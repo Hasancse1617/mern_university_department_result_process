@@ -5,8 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "server": "nodemon index.js",
-    "admin": "npm start --prefix admin",
+    "server": "nodemon server.js",
+    "admin": "npm start --prefix admin-app",
     "dev": "concurrently \" npm run server \" \" npm run admin \""
   },
   "keywords": [],
