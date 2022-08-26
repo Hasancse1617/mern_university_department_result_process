@@ -7,10 +7,12 @@ export const ChairmanRegister = (state) =>{
             dispatch({type: SET_CHAIRMAN_LOADER});
             const {data} = await axiosInstance.post('/chairman/register',state);
             dispatch({type: REMOVE_CHAIRMAN_LOADER});
-            dispatch({type: SET_CHAIRMAN_TOKEN, payload: data.token});
+            dispatch({type: SET_CHAIRMAN_MESSAGE, payload: data.msg});
+            console.log(data.msg)
         } catch (error) {
+            const {errors} = error.response.data;
             dispatch({type: REMOVE_CHAIRMAN_LOADER});
-            dispatch({type: SET_CHAIRMAN_ERRORS, payload: error.response.data.errors});
+            dispatch({type: SET_CHAIRMAN_ERRORS, payload:errors});
         }
     }
 }
@@ -24,8 +26,9 @@ export const ChairmanLogin = (state) =>{
             localStorage.setItem("myToken", data.token);
             dispatch({type: SET_CHAIRMAN_TOKEN, payload: data.token});
         } catch (error) {
+            const {errors} = error.response.data;
             dispatch({type: REMOVE_CHAIRMAN_LOADER});
-            dispatch({type: SET_CHAIRMAN_ERRORS, payload: error.response.data.errors});
+            dispatch({type: SET_CHAIRMAN_ERRORS, payload:errors});
         }
     }
 }

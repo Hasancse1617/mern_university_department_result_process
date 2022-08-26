@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 require('dotenv').config();
-mongoose.set('useFindAndModify', false);
+// mongoose.set('useFindAndModify', false);
 
 module.exports = connect = async() =>{
     try {

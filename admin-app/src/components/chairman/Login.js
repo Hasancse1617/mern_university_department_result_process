@@ -9,7 +9,7 @@ import { NavLink } from 'react-router-dom';
 
 const Login = () => {
     const dispatch = useDispatch();
-    const {loading, loginErrors} = useSelector((state)=>state.AuthReducer);
+    const {loading, chairmanErrors} = useSelector((state)=>state.ChairmanReducer);
     const [state, setState] = useState({
         email: '',
         password: '',
@@ -33,13 +33,13 @@ const Login = () => {
         console.log(state);
     }
     useEffect(()=>{
-        if(loginErrors.length > 0){
-            loginErrors.map((error)=>{
+        if(chairmanErrors.length > 0){
+            chairmanErrors.map((error)=>{
                 toast.error(error.msg);
             });
           dispatch({type: REMOVE_CHAIRMAN_ERRORS});
         }
-    }, [loginErrors]);
+    }, [chairmanErrors]);
 
     return (
         <>

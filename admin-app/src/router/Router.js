@@ -10,7 +10,7 @@ import PrivateRoute from "./PrivateRoute";
 import RouteLink from "./RouteLink";
 
 const Router = () => {
-    const { user } = useSelector((state)=>state.AuthReducer);
+    const { user } = useSelector((state)=>state.ChairmanReducer);
     return (
         <>
            <Switch>

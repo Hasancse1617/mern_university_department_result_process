@@ -1,9 +1,15 @@
+const formidable = require("formidable");
+const Chairman = require("../models/Chairman");
+const sharp = require('sharp');
+const bcrypt = require('bcrypt');
+
 module.exports.createChairman = async (req,res)=>{
     const form = formidable({ multiples: true });
     form.parse(req, async(err, fields, files) =>{
-        const {name, email, user_type, password, c_password} = fields;
+
+        const {name, email, password, c_password} = fields;
         const errors = [];
-        // console.log(files);
+
         if(name === ''){
             errors.push({msg: 'Name is required'});
         }
@@ -15,9 +21,6 @@ module.exports.createChairman = async (req,res)=>{
                 errors.push({msg: 'Valid email is required'});
             }
         }
-        if(user_type === ''){
-            errors.push({msg: 'User Type is required'});
-        }
         if(password === ''){
             errors.push({msg: 'Password is required'});
         }else{
@@ -28,9 +31,7 @@ module.exports.createChairman = async (req,res)=>{
                 errors.push({msg: 'Password & Confirm Password must be equal!!'});
             }
         }
-        if(Object.keys(files).length === 0){
-            errors.push({msg:'Image is required'});
-        }else{
+        if(Object.keys(files).length !== 0){
             const { type } = files.image;
             const split = type.split('/');
             const extension = split[1].toLowerCase();
@@ -40,7 +41,7 @@ module.exports.createChairman = async (req,res)=>{
                 files.image.name = uuidv4() + '.' +extension;
             }
         }
-        const checkUser = await User.findOne({email});
+        const checkUser = await Chairman.findOne({email});
         if(checkUser){
             errors.push({msg:'Email is already exists'});
         }
@@ -48,29 +49,46 @@ module.exports.createChairman = async (req,res)=>{
             return res.status(400).json({errors});
         }
         else{
-            // console.log(email)
-            const newPath = `public/images/user_images/${files.image.name}`;
-            fs.copyFile(files.image.path, newPath, async(error)=>{
-                if(!error){
-                    // Hash Paaword
-                    const salt = await bcrypt.genSalt(10);
-                    const hash = await bcrypt.hash(password, salt);
-                    // console.log(hash)
-                    try {
-                        const response = await User.create({
-                            name,
-                            email,
-                            user_type: user_type,
-                            image: files.image.name,
-                            password: hash,
-                        });
 
-                        return res.status(200).json({msg: 'User created successfully', response});
-                    } catch (error) {
-                        return res.status(500).json({errors: [{msg: error.message}]});
+            // Hash Paaword
+            const salt = await bcrypt.genSalt(10);
+            const hash = await bcrypt.hash(password, salt);
+
+            if(Object.keys(files).length !== 0){
+                const imagePath = `public/images/chairman_images/${files.image.name}`;
+                sharp(files.image.path).resize(298, 298).toFile(imagePath, async(error, sharp)=>{
+                    if(!error){
+                        try {
+                            const response = await Chairman.create({
+                                name,
+                                email,
+                                image: files.image.name,
+                                password: hash,
+                                status: false
+                            });
+    
+                            return res.status(200).json({msg: 'Created successfully. Please active your email !', response});
+                        } catch (error) {
+                            return res.status(500).json({errors: [{msg: error.message}]});
+                        }
                     }
+                });
+            }
+            else{
+                console.log("KKKKKK")
+                try {
+                    const response = await Chairman.create({
+                        name,
+                        email,
+                        password: hash,
+                        status: false
+                    });
+
+                    return res.status(200).json({msg: 'Chairman created successfully. Please active your email !', response});
+                } catch (error) {
+                    return res.status(500).json({errors: [{msg: error.message}]});
                 }
-            })
+            }
         }
     });
 }

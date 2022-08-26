@@ -4,11 +4,10 @@ import { CHAIRMAN_LOGOUT, REMOVE_CHAIRMAN_ERRORS, REMOVE_CHAIRMAN_LOADER, REMOVE
 
 const initState = {
     loading: false,
-	loginErrors: [],
+	chairmanErrors: [],
 	token: '',
 	user: '',
 	message:'',
-	unauthorized:'',
 }
 
 const verifyToken = (token) => {
@@ -31,7 +30,7 @@ if (token) {
 	}
 }
 
-const AuthReducer = (state = initState, action) => {
+const ChairmanReducer = (state = initState, action) => {
     if (action.type === SET_CHAIRMAN_LOADER) {
 		return { ...state, loading: true };
 	} else if (action.type === REMOVE_CHAIRMAN_LOADER) {
@@ -51,10 +50,10 @@ const AuthReducer = (state = initState, action) => {
 		return { ...state, token: '', user: '' };
 	} 
 	else if (action.type === SET_CHAIRMAN_ERRORS) {
-		return {...state,loginErrors: action.payload};
+		return {...state,chairmanErrors: action.payload};
 	} 
 	else if (action.type === REMOVE_CHAIRMAN_ERRORS) {
-		return {...state,loginErrors: []};
+		return {...state,chairmanErrors: []};
 	}
 	else if (action.type === SET_CHAIRMAN_MESSAGE) {
 		return {...state,message: action.payload};
@@ -67,4 +66,4 @@ const AuthReducer = (state = initState, action) => {
 	}
 }
 
-export default AuthReducer;
+export default ChairmanReducer;
