@@ -1,14 +1,14 @@
 const express = require("express");
+const bodyParser = require("body-parser");
 require('dotenv').config()
 const cors = require("cors");
-const connect = require("./src/config/db");
-const bodyParser = require("body-parser");
+const connectDB = require("./src/config/db");
 const chairmanRoute = require("./src/routes/ChairmanRoute");
 
 const app = express();
-connect();
+connectDB();
 app.use(cors());
-app.use(express.raw());
+
 app.use(express.static('public'));
 app.use("/api/", chairmanRoute);
 const PORT = process.env.PORT || 5000;

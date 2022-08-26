@@ -1,6 +1,8 @@
 import React from "react";
 import { useSelector } from "react-redux";
 import { Route, Routes as Switch, Navigate } from "react-router";
+import Activation from "../components/chairman/Activation";
+import ChairmanRoute from "../components/chairman/ChairmanRoute";
 import ForgotPassword from "../components/chairman/ForgotPassword";
 import Login from "../components/chairman/Login";
 import Register from "../components/chairman/Register";
@@ -15,11 +17,8 @@ const Router = () => {
         <>
            <Switch>
                <Route path="/" element={user?<Navigate to="/chairman/dashboard" replace /> : <Navigate to="/chairman/login" replace/>}></Route>
-               <Route path="/chairman/login" element={<RouteLink><Login/></RouteLink>}></Route>
-               <Route path="/chairman/register" element={<RouteLink><Register/></RouteLink>}></Route>
-               <Route path="/chairman/forgot-password" element={<RouteLink><ForgotPassword/></RouteLink>}></Route>
-               <Route path="/chairman/reset-password/:token" element={<RouteLink><ResetPassword/></RouteLink>}></Route>
-               <Route path="/admin/*" element={<DashboardRoute/>}></Route>
+               <Route path="/chairman/*" element={<ChairmanRoute/>}></Route>
+               {/* <Route path="/chairman/*" element={<DashboardRoute/>}></Route> */}
            </Switch>
         </>
     );

@@ -27,7 +27,7 @@ const Login = () => {
             [e.target.name]: e.target.checked,
         })
     }
-    const userLogin = (e) =>{
+    const chairmanLogin = (e) =>{
         e.preventDefault();
         dispatch(ChairmanLogin(state));
         console.log(state);
@@ -43,10 +43,10 @@ const Login = () => {
 
     return (
         <>
-        <Toaster position="top-right" reverseOrder={false}/>
+        <Toaster position="top-right" reverseOrder={true}/>
         <div className="login-box">
             <Helmet>
-                <title>User Login - Movie</title>
+                <title>Chairman Login - Reasult Processing</title>
                 <meta name="description" content="User Login Here" />
             </Helmet>
             <div class="login-logo">
@@ -56,7 +56,7 @@ const Login = () => {
                 <div class="card-body login-card-body">
                 <p class="login-box-msg"><h5>Sign In</h5></p>
                 
-                <form onSubmit={userLogin}>
+                <form onSubmit={chairmanLogin}>
                     <div class="input-group mb-3">
                     <input type="email" name="email" class="form-control" value={state.email} onChange={handleInputs} placeholder="Email"/>
                     <div class="input-group-append">

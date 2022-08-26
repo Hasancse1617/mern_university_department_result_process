@@ -11,7 +11,7 @@ import Swal from 'sweetalert2'
 const ResetPassword = (props) => {
     const { token } = useParams();
     const dispatch = useDispatch();
-    const {loading, loginErrors,message} = useSelector((state)=>state.AuthReducer);
+    const {loading, chairmanErrors,message} = useSelector((state)=>state.AuthReducer);
     const [state, setState] = useState({
         password:'',
         c_password:'',
@@ -27,13 +27,13 @@ const ResetPassword = (props) => {
         dispatch(resetPassword(state,token));
     }
     useEffect(()=>{
-        if(loginErrors.length > 0){
-            loginErrors.map((error)=>{
+        if(chairmanErrors.length > 0){
+            chairmanErrors.map((error)=>{
                 toast.error(error.msg);
             });
             dispatch({type: REMOVE_CHAIRMAN_ERRORS});
         }
-    }, [loginErrors]);
+    }, [chairmanErrors]);
     useEffect(()=>{
         if(message){
             Swal.fire({

@@ -21,7 +21,7 @@ export const ChairmanLogin = (state) =>{
     return async (dispatch) =>{
         try {
             dispatch({type: SET_CHAIRMAN_LOADER});
-            const {data} = await axiosInstance.post('/login',state);
+            const {data} = await axiosInstance.post('/chairman/login',state);
             dispatch({type: REMOVE_CHAIRMAN_LOADER});
             localStorage.setItem("myToken", data.token);
             dispatch({type: SET_CHAIRMAN_TOKEN, payload: data.token});
@@ -58,5 +58,21 @@ export const resetPassword = (state,token) =>{
             dispatch({type: REMOVE_CHAIRMAN_LOADER});
             dispatch({type: SET_CHAIRMAN_ERRORS, payload: error.response.data.errors});
         }
+    }
+}
+
+export const verifyAccount = (token) =>{
+    return async(dispatch,getState)=>{
+        // const {AuthReducer: {token}} = getState();
+        dispatch({type: SET_CHAIRMAN_LOADER});
+        try {
+                const { data:{msg} } = await axiosInstance.post(`/chairman/verify-account/${token}`); 
+                dispatch({type: REMOVE_CHAIRMAN_LOADER});
+                dispatch({type: SET_CHAIRMAN_MESSAGE, payload:msg});   
+          } catch (error) {
+                const {errors} = error.response.data;
+                dispatch({type: REMOVE_CHAIRMAN_LOADER});
+                dispatch({type: SET_CHAIRMAN_ERRORS, payload:errors});
+          }
     }
 }

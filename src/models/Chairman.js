@@ -18,6 +18,10 @@ const chairmanSchema = new Schema({
         type: String,
         required: true
     },
+    email_verified:{
+        type: Boolean,
+        default: false
+    },
     status:{
         type: Boolean,
         default: false

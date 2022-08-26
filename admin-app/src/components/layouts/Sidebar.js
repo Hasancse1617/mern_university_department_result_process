@@ -3,7 +3,7 @@ import { useSelector } from "react-redux";
 import { NavLink, useLocation } from "react-router-dom";
 const Sidebar = () => {
     let { pathname } = useLocation();
-    const {user} = useSelector((state)=>state.AuthReducer);
+    const {user} = useSelector((state)=>state.ChairmanReducer);
     return (
         <>
             <aside className="main-sidebar sidebar-dark-primary elevation-4">

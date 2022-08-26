@@ -4,12 +4,12 @@ import { Helmet } from "react-helmet";
 import { useSelector, useDispatch } from 'react-redux';
 import { ChairmanRegister } from  "../../store/actions/ChairmanAction";
 import toast, { Toaster } from 'react-hot-toast';
-import { REMOVE_CHAIRMAN_ERRORS } from '../../store/types/ChairmanType';
+import { REMOVE_CHAIRMAN_ERRORS, REMOVE_CHAIRMAN_MESSAGE } from '../../store/types/ChairmanType';
 import { NavLink } from 'react-router-dom';
 
 const Register = () => {
     const dispatch = useDispatch();
-    const {loading, chairmanErrors} = useSelector((state)=>state.ChairmanReducer);
+    const {loading, message, chairmanErrors} = useSelector((state)=>state.ChairmanReducer);
     const [state, setState] = useState({
         name: "",
         email: "",
@@ -48,11 +48,16 @@ const Register = () => {
             });
           dispatch({type: REMOVE_CHAIRMAN_ERRORS});
         }
-    }, [chairmanErrors]);
+        if(message){
+            toast.success(message, { duration: 5000 });
+            dispatch({type: REMOVE_CHAIRMAN_MESSAGE});
+        }
+    }, [chairmanErrors, message]);
+
 
     return (
         <>
-        <Toaster position="top-right" reverseOrder={false}/>
+        <Toaster position="top-right" reverseOrder={true}/>
         <div className="login-box">
             <Helmet>
                 <title>Chairman registration</title>
@@ -65,7 +70,7 @@ const Register = () => {
                 <div class="card-body login-card-body">
                 <p class="login-box-msg"><h5>SignUp</h5></p>
                 
-                <form onSubmit={chairmanSignUp}>
+                <form onSubmit={chairmanSignUp} enctype="multipart/form-data">
                 <div class="input-group mb-3">
                     <input type="text" name="name" class="form-control" value={state.name} onChange={handleInputs} placeholder="Name"/>
                         <div class="input-group-append">
