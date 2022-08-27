@@ -8,7 +8,7 @@ import toast, {Toaster} from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import { REMOVE_CHAIRMAN_ERRORS, REMOVE_CHAIRMAN_MESSAGE } from "../../store/types/ChairmanType";
 
-const Activation = (props) => {
+const ChairmanActivation = (props) => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const { chairmanErrors, message } = useSelector((state)=>state.ChairmanReducer);
@@ -62,4 +62,4 @@ const Activation = (props) => {
     )
 }
 
-export default Activation;
+export default ChairmanActivation;

@@ -7,7 +7,7 @@ import toast, { Toaster } from 'react-hot-toast';
 import { REMOVE_CHAIRMAN_ERRORS } from '../../store/types/ChairmanType';
 import { NavLink } from 'react-router-dom';
 
-const Login = () => {
+const ChairmanLogin = () => {
     const dispatch = useDispatch();
     const {loading, chairmanErrors} = useSelector((state)=>state.ChairmanReducer);
     const [state, setState] = useState({
@@ -104,4 +104,4 @@ const Login = () => {
     );
 }
 
-export default Login;
+export default ChairmanLogin;

@@ -6,7 +6,7 @@ const initState = {
     loading: false,
 	chairmanErrors: [],
 	token: '',
-	user: '',
+	chairman: '',
 	message:'',
 }
 
@@ -25,8 +25,8 @@ if (token) {
 	const decoded = verifyToken(token);
 	if (decoded) {
 		initState.token = token;
-		const { user } = decoded;
-		initState.user = user;
+		const { chairman } = decoded;
+		initState.chairman = chairman;
 	}
 }
 
@@ -37,17 +37,16 @@ const ChairmanReducer = (state = initState, action) => {
 		return { ...state, loading: false };
 	} else if (action.type === SET_CHAIRMAN_TOKEN) {
 		const decoded = verifyToken(action.payload);
-		const { user } = decoded;
+		const { chairman } = decoded;
 		return {
 			...state,
 			token: action.payload,
-			user: user,
-			loginErrors: [],
-			registerErrors: [],
+			chairman: chairman,
+			chairmanErrors: []
 		};
 	} 
 	else if (action.type === CHAIRMAN_LOGOUT) {
-		return { ...state, token: '', user: '' };
+		return { ...state, token: '', chairman: '' };
 	} 
 	else if (action.type === SET_CHAIRMAN_ERRORS) {
 		return {...state,chairmanErrors: action.payload};

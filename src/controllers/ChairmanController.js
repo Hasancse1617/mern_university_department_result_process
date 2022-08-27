@@ -7,8 +7,8 @@ require('dotenv').config();
 const jwt_decode = require('jwt-decode');
 const { send_Account_Verify_Email } = require("../utils/email");
 
-const createToken = (user, expiresToken)=>{
-    return jwt.sign({user}, process.env.SECRET, {
+const createToken = (chairman, expiresToken)=>{
+    return jwt.sign({chairman}, process.env.SECRET, {
         expiresIn: expiresToken
     });
 }

@@ -8,7 +8,7 @@ import { Helmet } from "react-helmet";
 import toast, { Toaster } from 'react-hot-toast';
 import Swal from 'sweetalert2'
 
-const ForgotPassword = () => {
+const ChairmanForgotPassword = () => {
     const dispatch = useDispatch();
     const {loading, chairmanErrors, message} = useSelector((state)=>state.ChairmanReducer);
     const [state, setState] = useState({
@@ -87,4 +87,4 @@ const ForgotPassword = () => {
     );
 }
 
-export default ForgotPassword;
+export default ChairmanForgotPassword;

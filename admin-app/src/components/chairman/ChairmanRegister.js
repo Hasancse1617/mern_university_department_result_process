@@ -7,7 +7,7 @@ import toast, { Toaster } from 'react-hot-toast';
 import { REMOVE_CHAIRMAN_ERRORS, REMOVE_CHAIRMAN_MESSAGE } from '../../store/types/ChairmanType';
 import { NavLink } from 'react-router-dom';
 
-const Register = () => {
+const ChairmanRegister = () => {
     const dispatch = useDispatch();
     const {loading, message, chairmanErrors} = useSelector((state)=>state.ChairmanReducer);
     const [state, setState] = useState({
@@ -138,4 +138,4 @@ const Register = () => {
     );
 }
 
-export default Register;
+export default ChairmanRegister;
