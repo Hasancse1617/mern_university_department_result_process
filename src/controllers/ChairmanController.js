@@ -40,16 +40,6 @@ module.exports.createChairman = async (req,res)=>{
                 errors.push({msg: 'Password & Confirm Password must be equal!!'});
             }
         }
-        if(Object.keys(files).length !== 0){
-            const { type } = files.image;
-            const split = type.split('/');
-            const extension = split[1].toLowerCase();
-            if(extension !== 'jpg' && extension !== 'jpeg' && extension !== 'png'){
-                errors.push({msg: `${extension} is not a valid extension`});
-            }else{
-                files.image.name = uuidv4() + '.' +extension;
-            }
-        }
         const checkUser = await Chairman.findOne({email});
         if(checkUser){
             errors.push({msg:'Email is already exists'});
@@ -58,47 +48,21 @@ module.exports.createChairman = async (req,res)=>{
             return res.status(400).json({errors});
         }
         else{
-
             // Hash Paaword
             const salt = await bcrypt.genSalt(10);
             const hash = await bcrypt.hash(password, salt);
-
-            if(Object.keys(files).length !== 0){
-                const imagePath = `public/images/chairman_images/${files.image.name}`;
-                sharp(files.image.path).resize(298, 298).toFile(imagePath, async(error, sharp)=>{
-                    if(!error){
-                        try {
-
-                            send_Account_Verify_Email(email);//Send Email
-                            const response = await Chairman.create({
-                                name,
-                                email,
-                                image: files.image.name,
-                                password: hash,
-                                email_verified: false
-                            });
-                            
-                            return res.status(200).json({msg: 'Created successfully. Please cheek your Email to verify your account!', response});
-                        } catch (error) {
-                            return res.status(500).json({errors: [{msg: error.message}]});
-                        }
-                    }
+            try {
+                send_Account_Verify_Email(email);//Send Email
+                const response = await Chairman.create({
+                    name,
+                    email,
+                    password: hash,
+                    email_verified: false
                 });
-            }
-            else{
-                try {
-                    send_Account_Verify_Email(email);//Send Email
-                    const response = await Chairman.create({
-                        name,
-                        email,
-                        password: hash,
-                        email_verified: false
-                    });
-                  
-                    return res.status(200).json({msg: 'Created successfully. Please cheek your Email to verify your account!', response});
-                } catch (error) {
-                    return res.status(500).json({errors: [{msg: error.message}]});
-                }
+                
+                return res.status(200).json({msg: 'Created successfully. Please cheek your Email to verify your account!', response});
+            } catch (error) {
+                return res.status(500).json({errors: [{msg: error.message}]});
             }
         }
     });

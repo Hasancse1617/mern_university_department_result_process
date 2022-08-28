@@ -1,7 +1,7 @@
 import axiosInstance from '../../helper/axiosInstance';
 import { REMOVE_CHAIRMAN_LOADER, SET_CHAIRMAN_ERRORS, SET_CHAIRMAN_LOADER, SET_CHAIRMAN_MESSAGE, SET_CHAIRMAN_TOKEN } from '../types/ChairmanType';
 
-export const ChairmanRegister = (state) =>{
+export const RegisterChairman = (state) =>{
     return async(dispatch)=>{
         try {
             dispatch({type: SET_CHAIRMAN_LOADER});
@@ -17,7 +17,7 @@ export const ChairmanRegister = (state) =>{
     }
 }
 
-export const ChairmanLogin = (state) =>{
+export const LoginChairman = (state) =>{
     return async (dispatch) =>{
         try {
             dispatch({type: SET_CHAIRMAN_LOADER});

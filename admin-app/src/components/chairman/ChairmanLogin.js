@@ -2,7 +2,7 @@ import React from "react";
 import { useState, useEffect } from 'react';
 import { Helmet } from "react-helmet";
 import { useSelector, useDispatch } from 'react-redux';
-import { ChairmanLogin } from  "../../store/actions/ChairmanAction";
+import { LoginChairman } from  "../../store/actions/ChairmanAction";
 import toast, { Toaster } from 'react-hot-toast';
 import { REMOVE_CHAIRMAN_ERRORS } from '../../store/types/ChairmanType';
 import { NavLink } from 'react-router-dom';
@@ -29,7 +29,7 @@ const ChairmanLogin = () => {
     }
     const chairmanLogin = (e) =>{
         e.preventDefault();
-        dispatch(ChairmanLogin(state));
+        dispatch(LoginChairman(state));
         console.log(state);
     }
     useEffect(()=>{
@@ -93,7 +93,7 @@ const ChairmanLogin = () => {
                 </form>
                 <br></br>
                 <p class="mb-1">
-                    <NavLink to="/chairman/forgot-password">I forgot my password</NavLink>
+                    <NavLink to="/chairman/forgot-password">Forgotten password?</NavLink>
                     <NavLink style={{float: "right"}} to="/chairman/register">SignUp</NavLink>
                 </p>
                 </div>

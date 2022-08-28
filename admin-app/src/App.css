@@ -57,3 +57,8 @@ nav.main-header {
 .main-sidebar ::-webkit-scrollbar-thumb:hover {
   background: #041666; 
 }
+
+.user-image i{
+  font-size: 35px;
+  color: #efeeee;
+}

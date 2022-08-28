@@ -2,7 +2,7 @@ import React from "react";
 import { useState, useEffect } from 'react';
 import { Helmet } from "react-helmet";
 import { useSelector, useDispatch } from 'react-redux';
-import { ChairmanRegister } from  "../../store/actions/ChairmanAction";
+import { RegisterChairman } from  "../../store/actions/ChairmanAction";
 import toast, { Toaster } from 'react-hot-toast';
 import { REMOVE_CHAIRMAN_ERRORS, REMOVE_CHAIRMAN_MESSAGE } from '../../store/types/ChairmanType';
 import { NavLink } from 'react-router-dom';
@@ -13,33 +13,18 @@ const ChairmanRegister = () => {
     const [state, setState] = useState({
         name: "",
         email: "",
-        image: "",
         password: "",
         c_password: ""
     });
-    const [preview, setPreview] = useState('');
     const handleInputs = (e) =>{
         setState({
             ...state,
             [e.target.name]: e.target.value,
         })
     }
-    const handleImage = (e) =>{
-        if(e.target.files.length !== 0){
-            const reader = new FileReader();
-            setState({
-                ...state,
-                [e.target.name]: e.target.files[0]
-            });
-            reader.onloadend = () =>{
-                setPreview(reader.result);
-            }
-            reader.readAsDataURL(e.target.files[0]);
-        }
-    }
     const chairmanSignUp = (e) =>{
         e.preventDefault();
-        dispatch(ChairmanRegister(state));
+        dispatch(RegisterChairman(state));
     }
     useEffect(()=>{
         if(chairmanErrors.length > 0){
@@ -88,18 +73,6 @@ const ChairmanRegister = () => {
                         </div>
                     </div>
                     <div class="input-group mb-3">
-                    <input type="file" name="image" class="form-control" onChange={handleImage}/>
-                        <div class="input-group-append">
-                            <div class="input-group-text">
-                            <span class="fas fa-image"></span>
-                            </div>
-                        </div>
-                    </div>
-                    {preview? 
-                    <div class="input-group mb-3">
-                        <img src={preview} height="90"></img>
-                    </div>:""}
-                    <div class="input-group mb-3">
                     <input type="password" name="password" class="form-control" value={state.password} onChange={handleInputs} placeholder="Password"/>
                         <div class="input-group-append">
                             <div class="input-group-text">
@@ -126,9 +99,8 @@ const ChairmanRegister = () => {
                     
                 </form>
                 <br></br>
-                <p class="mb-1">
-                    <NavLink to="/chairman/forgot-password">If you have an account, click here to login</NavLink>
-                    {/* <NavLink style={{float: "right"}} to="/chairman/forgot-password">Register</NavLink> */}
+                <p class="mt-3 mb-1">
+                    Already have an account? Please <NavLink to="/chairman/login">Login !!!</NavLink>
                 </p>
                 </div>
                 {/* <!-- /.login-card-body --> */}

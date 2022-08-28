@@ -13,15 +13,15 @@ const Sidebar = () => {
                         alt="AdminLTE Logo"
                         className="brand-image img-circle elevation-3"
                         style={{opacity: .8 }} />
-                    <span className="brand-text font-weight-light">Admin Panel</span>
+                    <span className="brand-text font-weight-light">Chairman Panel</span>
                 </NavLink>
 
                 {/* <!-- Sidebar --> */}
                 <div className="sidebar">
                 {/* <!-- Sidebar user (optional) --> */}
                 <div className="user-panel mt-3 pb-3 mb-3 d-flex">
-                    <div className="image">
-                    <img src={`${process.env.REACT_APP_API_PATH}/images/chairman_images/avatar5.png`} className="img-circle elevation-2" alt="User Image"/>
+                    <div className="image user-image">
+                        <i className="fas fa-user"></i>
                     </div>
                     <div class="info">
                     <a href="#" className="d-block">{chairman.name}</a>
