@@ -39,6 +39,7 @@ export const forgotPassword = (state) =>{
             dispatch({type: SET_TEACHER_LOADER});
             const {data} = await axiosInstance.post('/teacher/forgot-password',state);
             dispatch({type: REMOVE_TEACHER_LOADER});
+            console.log(data)
             dispatch({type: SET_TEACHER_MESSAGE, payload: data.msg});
         } catch (error) {
             dispatch({type: REMOVE_TEACHER_LOADER});

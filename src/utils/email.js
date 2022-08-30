@@ -1,7 +1,7 @@
 const nodemailer = require('nodemailer');
 const jwt = require('jsonwebtoken');
 
-module.exports.SendEmail = async(email) =>{
+module.exports.Send_Reset_Password_Email = async(email, type) =>{
     const transporter = nodemailer.createTransport({
         service: 'gmail',
         auth: {
@@ -13,9 +13,9 @@ module.exports.SendEmail = async(email) =>{
       const emailToken = jwt.sign({email}, process.env.EMAIL_SECRET, {
         expiresIn: '10m'
        });
-      const url = `http://localhost:3000/chairman/reset-password/${emailToken}`;
+      const url = `http://localhost:3000/${type}/reset-password/${emailToken}`;
       let info = await transporter.sendMail({
-        from: `"Hasan Ali" ${process.env.SMTP_GMAIL}`, // sender address
+        from: `"Result Processing" ${process.env.SMTP_GMAIL}`, // sender address
         to: email, // list of receivers
         subject: "Chairman Reset Password ✔", // Subject line
         text: "Please check your email to reset your password", // plain text body
@@ -37,7 +37,7 @@ module.exports.send_Account_Verify_Email = async(email, type) =>{
     });
     const url = `http://localhost:3000/${type}/verify-account/${emailToken}`;
     let info = await transporter.sendMail({
-      from: `"Hasan Ali" ${process.env.SMTP_GMAIL}`, // sender address
+      from: `"Result Processing" ${process.env.SMTP_GMAIL}`, // sender address
       to: email, // list of receivers
       subject: "Chairman Account Activation ✔", // Subject line
       text: "Thanks for creating your account. Please verify your account", // plain text body

@@ -7,8 +7,11 @@ import ChairmanLogin from "../components/chairman/ChairmanLogin";
 import ChairmanRegister from "../components/chairman/ChairmanRegister";
 import ChairmanResetPassword from "../components/chairman/ChairmanResetPassword";
 import Login from "../components/layouts/Login";
+import TeacherActivation from "../components/teacher/TeacherActivation";
+import TeacherForgotPassword from "../components/teacher/TeacherForgotPassword";
 import TeacherLogin from "../components/teacher/TeacherLogin";
 import TeacherRegister from "../components/teacher/TeacherRegister";
+import TeacherResetPassword from "../components/teacher/TeacherResetPassword";
 import DashboardRoute from "./DashboardRoute";
 import PrivateRoute from "./PrivateRoute";
 import RouteLink from "./RouteLink";
@@ -30,6 +33,9 @@ const Router = () => {
                {/* Teacher some route without sidebar and footer */}
                <Route path="/teacher/login" element={<TeacherLogin/>}></Route>
                <Route path="/teacher/register" element={<TeacherRegister/>}></Route>
+               <Route path="/teacher/verify-account/:token" element={<TeacherActivation/>}></Route>
+               <Route path="/teacher/forgot-password" element={<TeacherForgotPassword/>}></Route>
+               <Route path="/teacher/reset-password/:token" element={<TeacherResetPassword/>}></Route>
                {/* end Teacher some route without sidebar and footer */}
            </Switch>
         </>

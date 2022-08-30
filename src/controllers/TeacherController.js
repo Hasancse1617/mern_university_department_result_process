@@ -4,7 +4,7 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
 const jwt_decode = require('jwt-decode');
-const { send_Account_Verify_Email } = require("../utils/email");
+const { send_Account_Verify_Email, Send_Reset_Password_Email } = require("../utils/email");
 
 const createToken = (teacher, expiresToken)=>{
     return jwt.sign({teacher}, process.env.SECRET, {
@@ -17,7 +17,7 @@ module.exports.createTeacher = async (req,res)=>{
 
         const {name, email, password, c_password} = fields;
         const errors = [];
-console.log(name);
+
         if(name === ''){
             errors.push({msg: 'Name is required'});
         }
@@ -76,7 +76,7 @@ module.exports.verifyTeacher = async(req,res) =>{
         const decodeToken = jwt_decode(token);
         const expiresIn = new Date(decodeToken.exp * 1000);
         if (new Date() > expiresIn) {
-            errors.push({msg: 'Your token is expired'});
+            errors.push({msg: 'Your token is expired. Try again!'});
         }
     } catch (error) {
         errors.push({msg: 'Your token is not valid'});
@@ -162,7 +162,9 @@ module.exports.forgotPassword = async(req, res) =>{
             return res.status(400).json({errors});
         }else{
             try {
-                const response = SendEmail(email);
+                
+                const response = Send_Reset_Password_Email(email, "teacher");
+                console.log("Hasan")
                 return res.status(200).json({msg: 'Check your email & change your password',response});
             } catch (error) {
                 return res.status(500).json({errors: error, msg: error.message});
@@ -194,7 +196,7 @@ module.exports.resetPassword = async(req, res) =>{
             const decodeToken = jwt_decode(token);
             const expiresIn = new Date(decodeToken.exp * 1000);
             if (new Date() > expiresIn) {
-                errors.push({msg: 'Your token is expired'});
+                errors.push({msg: 'Your token is expired. Try again!'});
             }
         } catch (error) {
             errors.push({msg: 'Your token is not valid'});
@@ -207,7 +209,7 @@ module.exports.resetPassword = async(req, res) =>{
             try {
                 const salt = await bcrypt.genSalt(10);
                 const hash = await bcrypt.hash(password, salt);
-                const response = await User.findOneAndUpdate({email},{password: hash}, {new: true});
+                const response = await Teacher.findOneAndUpdate({email},{password: hash}, {new: true});
                 return res.status(200).json({msg: 'Your Password updated successfully', response });
             } catch (error) {
                 return res.status(500).json({errors: error.message});

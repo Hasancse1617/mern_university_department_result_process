@@ -4,7 +4,7 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
 const jwt_decode = require('jwt-decode');
-const { send_Account_Verify_Email } = require("../utils/email");
+const { send_Account_Verify_Email, Send_Reset_Password_Email } = require("../utils/email");
 
 const createToken = (chairman, expiresToken)=>{
     return jwt.sign({chairman}, process.env.SECRET, {
@@ -162,7 +162,7 @@ module.exports.forgotPassword = async(req, res) =>{
             return res.status(400).json({errors});
         }else{
             try {
-                const response = SendEmail(email);
+                const response = Send_Reset_Password_Email(email, "chairman");
                 return res.status(200).json({msg: 'Check your email & change your password',response});
             } catch (error) {
                 return res.status(500).json({errors: error, msg: error.message});
