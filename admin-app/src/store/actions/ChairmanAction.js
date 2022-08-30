@@ -37,7 +37,7 @@ export const forgotPassword = (state) =>{
     return async (dispatch) =>{
         try {
             dispatch({type: SET_CHAIRMAN_LOADER});
-            const {data} = await axiosInstance.post('/forgot-password',state);
+            const {data} = await axiosInstance.post('/chairman/forgot-password',state);
             dispatch({type: REMOVE_CHAIRMAN_LOADER});
             dispatch({type: SET_CHAIRMAN_MESSAGE, payload: data.msg});
         } catch (error) {
@@ -51,7 +51,7 @@ export const resetPassword = (state,token) =>{
     return async (dispatch) =>{
         try {
             dispatch({type: SET_CHAIRMAN_LOADER});
-            const {data} = await axiosInstance.post(`/reset-password/${token}`,state);
+            const {data} = await axiosInstance.post(`/chairman/reset-password/${token}`,state);
             dispatch({type: REMOVE_CHAIRMAN_LOADER});
             dispatch({type: SET_CHAIRMAN_MESSAGE, payload: data.msg});
         } catch (error) {

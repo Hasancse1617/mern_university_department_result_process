@@ -1,23 +1,23 @@
 const formidable = require("formidable");
-const Chairman = require("../models/Chairman");
+const Teacher = require("../models/Teacher");
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
 const jwt_decode = require('jwt-decode');
 const { send_Account_Verify_Email } = require("../utils/email");
 
-const createToken = (chairman, expiresToken)=>{
-    return jwt.sign({chairman}, process.env.SECRET, {
+const createToken = (teacher, expiresToken)=>{
+    return jwt.sign({teacher}, process.env.SECRET, {
         expiresIn: expiresToken
     });
 }
-module.exports.createChairman = async (req,res)=>{
+module.exports.createTeacher = async (req,res)=>{
     const form = formidable({ multiples: true });
     form.parse(req, async(err, fields, files) =>{
 
         const {name, email, password, c_password} = fields;
         const errors = [];
-
+console.log(name);
         if(name === ''){
             errors.push({msg: 'Name is required'});
         }
@@ -39,7 +39,7 @@ module.exports.createChairman = async (req,res)=>{
                 errors.push({msg: 'Password & Confirm Password must be equal!!'});
             }
         }
-        const checkUser = await Chairman.findOne({email});
+        const checkUser = await Teacher.findOne({email});
         if(checkUser){
             errors.push({msg:'Email is already exists'});
         }
@@ -51,8 +51,8 @@ module.exports.createChairman = async (req,res)=>{
             const salt = await bcrypt.genSalt(10);
             const hash = await bcrypt.hash(password, salt);
             try {
-                send_Account_Verify_Email(email, "chairman");//Send Email
-                const response = await Chairman.create({
+                send_Account_Verify_Email(email, "teacher");//Send Email
+                const response = await Teacher.create({
                     name,
                     email,
                     type: "teacher",
@@ -68,7 +68,7 @@ module.exports.createChairman = async (req,res)=>{
     });
 }
 
-module.exports.verifyChairman = async(req,res) =>{
+module.exports.verifyTeacher = async(req,res) =>{
     const token = req.params.token;
     const {email} = jwt_decode(token);
     const errors = [];
@@ -81,15 +81,15 @@ module.exports.verifyChairman = async(req,res) =>{
     } catch (error) {
         errors.push({msg: 'Your token is not valid'});
     }
-    const checkChairman = await Chairman.findOne({email});
-    if(!checkChairman){
+    const checkTeacher = await Teacher.findOne({email});
+    if(!checkTeacher){
         errors.push({msg:'Email not found'});
     }
     if(errors.length !== 0){
         return res.status(400).json({errors});
     }else{
         try {
-            const response = await Chairman.findOneAndUpdate({email},{email_verified: true, status: true});
+            const response = await Teacher.findOneAndUpdate({email},{email_verified: true});
             return res.status(200).json({msg: 'Email verified successfully. Please Login'});
         } catch (error) {
             return res.status(500).json({errors: [{msg: error.message}]});
@@ -97,7 +97,7 @@ module.exports.verifyChairman = async(req,res) =>{
     }
 }
 
-module.exports.loginChairman = async(req,res) =>{
+module.exports.loginTeacher = async(req,res) =>{
     const form = formidable();
     form.parse(req, async(err,fields,files)=>{
         const { email, password, remember_me } = fields;
@@ -116,16 +116,16 @@ module.exports.loginChairman = async(req,res) =>{
             expiresToken = '7d';
         }
         try{
-            const chairman = await Chairman.findOne({email});
-            if(chairman){
-                if(!chairman.email_verified){
+            const teacher = await Teacher.findOne({email});
+            if(teacher){
+                if(!teacher.email_verified){
                     send_Account_Verify_Email(email);
                     return res.status(500).json({errors: [{msg: 'Account not verified. Check Email & verify account'}]});
                 }
 
-                const matched = await bcrypt.compare(password, chairman.password);
+                const matched = await bcrypt.compare(password, teacher.password);
                 if(matched){
-                    const token = createToken(chairman,expiresToken);
+                    const token = createToken(teacher,expiresToken);
                     return res.status(200).json({'msg':'You have successfully login',token});
                 }else{
                     return res.status(401).json({errors:[{msg:'Username or Password does not matched'}]});
@@ -144,7 +144,7 @@ module.exports.forgotPassword = async(req, res) =>{
     const form = formidable();
     form.parse(req, async(err,fields,files)=>{
         const { email } = fields;
-        const chairman = await Chairman.findOne({email});
+        const teacher = await Teacher.findOne({email});
         const errors = [];
         if(email === ''){
             errors.push({msg: 'Email is required'});
@@ -153,7 +153,7 @@ module.exports.forgotPassword = async(req, res) =>{
             if(!filter.test(email)){
                 errors.push({msg: 'Valid email is required'});
             }else{
-                if(!chairman){
+                if(!teacher){
                     errors.push({msg: 'Email not fount'});
                 }
             }

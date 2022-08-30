@@ -1,12 +1,14 @@
 import React from "react";
 import { useSelector } from "react-redux";
-import { Route, Routes as Switch, Navigate } from "react-router";
+import { Route, Routes as Switch } from "react-router";
 import ChairmanActivation from "../components/chairman/ChairmanActivation";
 import ChairmanForgotPassword from "../components/chairman/ChairmanForgotPassword";
 import ChairmanLogin from "../components/chairman/ChairmanLogin";
 import ChairmanRegister from "../components/chairman/ChairmanRegister";
 import ChairmanResetPassword from "../components/chairman/ChairmanResetPassword";
 import Login from "../components/layouts/Login";
+import TeacherLogin from "../components/teacher/TeacherLogin";
+import TeacherRegister from "../components/teacher/TeacherRegister";
 import DashboardRoute from "./DashboardRoute";
 import PrivateRoute from "./PrivateRoute";
 import RouteLink from "./RouteLink";
@@ -25,6 +27,10 @@ const Router = () => {
                <Route path="/chairman/reset-password/:token" element={<RouteLink><ChairmanResetPassword/></RouteLink>}></Route>
                {/* end chairman some route without sidebar and footer */}
                <Route path="/chairman/*" element={<PrivateRoute><DashboardRoute/></PrivateRoute>}></Route>
+               {/* Teacher some route without sidebar and footer */}
+               <Route path="/teacher/login" element={<TeacherLogin/>}></Route>
+               <Route path="/teacher/register" element={<TeacherRegister/>}></Route>
+               {/* end Teacher some route without sidebar and footer */}
            </Switch>
         </>
     );

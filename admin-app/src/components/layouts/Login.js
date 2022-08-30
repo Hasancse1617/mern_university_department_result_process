@@ -1,8 +1,6 @@
 import React from "react";
-import { useState, useEffect } from 'react';
 import { Helmet } from "react-helmet";
-import { useSelector, useDispatch } from 'react-redux';
-import toast, { Toaster } from 'react-hot-toast';
+import { Toaster } from 'react-hot-toast';
 import { NavLink } from "react-router-dom";
 
 const Login = () => {
@@ -36,7 +34,7 @@ const Login = () => {
                     <br/>
                     <NavLink to="/teacher/login">
                         <div class="col-12">
-                            <button type="submit" class="btn btn-primary btn-block">Teacher</button>
+                            <button type="submit" class="btn btn-primary btn-block">Exam Teacher</button>
                         </div>
                     </NavLink>
                 </form>

@@ -1,6 +1,6 @@
 const { model, Schema } = require("mongoose");
 
-const chairmanSchema = new Schema({
+const teacherSchema = new Schema({
     name:{
         type: String,
         required: true
@@ -27,4 +27,4 @@ const chairmanSchema = new Schema({
     }
 }, {timestamps: true}); 
 
-module.exports = model("chairman", chairmanSchema);
+module.exports = model("teacher", teacherSchema);
