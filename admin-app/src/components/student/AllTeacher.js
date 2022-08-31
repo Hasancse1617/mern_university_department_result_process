@@ -8,7 +8,7 @@ import Swal from 'sweetalert2';
 import $ from "jquery";
 import Loader from "../loader/Loader";
 import { REMOVE_STUDENT_MESSAGE } from "../../store/types/StudentType";
-import { deleteAction, fetchTeachers, statusAction } from "../../store/actions/StudentAction";
+import { deleteTeacher, fetchTeachers, statusAction } from "../../store/actions/StudentAction";
 
 
 const AllTeacher = () => {
@@ -28,7 +28,7 @@ const AllTeacher = () => {
       confirmButtonText: 'Yes, delete it!'
     }).then((result) => {
       if (result.isConfirmed) {
-        dispatch(deleteAction(id));
+        dispatch(deleteTeacher(id));
       }
     })
   }

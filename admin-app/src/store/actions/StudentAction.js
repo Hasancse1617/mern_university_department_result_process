@@ -132,3 +132,20 @@ export const statusAction = (statusData) =>{
             }
       }
   }
+
+  export const deleteTeacher = (id) =>{
+      return async (dispatch, getState)=>{
+            try {
+                  dispatch({type:SET_STUDENT_LOADER});
+                  const {data} = await axiosInstance.post(`/teacher-delete/${id}`);
+                  dispatch({type:REMOVE_STUDENT_LOADER});
+                  dispatch({type:SET_STUDENT_MESSAGE, payload: data.msg});    
+          } catch (error) {
+              if(error){
+                 const {errors} = error.response.data;
+                 dispatch({type: SET_STUDENT_ERRORS, payload:errors});
+              } 
+          }
+        
+      };
+  }

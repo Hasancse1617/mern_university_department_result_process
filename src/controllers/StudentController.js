@@ -136,6 +136,16 @@ module.exports.deleteStudent = async (req,res)=>{
     } 
 }
 
+module.exports.deleteTeacher = async (req,res)=>{
+    const id = req.params.id;
+    try{
+        const teacher = await Teacher.findByIdAndDelete(id);
+        return res.status(200).json({msg: 'Teacher deleted successfully'});
+    }catch(error){
+        return res.status(500).json({errors:error});
+    } 
+}
+
 module.exports.statusTeacher = async(req, res) =>{
     const form = formidable({ multiples: true });
     form.parse(req, async(err, fields, files) =>{
