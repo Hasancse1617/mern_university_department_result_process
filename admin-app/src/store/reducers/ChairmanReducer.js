@@ -9,18 +9,18 @@ const initState = {
 	chairman: '',
 	message:'',
 }
-
+console.log("Chairman Reducer")
 const verifyToken = (token) => {
 	const decodeToken = jwt_decode(token);
 	const expiresIn = new Date(decodeToken.exp * 1000);
 	if (new Date() > expiresIn) {
-		localStorage.removeItem('myToken');
+		localStorage.removeItem('chairmanToken');
 		return null;
 	} else {
 		return decodeToken;
 	}
 };
-const token = localStorage.getItem('myToken');
+const token = localStorage.getItem('chairmanToken');
 if (token) {
 	const decoded = verifyToken(token);
 	if (decoded) {

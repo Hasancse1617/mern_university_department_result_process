@@ -34,15 +34,8 @@ const ChairmanForgotPassword = () => {
     }, [chairmanErrors]);
     useEffect(()=>{
         if(message){
-            Swal.fire({
-              position: 'top-end',
-              icon: 'success',
-              title: message,
-              toast: true,
-              showConfirmButton: false,
-              timer: 2000
-            })
-          dispatch({type: REMOVE_CHAIRMAN_MESSAGE});
+            toast.success(message, { duration: 5000 });
+            dispatch({type: REMOVE_CHAIRMAN_MESSAGE});
         }
       },[message]);
     return (
@@ -50,11 +43,12 @@ const ChairmanForgotPassword = () => {
         <Toaster position="top-right" reverseOrder={false}/>
         <div class="login-box">
         <Helmet>
-            <title>User forgot password - Movie</title>
+            <title>Chairman forgot password - Movie</title>
             <meta name="description" content="User Login Here" />
         </Helmet>
         <div class="login-logo">
-            <a href=""><b>Chairman Panel</b></a>
+            <NavLink to="/admin"><img src="http://localhost:5000/images/logo2.png" width="20%"/></NavLink><br/>
+            <b>Chairman Panel</b>
         </div>
         {/* <!-- /.login-logo --> */}
         <div class="card">

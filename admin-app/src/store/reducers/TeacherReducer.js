@@ -29,7 +29,7 @@ if (token) {
 		initState.teacher = teacher;
 	}
 }
-
+console.log("Teacher Reducer")
 const TeacherReducer = (state = initState, action) => {
     if (action.type === SET_TEACHER_LOADER) {
 		return { ...state, loading: true };

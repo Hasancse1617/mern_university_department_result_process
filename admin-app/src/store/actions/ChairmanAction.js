@@ -23,7 +23,7 @@ export const LoginChairman = (state) =>{
             dispatch({type: SET_CHAIRMAN_LOADER});
             const {data} = await axiosInstance.post('/chairman/login',state);
             dispatch({type: REMOVE_CHAIRMAN_LOADER});
-            localStorage.setItem("myToken", data.token);
+            localStorage.setItem("chairmanToken", data.token);
             dispatch({type: SET_CHAIRMAN_TOKEN, payload: data.token});
         } catch (error) {
             const {errors} = error.response.data;

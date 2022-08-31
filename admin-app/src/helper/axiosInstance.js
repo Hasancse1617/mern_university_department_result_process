@@ -17,7 +17,7 @@ import { CHAIRMAN_LOGOUT } from '../store/types/ChairmanType';
     const decodeToken = jwt_decode(token);
     const expiresIn = new Date(decodeToken.exp * 1000);
     if (new Date() > expiresIn) {
-      localStorage.removeItem('myToken');
+      localStorage.removeItem('chairmanToken');
       store.dispatch({type: CHAIRMAN_LOGOUT});
       return null;
     } else {
@@ -27,7 +27,7 @@ import { CHAIRMAN_LOGOUT } from '../store/types/ChairmanType';
 
   // Set the AUTH token for any request
   axiosInstance.interceptors.request.use(function (config) {
-    const token = localStorage.getItem('myToken');
+    const token = localStorage.getItem('chairmanToken');
     if(token){
       const verify = VerifyToken(token);
     }else{

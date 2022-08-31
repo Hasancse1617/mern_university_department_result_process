@@ -47,11 +47,12 @@ const TeacherLogin = () => {
         <Toaster position="top-right" reverseOrder={true}/>
         <div className="login-box">
             <Helmet>
-                <title>Chairman Login - Reasult Processing</title>
+                <title>Teacher Login - Reasult Processing</title>
                 <meta name="description" content="User Login Here" />
             </Helmet>
             <div class="login-logo">
-                <a href="../../index2.html"><b>Teacher Panel</b></a>
+                <NavLink to="/admin"><img src="http://localhost:5000/images/logo2.png" width="20%"/></NavLink><br/>
+                <b>Teacher Panel</b>
             </div>
             <div class="card">
                 <div class="card-body login-card-body">

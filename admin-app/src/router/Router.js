@@ -13,7 +13,6 @@ import TeacherLogin from "../components/teacher/TeacherLogin";
 import TeacherRegister from "../components/teacher/TeacherRegister";
 import TeacherResetPassword from "../components/teacher/TeacherResetPassword";
 import DashboardRoute from "./DashboardRoute";
-import PrivateRoute from "./PrivateRoute";
 import RouteLink from "./RouteLink";
 
 const Router = () => {
@@ -22,6 +21,7 @@ const Router = () => {
         <>
            <Switch>
                <Route path="/admin" element={<Login/>}></Route>
+               
                {/* chairman some route without sidebar and footer */}
                <Route path="/chairman/login" element={<RouteLink><ChairmanLogin/></RouteLink>}></Route>
                <Route path="/chairman/register" element={<RouteLink><ChairmanRegister/></RouteLink>}></Route>
@@ -29,7 +29,8 @@ const Router = () => {
                <Route path="/chairman/forgot-password" element={<RouteLink><ChairmanForgotPassword/></RouteLink>}></Route>
                <Route path="/chairman/reset-password/:token" element={<RouteLink><ChairmanResetPassword/></RouteLink>}></Route>
                {/* end chairman some route without sidebar and footer */}
-               <Route path="/chairman/*" element={<PrivateRoute><DashboardRoute/></PrivateRoute>}></Route>
+               <Route path="/chairman/*" element={<DashboardRoute/>}></Route>
+               
                {/* Teacher some route without sidebar and footer */}
                <Route path="/teacher/login" element={<TeacherLogin/>}></Route>
                <Route path="/teacher/register" element={<TeacherRegister/>}></Route>

@@ -8,11 +8,8 @@ const Sidebar = () => {
         <>
             <aside className="main-sidebar sidebar-dark-primary elevation-4">
                 {/* <!-- Brand Logo --> */}
-                <NavLink to="/admin/dashboard" className="brand-link">
-                    <img src="/assets/images/admin_images/AdminLTELogo.png"
-                        alt="AdminLTE Logo"
-                        className="brand-image img-circle elevation-3"
-                        style={{opacity: .8 }} />
+                <NavLink to="/admin/dashboard" className="brand-link text-center">
+                    <img src="http://localhost:5000/images/logo2.png" width="20%"/><br/>
                     <span className="brand-text font-weight-light">Chairman Panel</span>
                 </NavLink>
 
@@ -24,7 +21,7 @@ const Sidebar = () => {
                         <i className="fas fa-user"></i>
                     </div>
                     <div class="info">
-                    <a href="#" className="d-block">{chairman.name}</a>
+                         <a href="#" className="d-block">{chairman.name}</a>
                     </div>
                 </div>
 
@@ -33,48 +30,54 @@ const Sidebar = () => {
                     <ul className="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
                     {/* <!-- Add icons to the links using the .nav-icon class */}
                         {/* with font-awesome or any other icon font library --> */}
-                    <li className="nav-item has-treeview">
-                        <NavLink exact to={chairman?`/chairman/dashboard`:""} activeClassName="active" className="nav-link">
-                        <i className="nav-icon fas fa-tachometer-alt"></i>
-                        <p>
-                            Dashboard
-                        </p>
-                        </NavLink>
-                    </li>
-                    <li className="nav-item has-treeview menu-open">
-                        <a href="#" className="nav-link">
-                        <i className="nav-icon fas fa-copy"></i>
-                        <p>
-                            Teachers
-                            <i className="fas fa-angle-left right"></i>
-                        </p>
-                        </a>
-                        <ul className="nav nav-treeview">
-                            <li className="nav-item">
-                                <NavLink exact to="/admin/user/all?page=1" activeClassName="active" className={pathname==='/admin/user/create'?'active nav-link':'nav-link'}>
-                                <i className="far fa-circle nav-icon"></i>
-                                <p>All Teacher</p>
-                                </NavLink>
-                            </li>                       
-                        </ul>
-                    </li>
-                    <li className="nav-item has-treeview menu-open">
-                        <a href="#" className="nav-link">
-                        <i className="nav-icon fas fa-copy"></i>
-                        <p>
-                            Students
-                            <i className="fas fa-angle-left right"></i>
-                        </p>
-                        </a>
-                        <ul className="nav nav-treeview">
-                        <li className="nav-item">
-                            <NavLink exact to="/admin/banner/all?page=1" activeClassName="active" className={ pathname==='/admin/banner/create' || pathname.includes('/admin/banner/edit/') ?'nav-link active':'nav-link'}>
-                            <i className="far fa-circle nav-icon"></i>
-                            <p>All Student</p>
+                        <li className="nav-item has-treeview">
+                            <NavLink exact to={chairman?`/chairman/dashboard`:""} activeClassName="active" className="nav-link">
+                                <i className="nav-icon fas fa-tachometer-alt"></i>
+                                <p>
+                                    Dashboard
+                                </p>
                             </NavLink>
-                        </li>                                                     
-                        </ul>
-                    </li>
+                        </li>
+                        <li className="nav-item has-treeview menu-open">
+                            <a href="#" className="nav-link">
+                                <i className="nav-icon fas fa-copy"></i>
+                                <p>
+                                    Teachers
+                                    <i className="fas fa-angle-left right"></i>
+                                </p>
+                            </a>
+                            <ul className="nav nav-treeview">
+                                <li className="nav-item">
+                                    <NavLink exact to="/chairman/all-teacher" className={pathname==='/admin/user/create'?'active nav-link':'nav-link'}>
+                                        <i className="far fa-circle nav-icon"></i>
+                                        <p>All Teacher</p>
+                                    </NavLink>
+                                </li>                       
+                            </ul>
+                        </li>
+                        <li className="nav-item has-treeview menu-open">
+                            <a href="#" className="nav-link">
+                                <i className="nav-icon fas fa-copy"></i>
+                                <p>
+                                    Students
+                                    <i className="fas fa-angle-left right"></i>
+                                </p>
+                            </a>
+                            <ul className="nav nav-treeview">
+                                <li className="nav-item">
+                                    <NavLink exact to="/chairman/add-student" className={ pathname==='/admin/banner/create' || pathname.includes('/admin/banner/edit/') ?'nav-link active':'nav-link'}>
+                                        <i className="far fa-circle nav-icon"></i>
+                                        <p>Add Student</p>
+                                    </NavLink>
+                                </li>
+                                <li className="nav-item">
+                                    <NavLink exact to="/chairman/all-student?session="  className={ pathname==='/admin/banner/create' || pathname.includes('/admin/banner/edit/') ?'nav-link active':'nav-link'}>
+                                        <i className="far fa-circle nav-icon"></i>
+                                        <p>All Student</p>
+                                    </NavLink>
+                                </li>                                                      
+                            </ul>
+                        </li>
                     </ul>
                 </nav>
                 {/* <!-- /.sidebar-menu --> */}

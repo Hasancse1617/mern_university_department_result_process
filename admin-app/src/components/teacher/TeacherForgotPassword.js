@@ -42,11 +42,12 @@ const TeacherForgotPassword = () => {
         <Toaster position="top-right" reverseOrder={false}/>
         <div class="login-box">
         <Helmet>
-            <title>User forgot password - Movie</title>
+            <title>Teacher forgot password - Movie</title>
             <meta name="description" content="User Login Here" />
         </Helmet>
         <div class="login-logo">
-            <a href=""><b>Teacher Panel</b></a>
+            <NavLink to="/admin"><img src="http://localhost:5000/images/logo2.png" width="20%"/></NavLink><br/>
+            <b>Teacher Panel</b>
         </div>
         {/* <!-- /.login-logo --> */}
         <div class="card">

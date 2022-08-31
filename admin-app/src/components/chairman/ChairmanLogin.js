@@ -50,7 +50,8 @@ const ChairmanLogin = () => {
                 <meta name="description" content="User Login Here" />
             </Helmet>
             <div class="login-logo">
-                <a href="../../index2.html"><b>Chairman Panel</b></a>
+                <NavLink to="/admin"><img src="http://localhost:5000/images/logo2.png" width="20%"/></NavLink><br/>
+                <b>Chairman Panel</b>
             </div>
             <div class="card">
                 <div class="card-body login-card-body">
@@ -94,7 +95,7 @@ const ChairmanLogin = () => {
                 <br></br>
                 <p class="mb-1">
                     <NavLink to="/chairman/forgot-password">Forgotten password?</NavLink>
-                    <NavLink style={{float: "right"}} to="/chairman/register">SignUp</NavLink>
+                    <NavLink to="/chairman/register" style={{float: "right"}}>SignUp</NavLink>
                 </p>
                 </div>
                 {/* <!-- /.login-card-body --> */}

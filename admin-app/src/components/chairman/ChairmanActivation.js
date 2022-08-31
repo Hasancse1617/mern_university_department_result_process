@@ -2,7 +2,7 @@ import React from "react";
 import { Helmet } from "react-helmet";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useParams } from "react-router-dom";
+import { NavLink, useParams } from "react-router-dom";
 import { verifyAccount } from "../../store/actions/ChairmanAction";
 import toast, {Toaster} from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
@@ -36,13 +36,14 @@ const ChairmanActivation = (props) => {
         <div className="login-box">
             <Helmet>
                 <title>Chairman Activation - Result Processing system</title>
-                <meta name="description" content="User Login Here" />
+                <meta name="description" content="Chairman Activation" />
             </Helmet>
             <br></br>
             <br></br>
             <br></br>
             <div class="login-logo">
-                <a href="../../index2.html"><b>Chairman Panel</b></a>
+                <NavLink to="/admin"><img src="http://localhost:5000/images/logo2.png" width="20%"/></NavLink><br/>
+                <b>Chairman Panel</b>
             </div>
             <div class="card">
                 <div class="card-body login-card-body">

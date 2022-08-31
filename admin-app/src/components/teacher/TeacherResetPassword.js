@@ -50,7 +50,8 @@ const TeacherResetPassword = () => {
             <meta name="description" content="User Login Here" />
         </Helmet>
             <div class="login-logo">
-                <a><b>Reset Password</b></a>
+                <NavLink to="/admin"><img src="http://localhost:5000/images/logo2.png" width="20%"/></NavLink><br/>
+                <b>Reset Password</b>
             </div>
             {/* <!-- /.login-logo --> */}
             <div class="card">

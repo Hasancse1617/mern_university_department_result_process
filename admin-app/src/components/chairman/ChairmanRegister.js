@@ -49,7 +49,8 @@ const ChairmanRegister = () => {
                 <meta name="description" content="Chairman registration Here" />
             </Helmet>
             <div class="login-logo">
-                <a href="../../index2.html"><b>Chairman Panel</b></a>
+                <NavLink to="/admin"><img src="http://localhost:5000/images/logo2.png" width="20%"/></NavLink><br/>
+                <b>Chairman Panel</b>
             </div>
             <div class="card">
                 <div class="card-body login-card-body">

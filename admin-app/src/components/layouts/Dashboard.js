@@ -3,7 +3,7 @@ import { Helmet } from "react-helmet";
 
 const Dashboard = () => {
     return (
-        <div class="content-wrapper">
+        <>
             <Helmet>
                 <title>User Dashboard - Ecommerce</title>
                 <meta name="description" content="User Login Here" />
@@ -92,8 +92,7 @@ const Dashboard = () => {
                 </div>
             </div>
             </section>
-            {/* <!-- /.content --> */}
-        </div>
+        </>   
     );
 }
 

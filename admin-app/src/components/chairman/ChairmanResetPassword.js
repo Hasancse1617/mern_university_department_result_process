@@ -1,5 +1,5 @@
 import React from "react";
-import { NavLink, useParams } from 'react-router-dom';
+import { NavLink, useNavigate, useParams } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { resetPassword } from '../../store/actions/ChairmanAction';
@@ -8,10 +8,11 @@ import { Helmet } from "react-helmet";
 import toast, { Toaster } from 'react-hot-toast';
 import Swal from 'sweetalert2'
 
-const ChairmanResetPassword = (props) => {
+const ChairmanResetPassword = () => {
     const { token } = useParams();
+    const navigate = useNavigate();
     const dispatch = useDispatch();
-    const {loading, chairmanErrors,message} = useSelector((state)=>state.AuthReducer);
+    const {loading, chairmanErrors,message} = useSelector((state)=>state.ChairmanReducer);
     const [state, setState] = useState({
         password:'',
         c_password:'',
@@ -36,16 +37,9 @@ const ChairmanResetPassword = (props) => {
     }, [chairmanErrors]);
     useEffect(()=>{
         if(message){
-            Swal.fire({
-              position: 'top-end',
-              icon: 'success',
-              title: message,
-              toast: true,
-              showConfirmButton: false,
-              timer: 2000
-            })
-          dispatch({type: REMOVE_CHAIRMAN_MESSAGE});
-          props.history.push('/admin/login');
+            toast.success(message, { duration: 5000 });
+            dispatch({type: REMOVE_CHAIRMAN_MESSAGE});
+            navigate('/admin/login');
         }
       },[message]);
     return (
@@ -57,7 +51,8 @@ const ChairmanResetPassword = (props) => {
             <meta name="description" content="User Login Here" />
         </Helmet>
             <div class="login-logo">
-                <a><b>Reset Password</b></a>
+                <NavLink to="/admin"><img src="http://localhost:5000/images/logo2.png" width="20%"/></NavLink><br/>
+                <b>Reset Password</b>
             </div>
             {/* <!-- /.login-logo --> */}
             <div class="card">

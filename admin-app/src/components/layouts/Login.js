@@ -13,7 +13,8 @@ const Login = () => {
                 <meta name="description" content="User Login Here" />
             </Helmet>
             <div class="login-logo">
-                <a href="../../index2.html"><b>Admin Panel</b></a>
+                <NavLink to="/admin"><img src="http://localhost:5000/images/logo2.png" width="20%"/></NavLink><br/>
+                <b>Admin Panel</b>
             </div>
             <div class="card">
                 <div class="card-body login-card-body">
