@@ -6,6 +6,8 @@ import ChairmanForgotPassword from "../components/chairman/ChairmanForgotPasswor
 import ChairmanLogin from "../components/chairman/ChairmanLogin";
 import ChairmanRegister from "../components/chairman/ChairmanRegister";
 import ChairmanResetPassword from "../components/chairman/ChairmanResetPassword";
+import ExamLogin from "../components/exam/ExamLogin";
+import ExamRegister from "../components/exam/ExamRegister";
 import Login from "../components/layouts/Login";
 import TeacherActivation from "../components/teacher/TeacherActivation";
 import TeacherForgotPassword from "../components/teacher/TeacherForgotPassword";
@@ -21,7 +23,8 @@ const Router = () => {
         <>
            <Switch>
                <Route path="/admin" element={<Login/>}></Route>
-               
+
+                              {/* *** Chairman *** */}
                {/* chairman some route without sidebar and footer */}
                <Route path="/chairman/login" element={<RouteLink><ChairmanLogin/></RouteLink>}></Route>
                <Route path="/chairman/register" element={<RouteLink><ChairmanRegister/></RouteLink>}></Route>
@@ -30,7 +33,13 @@ const Router = () => {
                <Route path="/chairman/reset-password/:token" element={<RouteLink><ChairmanResetPassword/></RouteLink>}></Route>
                {/* end chairman some route without sidebar and footer */}
                <Route path="/chairman/*" element={<DashboardRoute/>}></Route>
-               
+
+                             {/* *** Exam Chairman *** */}
+                {/* chairman some route without sidebar and footer */}
+               <Route path="/exam/login" element={<ExamLogin/>}></Route>
+               <Route path="/exam/register" element={<ExamRegister/>}></Route>
+
+                             {/* *** Chairman *** */}
                {/* Teacher some route without sidebar and footer */}
                <Route path="/teacher/login" element={<TeacherLogin/>}></Route>
                <Route path="/teacher/register" element={<TeacherRegister/>}></Route>

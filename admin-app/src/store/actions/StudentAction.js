@@ -146,6 +146,5 @@ export const statusAction = (statusData) =>{
                  dispatch({type: SET_STUDENT_ERRORS, payload:errors});
               } 
           }
-        
-      };
+      }
   }
