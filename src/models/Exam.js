@@ -1,6 +1,10 @@
 const { model, Schema } = require("mongoose");
 
 const examSchema = new Schema({
+    dept_id:{
+        type: Schema.Types.ObjectId,
+        ref: 'dept'
+    },
     name:{
         type: String,
         required: true
@@ -9,10 +13,6 @@ const examSchema = new Schema({
         type: String,
         required: true,
         unique: true
-    },
-    type:{
-        type: String,
-        required: true
     },
     session:{
         type: String,

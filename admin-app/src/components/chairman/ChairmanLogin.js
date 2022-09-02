@@ -6,13 +6,17 @@ import { LoginChairman } from  "../../store/actions/ChairmanAction";
 import toast, { Toaster } from 'react-hot-toast';
 import { REMOVE_CHAIRMAN_ERRORS } from '../../store/types/ChairmanType';
 import { NavLink } from 'react-router-dom';
+import Select from 'react-select';
+import { fetchDept } from "../../store/actions/CommonAction";
 
 const ChairmanLogin = () => {
     const dispatch = useDispatch();
     const {loading, chairmanErrors} = useSelector((state)=>state.ChairmanReducer);
+    const {departments} = useSelector((state)=>state.CommonReducer);
     const [state, setState] = useState({
-        email: '',
-        password: '',
+        dept_id: "",
+        email: "",
+        password: "",
         remember_me: false,
     });
     const handleInputs = (e) =>{
@@ -21,6 +25,12 @@ const ChairmanLogin = () => {
             [e.target.name]: e.target.value,
         })
     }
+    const handleSelect = (selected_option) =>{
+        setState({
+           ...state,
+           dept_id: selected_option.value
+        });
+   }
     const handleCheck = (e) =>{
         setState({
             ...state,
@@ -30,7 +40,19 @@ const ChairmanLogin = () => {
     const chairmanLogin = (e) =>{
         e.preventDefault();
         dispatch(LoginChairman(state));
-        console.log(state);
+        // console.log(state);
+    }
+    useEffect(()=>{
+        dispatch(fetchDept());
+    },[]);
+    const Options = () =>{
+        const options = [];
+        if(departments){
+            departments.map((dept)=>{
+                options.push({value: dept._id , label:dept.dept_name });
+            })
+        }
+        return options;
     }
     useEffect(()=>{
         if(chairmanErrors && chairmanErrors.length > 0){
@@ -58,6 +80,9 @@ const ChairmanLogin = () => {
                 <p class="login-box-msg"><h5>Sign In</h5></p>
                 
                 <form onSubmit={chairmanLogin}>
+                    <div class="input-group mb-3">
+                       <Select name="dept_name" defaultInputValue={state.dept_id} onChange={handleSelect} options={Options()} placeholder="Select Department"/>
+                    </div>
                     <div class="input-group mb-3">
                     <input type="email" name="email" class="form-control" value={state.email} onChange={handleInputs} placeholder="Email"/>
                     <div class="input-group-append">

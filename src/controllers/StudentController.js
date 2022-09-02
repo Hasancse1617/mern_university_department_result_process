@@ -34,7 +34,7 @@ module.exports.recentlyAdded = async(req, res) =>{
 module.exports.createStudent = async(req, res) =>{ 
     const form = formidable();
     form.parse(req, async(err, fields, files) =>{
-        const {name, roll, reg, session} = fields;
+        const {dept_id, name, roll, reg, session} = fields;
         const errors = [];
         if(name === ''){
             errors.push({msg: 'Student name is required'});
@@ -70,6 +70,7 @@ module.exports.createStudent = async(req, res) =>{
         else{
             try {
                 const response = await Student.create({
+                    dept_id,
                     name,
                     roll,
                     reg,

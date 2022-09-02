@@ -6,12 +6,16 @@ import { RegisterTeacher } from  "../../store/actions/TeacherAction";
 import toast, { Toaster } from 'react-hot-toast';
 import { REMOVE_TEACHER_ERRORS, REMOVE_TEACHER_MESSAGE } from '../../store/types/TeacherType';
 import { NavLink, useNavigate } from 'react-router-dom';
+import Select from 'react-select';
+import { fetchDept } from "../../store/actions/CommonAction";
 
 const TeacherRegister = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const {loading, message, teacherErrors} = useSelector((state)=>state.TeacherReducer);
+    const {departments} = useSelector((state)=>state.CommonReducer);
     const [state, setState] = useState({
+        dept_id: "",
         name: "",
         email: "",
         password: "",
@@ -23,6 +27,24 @@ const TeacherRegister = () => {
             [e.target.name]: e.target.value,
         })
     }
+    const handleSelect = (selected_option) =>{
+        setState({
+           ...state,
+           dept_id: selected_option.value
+        });
+    }
+    const Options = () =>{
+        const options = [];
+        if(departments){
+            departments.map((dept)=>{
+                options.push({value: dept._id , label:dept.dept_name });
+            })
+        }
+        return options;
+    }
+    useEffect(()=>{
+        dispatch(fetchDept());
+    },[]);
     const teacherSignUp = (e) =>{
         e.preventDefault();
         dispatch(RegisterTeacher(state));
@@ -37,7 +59,9 @@ const TeacherRegister = () => {
         if(message){
             toast.success(message, { duration: 5000 });
             dispatch({type: REMOVE_TEACHER_MESSAGE});
-            navigate("/teacher/login");
+            setTimeout(()=>{
+                navigate("/teacher/login");
+            },100);
         }
     }, [teacherErrors, message]);
 
@@ -59,8 +83,11 @@ const TeacherRegister = () => {
                 <p class="login-box-msg"><h5>SignUp</h5></p>
                 
                 <form onSubmit={teacherSignUp}>
-                <div class="input-group mb-3">
-                    <input type="text" name="name" class="form-control" value={state.name} onChange={handleInputs} placeholder="Name"/>
+                    <div class="input-group mb-3">
+                       <Select name="dept_name" defaultInputValue={state.dept_id} onChange={handleSelect} options={Options()} placeholder="Select Department"/>
+                    </div>
+                   <div class="input-group mb-3">
+                    <input type="text" name="name" class="form-control" value={state.name} onChange={handleInputs} placeholder="Teacher Name"/>
                         <div class="input-group-append">
                             <div class="input-group-text">
                             <span class="fas fa-user"></span>
@@ -68,7 +95,7 @@ const TeacherRegister = () => {
                         </div>
                     </div>
                     <div class="input-group mb-3">
-                    <input type="email" name="email" class="form-control" value={state.email} onChange={handleInputs} placeholder="Email"/>
+                    <input type="email" name="email" class="form-control" value={state.email} onChange={handleInputs} placeholder="Teacher Email"/>
                         <div class="input-group-append">
                             <div class="input-group-text">
                             <span class="fas fa-envelope"></span>

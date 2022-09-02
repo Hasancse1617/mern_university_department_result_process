@@ -15,8 +15,11 @@ const createToken = (exam, expiresToken)=>{
 module.exports.createExam = async (req,res)=>{
     const form = formidable({ multiples: true });
     form.parse(req, async(err, fields, files) =>{
-        const {name, email, session, semister, exam_id, password, c_password} = fields;
+        const {dept_id, name, email, session, semister, exam_id, password, c_password} = fields;
         const errors = [];
+        if(dept_id === ''){
+            errors.push({msg: 'Dept Name is required'});
+        }
         if(name === ''){
             errors.push({msg: 'Name is required'});
         }
@@ -57,7 +60,12 @@ module.exports.createExam = async (req,res)=>{
         }
         const checkExam = await Exam.findOne({exam_id});
         if(checkExam){
-            errors.push({msg:'Exam is already exists'});
+            errors.push({msg:'Exam ID is already exists'});
+        }else{
+            const checkEmail = await Exam.findOne({ email });
+            if(checkEmail){
+                errors.push({msg:'Email is already exists'});
+            }
         }
         if(errors.length !== 0){
             return res.status(400).json({errors});
@@ -68,9 +76,9 @@ module.exports.createExam = async (req,res)=>{
             const hash = await bcrypt.hash(password, salt);
             try {
                 const response = await Exam.create({
+                    dept_id,
                     name,
                     email,
-                    type: "exam_chairman",
                     session,
                     semister,
                     exam_id,
@@ -107,7 +115,7 @@ module.exports.loginExam = async(req,res) =>{
             const exam = await Exam.findOne({exam_id});
             if(exam){
                 if(!exam.status){
-                    return res.status(500).json({errors: [{msg: 'Account not verified from Dept Chairman!'}]});
+                    return res.status(500).json({errors: [{msg: 'Exam is not verified from Dept Chairman!'}]});
                 }
 
                 const matched = await bcrypt.compare(password, exam.password);

@@ -1,13 +1,16 @@
 import jwt_decode from 'jwt-decode';
-import { EXAM_LOGOUT, REMOVE_EXAM_ERRORS, REMOVE_EXAM_LOADER, REMOVE_EXAM_MESSAGE, SET_EXAM_ERRORS, SET_EXAM_LOADER, SET_EXAM_MESSAGE, SET_EXAM_TOKEN } from '../types/ExamType';
+import { EXAM_STATUS, EXAM_LOGOUT, REMOVE_EXAM_ERRORS, REMOVE_EXAM_LOADER, REMOVE_EXAM_MESSAGE, SET_EXAM_ERRORS, SET_EXAM_LOADER, SET_EXAM_MESSAGE, SET_EXAM_TOKEN } from '../types/ExamType';
 
 
 const initState = {
     loading: false,
 	examErrors: [],
 	token: '',
+	exams: [],
 	exam: '',
 	message:'',
+	exam_status: false,
+    examId: 0,
 }
 
 const verifyToken = (token) => {
@@ -60,6 +63,9 @@ const ExamReducer = (state = initState, action) => {
 	else if (action.type === REMOVE_EXAM_MESSAGE) {
 		return {...state,message: ''};
 	}
+	else if(action.type === EXAM_STATUS){
+        return{...state, exam_status: action.payload.status, examId: action.payload.exam_id}
+    }
 	else {
 		return state;
 	}

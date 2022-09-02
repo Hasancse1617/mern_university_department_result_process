@@ -27,7 +27,7 @@ const ChairmanRegister = () => {
             [e.target.name]: e.target.value,
         })
     }
-    const handleInput = (selected_option) =>{
+    const handleSelect = (selected_option) =>{
          setState({
             ...state,
             dept_id: selected_option.value
@@ -84,7 +84,7 @@ const ChairmanRegister = () => {
                 
                 <form onSubmit={chairmanSignUp}>
                     <div class="input-group mb-3">
-                       <Select name="dept_name" defaultInputValue={state.dept_id} onChange={handleInput} options={Options()} placeholder="Select Department"/>
+                       <Select name="dept_name" defaultInputValue={state.dept_id} onChange={handleSelect} options={Options()} placeholder="Select Department"/>
                     </div>
                     <div class="input-group mb-3">
                     <input type="text" name="name" class="form-control" value={state.name} onChange={handleInputs} placeholder="Name"/>

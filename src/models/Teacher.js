@@ -1,15 +1,15 @@
 const { model, Schema } = require("mongoose");
 
 const teacherSchema = new Schema({
+    dept_id:{
+        type: Schema.Types.ObjectId,
+        ref: 'dept'
+    },
     name:{
         type: String,
         required: true
     },
     email:{
-        type: String,
-        required: true
-    },
-    type:{
         type: String,
         required: true
     },

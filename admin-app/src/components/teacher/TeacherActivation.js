@@ -21,7 +21,9 @@ const TeacherActivation = (props) => {
         if(message){
           toast.success(message, { duration: 5000 });
           dispatch({type: REMOVE_TEACHER_MESSAGE});
-          navigate(`/teacher/login`);
+          setTimeout(()=>{
+            navigate("/teacher/login");
+          },100);
         }
         if(teacherErrors.length > 0){
             teacherErrors.map((error)=>{

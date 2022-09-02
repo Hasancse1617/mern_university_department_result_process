@@ -11,6 +11,7 @@ import Loader from "../loader/Loader";
 
 const AddStudent = () => {
     const dispatch = useDispatch();
+    const {chairman} = useSelector((state)=>state.ChairmanReducer);
     const { studentErrors, message, recentStudents, loading } = useSelector((state)=> state.StudentReducer);
     const [state,setState] = useState({
         name:"",
@@ -43,6 +44,7 @@ const AddStudent = () => {
         e.preventDefault();
         const {name,roll,reg,session} = state;
         const formData = new FormData();
+        formData.append('dept_id',chairman.dept_id._id);
         formData.append('name',name);
         formData.append('roll',roll);
         formData.append('reg', reg);

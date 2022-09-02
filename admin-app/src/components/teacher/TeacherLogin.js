@@ -52,7 +52,8 @@ const TeacherLogin = () => {
             </Helmet>
             <div class="login-logo">
                 <NavLink to="/admin"><img src="http://localhost:5000/images/logo2.png" width="20%"/></NavLink><br/>
-                <b>Teacher Panel</b>
+                <b>Dept Teacher</b>
+                <h5>Need to verified from Dept Chairman.</h5>
             </div>
             <div class="card">
                 <div class="card-body login-card-body">

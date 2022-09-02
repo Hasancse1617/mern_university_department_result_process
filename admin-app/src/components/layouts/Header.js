@@ -1,10 +1,11 @@
 import React from "react";
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { NavLink } from "react-router-dom";
 import {CHAIRMAN_LOGOUT} from '../../store/types/ChairmanType';
 
 const Header = () =>{
     const dispatch = useDispatch();
+    const {chairman} = useSelector((state)=>state.ChairmanReducer);
     const logout = async () =>{
         localStorage.removeItem('chairmanToken');
         dispatch({type: CHAIRMAN_LOGOUT});
@@ -17,13 +18,13 @@ const Header = () =>{
                     <li class="nav-item">
                         <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i className="fas fa-bars"></i></a>
                     </li>
-                    <li class="nav-item d-none d-sm-inline-block">
-                        <NavLink to="/chairman/dashboard" className="nav-link">Home</NavLink>
-                    </li>
                 </ul>
-
+                <div className="dept_name">
+                     <h1> Dept of {chairman? chairman.dept_id.short_name : ""}</h1>
+                </div>
                 {/* <!-- Right navbar links --> */}
                 <ul class="navbar-nav ml-auto">
+                
                 {/* <!-- Messages Dropdown Menu --> */}
                 <li class="nav-item dropdown">
                     <a class="nav-link" data-toggle="dropdown" href="#">
@@ -88,11 +89,7 @@ const Header = () =>{
                     Logout
                     </a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" data-widget="control-sidebar" data-slide="true" href="#" role="button">
-                    <i class="fas fa-th-large"></i>
-                    </a>
-                </li>
+
                 </ul>
             </nav>
         </>

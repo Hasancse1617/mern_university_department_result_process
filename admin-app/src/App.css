@@ -14,6 +14,7 @@ aside.main-sidebar.sidebar-dark-primary {
 }
 nav.main-header {
   background-color: #bad4b6;
+  position: relative;
 }
 .bg-info {
   background-color: #18616d!important;
@@ -64,4 +65,10 @@ nav.main-header {
 }
 .css-319lph-ValueContainer{
   width: 300px;
+}
+.dept_name {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
 }

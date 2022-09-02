@@ -6,12 +6,16 @@ import { RegisterExam } from  "../../store/actions/ExamAction";
 import toast, { Toaster } from 'react-hot-toast';
 import { REMOVE_EXAM_ERRORS, REMOVE_EXAM_MESSAGE } from '../../store/types/ExamType';
 import { NavLink, useNavigate } from 'react-router-dom';
+import Select from 'react-select';
+import { fetchDept } from "../../store/actions/CommonAction";
 
 const ExamRegister = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const {loading, message, examErrors} = useSelector((state)=>state.ExamReducer);
+    const {departments} = useSelector((state)=>state.CommonReducer);
     const [state, setState] = useState({
+        dept_id: "",
         name: "",
         email: "",
         exam_id: "",
@@ -26,9 +30,27 @@ const ExamRegister = () => {
             [e.target.name]: e.target.value,
         })
     }
+    const handleSelect = (selected_option) =>{
+        setState({
+           ...state,
+           dept_id: selected_option.value
+        });
+   }
     const examSignUp = (e) =>{
         e.preventDefault();
         dispatch(RegisterExam(state));
+    }
+    useEffect(()=>{
+        dispatch(fetchDept());
+    },[]);
+    const Options = () =>{
+        const options = [];
+        if(departments){
+            departments.map((dept)=>{
+                options.push({value: dept._id , label:dept.dept_name });
+            })
+        }
+        return options;
     }
     useEffect(()=>{
         if(message){
@@ -63,6 +85,9 @@ const ExamRegister = () => {
                 <p class="login-box-msg"><h5>SignUp as a Exam Chairman</h5></p>
                 
                 <form onSubmit={examSignUp} enctype="multipart/form-data">
+                    <div class="input-group mb-3">
+                       <Select name="dept_name" defaultInputValue={state.dept_id} onChange={handleSelect} options={Options()} placeholder="Select Department"/>
+                    </div>
                    <div class="input-group mb-3">
                     <input type="text" name="name" class="form-control" value={state.name} onChange={handleInputs} placeholder="Enater Your Name"/>
                         <div class="input-group-append">

@@ -67,7 +67,6 @@ module.exports.createChairman = async (req,res)=>{
                     dept_id,
                     name,
                     email,
-                    type: "chairman",
                     password: hash,
                     email_verified: false
                 });
@@ -112,8 +111,11 @@ module.exports.verifyChairman = async(req,res) =>{
 module.exports.loginChairman = async(req,res) =>{
     const form = formidable();
     form.parse(req, async(err,fields,files)=>{
-        const { email, password, remember_me } = fields;
+        const { dept_id, email, password, remember_me } = fields;
         const errors = [];
+        if(dept_id === ''){
+            errors.push({msg: 'Dept name is required'});
+        }
         if(email === ''){
             errors.push({msg: 'Email is required'});
         }
@@ -128,10 +130,10 @@ module.exports.loginChairman = async(req,res) =>{
             expiresToken = '7d';
         }
         try{
-            const chairman = await Chairman.findOne({email});
+            const chairman = await Chairman.findOne({dept_id, email}).populate('dept_id','short_name');
             if(chairman){
                 if(!chairman.email_verified){
-                    send_Account_Verify_Email(email);
+                    send_Account_Verify_Email(email, "chairman");
                     return res.status(500).json({errors: [{msg: 'Account not verified. Check Email & verify account'}]});
                 }
 
@@ -140,11 +142,11 @@ module.exports.loginChairman = async(req,res) =>{
                     const token = createToken(chairman,expiresToken);
                     return res.status(200).json({'msg':'You have successfully login',token});
                 }else{
-                    return res.status(401).json({errors:[{msg:'Username or Password does not matched'}]});
+                    return res.status(401).json({errors:[{msg:'Password does not matched'}]});
                 }
             }
             else{
-                return res.status(404).json({errors:[{msg:'Email not found'}]});
+                return res.status(404).json({errors:[{msg:'Dept or Email not found'}]});
             }
         }catch(error){
             return res.status(500).json({errors: [{msg: error.message}]});

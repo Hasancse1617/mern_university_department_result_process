@@ -15,9 +15,12 @@ module.exports.createTeacher = async (req,res)=>{
     const form = formidable({ multiples: true });
     form.parse(req, async(err, fields, files) =>{
 
-        const {name, email, password, c_password} = fields;
+        const {dept_id,name, email, password, c_password} = fields;
         const errors = [];
 
+        if(dept_id === ''){
+            errors.push({msg: 'Dept Name is required'});
+        }
         if(name === ''){
             errors.push({msg: 'Name is required'});
         }
@@ -39,8 +42,8 @@ module.exports.createTeacher = async (req,res)=>{
                 errors.push({msg: 'Password & Confirm Password must be equal!!'});
             }
         }
-        const checkUser = await Teacher.findOne({email});
-        if(checkUser){
+        const checkTeacher = await Teacher.findOne({email});
+        if(checkTeacher){
             errors.push({msg:'Email is already exists'});
         }
         if(errors.length !== 0){
@@ -53,9 +56,9 @@ module.exports.createTeacher = async (req,res)=>{
             try {
                 send_Account_Verify_Email(email, "teacher");//Send Email
                 const response = await Teacher.create({
+                    dept_id,
                     name,
                     email,
-                    type: "teacher",
                     password: hash,
                     email_verified: false
                 });
