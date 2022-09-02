@@ -36,3 +36,37 @@ export const LoginExam = (state) =>{
         }
     }
 }
+
+export const forgotPassword = (state) =>{
+    return async (dispatch) =>{
+        try {
+            dispatch({type: SET_EXAM_LOADER});
+            const {data} = await axiosInstance.post('/exam/forgot-password',state);
+            dispatch({type: REMOVE_EXAM_LOADER});
+            dispatch({type: SET_EXAM_MESSAGE, payload: data.msg});
+        } catch (error) {
+            dispatch({type: REMOVE_EXAM_LOADER});
+            if(error.response.data){
+                const {errors} = error.response.data;
+                dispatch({type: SET_EXAM_ERRORS, payload:errors});
+            }
+        }
+    }
+}
+
+export const resetPassword = (state,token) =>{
+    return async (dispatch) =>{
+        try {
+            dispatch({type: SET_EXAM_LOADER});
+            const {data} = await axiosInstance.post(`/exam/reset-password/${token}`,state);
+            dispatch({type: REMOVE_EXAM_LOADER});
+            dispatch({type: SET_EXAM_MESSAGE, payload: data.msg});
+        } catch (error) {
+            dispatch({type: REMOVE_EXAM_LOADER});
+            if(error.response.data){
+                const {errors} = error.response.data;
+                dispatch({type: SET_EXAM_ERRORS, payload:errors});
+            }
+        }
+    }
+}

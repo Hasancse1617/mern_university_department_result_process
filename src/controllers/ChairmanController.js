@@ -1,5 +1,6 @@
 const formidable = require("formidable");
 const Chairman = require("../models/Chairman");
+const Dept = require("../models/Dept");
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
@@ -14,7 +15,7 @@ const createToken = (chairman, expiresToken)=>{
 module.exports.createChairman = async (req,res)=>{
     const form = formidable({ multiples: true });
     form.parse(req, async(err, fields, files) =>{
-
+        // await Dept.create({dept_name: "Biomedical Engineering", short_name: "BME"});
         const {name, email, password, c_password} = fields;
         const errors = [];
 

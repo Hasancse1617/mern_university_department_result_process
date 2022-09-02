@@ -7,6 +7,7 @@ const chairmanRoute = require("./src/routes/ChairmanRoute");
 const teacherRoute = require("./src/routes/TeacherRoute");
 const studentRoute = require("./src/routes/StudentRoute");
 const examRoute = require("./src/routes/ExamRoute");
+const commonRoute = require("./src/routes/CommonRoute");
 
 const app = express();
 connectDB();

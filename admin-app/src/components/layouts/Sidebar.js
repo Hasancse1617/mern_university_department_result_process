@@ -10,7 +10,7 @@ const Sidebar = () => {
                 {/* <!-- Brand Logo --> */}
                 <NavLink to="/admin/dashboard" className="brand-link text-center">
                     <img src="http://localhost:5000/images/logo2.png" width="20%"/><br/>
-                    <span className="brand-text font-weight-light">Chairman Panel</span>
+                    <span className="brand-text font-weight-light">Dept. Chairman</span>
                 </NavLink>
 
                 {/* <!-- Sidebar --> */}

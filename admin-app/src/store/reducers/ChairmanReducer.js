@@ -1,5 +1,5 @@
 import jwt_decode from 'jwt-decode';
-import { CHAIRMAN_LOGOUT, REMOVE_CHAIRMAN_ERRORS, REMOVE_CHAIRMAN_LOADER, REMOVE_CHAIRMAN_MESSAGE, REMOVE_UNAUTHORIZED_ACCESS, SET_CHAIRMAN_ERRORS, SET_CHAIRMAN_LOADER, SET_CHAIRMAN_MESSAGE, SET_CHAIRMAN_TOKEN } from '../types/ChairmanType';
+import { CHAIRMAN_LOGOUT, REMOVE_CHAIRMAN_ERRORS, REMOVE_CHAIRMAN_LOADER, REMOVE_CHAIRMAN_MESSAGE, SET_CHAIRMAN_ERRORS, SET_CHAIRMAN_LOADER, SET_CHAIRMAN_MESSAGE, SET_CHAIRMAN_TOKEN } from '../types/ChairmanType';
 
 
 const initState = {
@@ -9,7 +9,7 @@ const initState = {
 	chairman: '',
 	message:'',
 }
-console.log("Chairman Reducer")
+
 const verifyToken = (token) => {
 	const decodeToken = jwt_decode(token);
 	const expiresIn = new Date(decodeToken.exp * 1000);

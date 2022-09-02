@@ -5,12 +5,14 @@ import ChairmanReducer from './reducers/ChairmanReducer';
 import TeacherReducer from './reducers/TeacherReducer';
 import StudentReducer from './reducers/StudentReducer';
 import ExamReducer from './reducers/ExamReducer';
+import CommonReducer from './reducers/CommonReducer';
 
 const rootReducers = combineReducers({
      ChairmanReducer,
      TeacherReducer,
      StudentReducer,
      ExamReducer,
+     CommonReducer,
 });
 const middlewares = [thunkMiddleware];
 const Store = createStore(rootReducers, composeWithDevTools( applyMiddleware(...middlewares)));

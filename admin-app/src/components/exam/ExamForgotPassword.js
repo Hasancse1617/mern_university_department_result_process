@@ -2,17 +2,18 @@ import React from "react";
 import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { NavLink } from 'react-router-dom'
-import { forgotPassword } from '../../store/actions/ChairmanAction';
-import { REMOVE_CHAIRMAN_ERRORS, REMOVE_CHAIRMAN_MESSAGE } from '../../store/types/ChairmanType';
+import { forgotPassword } from '../../store/actions/ExamAction';
+import { REMOVE_EXAM_ERRORS, REMOVE_EXAM_MESSAGE } from '../../store/types/ExamType';
 import { Helmet } from "react-helmet";
 import toast, { Toaster } from 'react-hot-toast';
 import Swal from 'sweetalert2'
 
-const ChairmanForgotPassword = () => {
+const ExamForgotPassword = () => {
     const dispatch = useDispatch();
-    const {loading, chairmanErrors, message} = useSelector((state)=>state.ChairmanReducer);
+    const {loading, examErrors, message} = useSelector((state)=>state.ExamReducer);
     const [state, setState] = useState({
-        email:''
+        exam_id:"",
+        email:""
     });
     const handleInput = (e) =>{
         setState({
@@ -25,30 +26,30 @@ const ChairmanForgotPassword = () => {
         dispatch(forgotPassword(state));
     }
     useEffect(()=>{
-        if(chairmanErrors && chairmanErrors.length > 0){
-            chairmanErrors.map((error)=>{
+        if(examErrors && examErrors.length > 0){
+            examErrors.map((error)=>{
                 toast.error(error.msg);
             });
-            dispatch({type: REMOVE_CHAIRMAN_ERRORS});
+            dispatch({type: REMOVE_EXAM_ERRORS});
         }
-    }, [chairmanErrors]);
+    }, [examErrors]);
     useEffect(()=>{
         if(message){
             toast.success(message, { duration: 5000 });
-            dispatch({type: REMOVE_CHAIRMAN_MESSAGE});
+            dispatch({type: REMOVE_EXAM_MESSAGE});
         }
-      },[message]);
+    },[message]);
     return (
         <>
         <Toaster position="top-right" reverseOrder={false}/>
         <div class="login-box">
         <Helmet>
-            <title>Chairman forgot password - Movie</title>
+            <title>Exam forgot password - Result processing</title>
             <meta name="description" content="User Login Here" />
         </Helmet>
         <div class="login-logo">
             <NavLink to="/admin"><img src="http://localhost:5000/images/logo2.png" width="20%"/></NavLink><br/>
-            <b>Chairman Panel</b>
+            <b>Exam Panel</b>
         </div>
         {/* <!-- /.login-logo --> */}
         <div class="card">
@@ -57,22 +58,30 @@ const ChairmanForgotPassword = () => {
 
         <form onSubmit={handleSubmit} method="post">
             <div class="input-group mb-3">
-            <input type="email" name="email" value={state.email} onChange={handleInput} class="form-control" placeholder="Email"/>
-            <div class="input-group-append">
-                <div class="input-group-text">
-                <span class="fas fa-envelope"></span>
+                <input type="text" name="exam_id" value={state.exam_id} onChange={handleInput} class="form-control" placeholder="Exam ID"/>
+                <div class="input-group-append">
+                    <div class="input-group-text">
+                        <span class="fas fa-id-card"></span>
+                    </div>
                 </div>
             </div>
+            <div class="input-group mb-3">
+                <input type="email" name="email" value={state.email} onChange={handleInput} class="form-control" placeholder="Email"/>
+                <div class="input-group-append">
+                    <div class="input-group-text">
+                        <span class="fas fa-envelope"></span>
+                    </div>
+                </div>
             </div>
             <div class="row">
-            <div class="col-12">
-                <button type="submit" class="btn btn-primary btn-block">Request new password</button>
-            </div>
+                <div class="col-12">
+                    <button type="submit" class="btn btn-primary btn-block">Request new password</button>
+                </div>
             </div>
         </form>
 
         <p class="mt-3 mb-1">
-            Already have an account? Please <NavLink to="/chairman/login">Login !!!</NavLink>
+            Already have an account? Please <NavLink to="/exam/login">Login !!!</NavLink>
         </p>
         </div>
     </div>
@@ -81,4 +90,4 @@ const ChairmanForgotPassword = () => {
     );
 }
 
-export default ChairmanForgotPassword;
+export default ExamForgotPassword;

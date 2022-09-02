@@ -8,8 +8,8 @@ import { REMOVE_EXAM_ERRORS, REMOVE_EXAM_MESSAGE } from '../../store/types/ExamT
 import { NavLink, useNavigate } from 'react-router-dom';
 
 const ExamRegister = () => {
-    const navigate = useNavigate();
     const dispatch = useDispatch();
+    const navigate = useNavigate();
     const {loading, message, examErrors} = useSelector((state)=>state.ExamReducer);
     const [state, setState] = useState({
         name: "",
@@ -79,7 +79,7 @@ const ExamRegister = () => {
                     </div>
                     <div class="input-group mb-3">
                         <select value={state.session} class="form-control" name="session" onChange={handleInputs}>
-                            <option value="">Select Session</option>
+                            <option value="">Select Exam Session</option>
                             <option value="2016-17">2016-17</option>
                             <option value="2017-18">2017-18</option>
                             <option value="2018-19">2018-19</option>
@@ -94,7 +94,7 @@ const ExamRegister = () => {
                     </div>
                     <div class="input-group mb-3">
                         <select value={state.semister} class="form-control" name="semister" onChange={handleInputs}>
-                            <option value="">Select Semister</option>
+                            <option value="">Select Exam Semister</option>
                             <option value="1">One</option>
                             <option value="2">Two</option>
                             <option value="3">Three</option>

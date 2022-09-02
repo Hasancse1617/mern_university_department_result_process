@@ -23,7 +23,7 @@ const ChairmanActivation = (props) => {
           dispatch({type: REMOVE_CHAIRMAN_MESSAGE});
           navigate(`/chairman/login`);
         }
-        if(chairmanErrors.length > 0){
+        if(chairmanErrors && chairmanErrors.length > 0){
             chairmanErrors.map((error)=>{
                 toast.error(error.msg);
             });

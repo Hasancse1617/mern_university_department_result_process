@@ -6,6 +6,7 @@ import ChairmanForgotPassword from "../components/chairman/ChairmanForgotPasswor
 import ChairmanLogin from "../components/chairman/ChairmanLogin";
 import ChairmanRegister from "../components/chairman/ChairmanRegister";
 import ChairmanResetPassword from "../components/chairman/ChairmanResetPassword";
+import ExamForgotPassword from "../components/exam/ExamForgotPassword";
 import ExamLogin from "../components/exam/ExamLogin";
 import ExamRegister from "../components/exam/ExamRegister";
 import Login from "../components/layouts/Login";
@@ -38,6 +39,7 @@ const Router = () => {
                 {/* chairman some route without sidebar and footer */}
                <Route path="/exam/login" element={<ExamLogin/>}></Route>
                <Route path="/exam/register" element={<ExamRegister/>}></Route>
+               <Route path="/exam/forgot-password" element={<ExamForgotPassword/>}></Route>
 
                              {/* *** Chairman *** */}
                {/* Teacher some route without sidebar and footer */}

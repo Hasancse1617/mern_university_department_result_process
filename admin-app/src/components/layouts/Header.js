@@ -6,7 +6,7 @@ import {CHAIRMAN_LOGOUT} from '../../store/types/ChairmanType';
 const Header = () =>{
     const dispatch = useDispatch();
     const logout = async () =>{
-        localStorage.removeItem('myToken');
+        localStorage.removeItem('chairmanToken');
         dispatch({type: CHAIRMAN_LOGOUT});
     }
     return(
@@ -15,7 +15,7 @@ const Header = () =>{
                 {/* <!-- Left navbar links --> */}
                 <ul class="navbar-nav">
                     <li class="nav-item">
-                        <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i classname="fas fa-bars"></i></a>
+                        <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i className="fas fa-bars"></i></a>
                     </li>
                     <li class="nav-item d-none d-sm-inline-block">
                         <NavLink to="/chairman/dashboard" className="nav-link">Home</NavLink>

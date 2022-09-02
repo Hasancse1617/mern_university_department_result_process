@@ -9,9 +9,9 @@ import { NavLink } from 'react-router-dom';
 
 const ExamLogin = () => {
     const dispatch = useDispatch();
-    const {loading, examErrors } = useSelector((state)=>state.ExamReducer);
+    const {loading, examErrors} = useSelector((state)=>state.ExamReducer);
     const [state, setState] = useState({
-        email: '',
+        exam_id: '',
         password: '',
         remember_me: false,
     });
@@ -56,11 +56,11 @@ const ExamLogin = () => {
             </div>
             <div class="card">
                 <div class="card-body login-card-body">
-                <p class="login-box-msg"><h5>You can login after accept from Dept Chairman!</h5></p>
+                <p class="login-box-msg"><h5>You can login after validation from Dept Chairman!</h5></p>
                 
                 <form onSubmit={examLogin}>
                     <div class="input-group mb-3">
-                    <input type="text" name="exam_id" class="form-control" value={state.email} onChange={handleInputs} placeholder="Exam ID"/>
+                    <input type="text" name="exam_id" class="form-control" value={state.exam_id} onChange={handleInputs} placeholder="Exam ID"/>
                     <div class="input-group-append">
                         <div class="input-group-text">
                         <span class="fas fa-envelope"></span>

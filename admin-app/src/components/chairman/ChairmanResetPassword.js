@@ -28,7 +28,7 @@ const ChairmanResetPassword = () => {
         dispatch(resetPassword(state,token));
     }
     useEffect(()=>{
-        if(chairmanErrors.length > 0){
+        if(chairmanErrors && chairmanErrors.length > 0){
             chairmanErrors.map((error)=>{
                 toast.error(error.msg);
             });

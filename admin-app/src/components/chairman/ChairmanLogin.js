@@ -33,7 +33,7 @@ const ChairmanLogin = () => {
         console.log(state);
     }
     useEffect(()=>{
-        if(chairmanErrors.length > 0){
+        if(chairmanErrors && chairmanErrors.length > 0){
             chairmanErrors.map((error)=>{
                 toast.error(error.msg);
             });
@@ -51,7 +51,7 @@ const ChairmanLogin = () => {
             </Helmet>
             <div class="login-logo">
                 <NavLink to="/admin"><img src="http://localhost:5000/images/logo2.png" width="20%"/></NavLink><br/>
-                <b>Chairman Panel</b>
+                <b>Dept. Chairman</b>
             </div>
             <div class="card">
                 <div class="card-body login-card-body">

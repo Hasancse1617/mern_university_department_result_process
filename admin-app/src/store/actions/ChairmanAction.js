@@ -1,5 +1,5 @@
 import axiosInstance from '../../helper/axiosInstance';
-import { REMOVE_CHAIRMAN_LOADER, SET_CHAIRMAN_ERRORS, SET_CHAIRMAN_LOADER, SET_CHAIRMAN_MESSAGE, SET_CHAIRMAN_TOKEN } from '../types/ChairmanType';
+import { REMOVE_CHAIRMAN_LOADER, SET_CHAIRMAN_ERRORS, SET_CHAIRMAN_LOADER, SET_CHAIRMAN_MESSAGE, SET_CHAIRMAN_TOKEN, SET_DEPT } from '../types/ChairmanType';
 
 export const RegisterChairman = (state) =>{
     return async(dispatch)=>{
@@ -10,9 +10,11 @@ export const RegisterChairman = (state) =>{
             dispatch({type: SET_CHAIRMAN_MESSAGE, payload: data.msg});
             console.log(data.msg)
         } catch (error) {
-            const {errors} = error.response.data;
+            if(error.response.data){
+                const {errors} = error.response.data;
+                dispatch({type: SET_CHAIRMAN_ERRORS, payload:errors});
+            }
             dispatch({type: REMOVE_CHAIRMAN_LOADER});
-            dispatch({type: SET_CHAIRMAN_ERRORS, payload:errors});
         }
     }
 }
@@ -26,9 +28,11 @@ export const LoginChairman = (state) =>{
             localStorage.setItem("chairmanToken", data.token);
             dispatch({type: SET_CHAIRMAN_TOKEN, payload: data.token});
         } catch (error) {
-            const {errors} = error.response.data;
+            if(error.response.data){
+                const {errors} = error.response.data;
+                dispatch({type: SET_CHAIRMAN_ERRORS, payload:errors});
+            }
             dispatch({type: REMOVE_CHAIRMAN_LOADER});
-            dispatch({type: SET_CHAIRMAN_ERRORS, payload:errors});
         }
     }
 }
@@ -41,8 +45,11 @@ export const forgotPassword = (state) =>{
             dispatch({type: REMOVE_CHAIRMAN_LOADER});
             dispatch({type: SET_CHAIRMAN_MESSAGE, payload: data.msg});
         } catch (error) {
+            if(error.response.data){
+                const {errors} = error.response.data;
+                dispatch({type: SET_CHAIRMAN_ERRORS, payload:errors});
+            }
             dispatch({type: REMOVE_CHAIRMAN_LOADER});
-            dispatch({type: SET_CHAIRMAN_ERRORS, payload: error.response.data.errors});
         }
     }
 }
@@ -55,8 +62,11 @@ export const resetPassword = (state,token) =>{
             dispatch({type: REMOVE_CHAIRMAN_LOADER});
             dispatch({type: SET_CHAIRMAN_MESSAGE, payload: data.msg});
         } catch (error) {
+            if(error.response.data){
+                const {errors} = error.response.data;
+                dispatch({type: SET_CHAIRMAN_ERRORS, payload:errors});
+            }
             dispatch({type: REMOVE_CHAIRMAN_LOADER});
-            dispatch({type: SET_CHAIRMAN_ERRORS, payload: error.response.data.errors});
         }
     }
 }
@@ -70,9 +80,11 @@ export const verifyAccount = (token) =>{
                 dispatch({type: REMOVE_CHAIRMAN_LOADER});
                 dispatch({type: SET_CHAIRMAN_MESSAGE, payload:msg});   
           } catch (error) {
-                const {errors} = error.response.data;
+                if(error.response.data){
+                    const {errors} = error.response.data;
+                    dispatch({type: SET_CHAIRMAN_ERRORS, payload:errors});
+                }
                 dispatch({type: REMOVE_CHAIRMAN_LOADER});
-                dispatch({type: SET_CHAIRMAN_ERRORS, payload:errors});
           }
     }
 }

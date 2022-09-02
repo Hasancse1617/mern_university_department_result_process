@@ -6,10 +6,12 @@ import { RegisterChairman } from  "../../store/actions/ChairmanAction";
 import toast, { Toaster } from 'react-hot-toast';
 import { REMOVE_CHAIRMAN_ERRORS, REMOVE_CHAIRMAN_MESSAGE } from '../../store/types/ChairmanType';
 import { NavLink } from 'react-router-dom';
+import { fetchDept } from "../../store/actions/CommonAction";
 
 const ChairmanRegister = () => {
     const dispatch = useDispatch();
     const {loading, message, chairmanErrors} = useSelector((state)=>state.ChairmanReducer);
+    const {departments} = useSelector((state)=>state.CommonReducer);
     const [state, setState] = useState({
         name: "",
         email: "",
@@ -27,7 +29,7 @@ const ChairmanRegister = () => {
         dispatch(RegisterChairman(state));
     }
     useEffect(()=>{
-        if(chairmanErrors.length > 0){
+        if(chairmanErrors && chairmanErrors.length > 0){
             chairmanErrors.map((error)=>{
                 toast.error(error.msg);
             });
@@ -38,7 +40,10 @@ const ChairmanRegister = () => {
             dispatch({type: REMOVE_CHAIRMAN_MESSAGE});
         }
     }, [chairmanErrors, message]);
-
+    useEffect(()=>{
+        console.log('kkkk',departments)
+        dispatch(fetchDept());
+    },[]);
 
     return (
         <>
@@ -50,14 +55,22 @@ const ChairmanRegister = () => {
             </Helmet>
             <div class="login-logo">
                 <NavLink to="/admin"><img src="http://localhost:5000/images/logo2.png" width="20%"/></NavLink><br/>
-                <b>Chairman Panel</b>
+                <b>Dept. Chairman</b>
             </div>
             <div class="card">
                 <div class="card-body login-card-body">
                 <p class="login-box-msg"><h5>SignUp</h5></p>
                 
-                <form onSubmit={chairmanSignUp} enctype="multipart/form-data">
-                <div class="input-group mb-3">
+                <form onSubmit={chairmanSignUp}>
+                  <div class="input-group mb-3">
+                    <input type="text" name="dept_name" class="form-control" value={state.dept_name} onChange={handleInputs} placeholder="Department Name"/>
+                        <div class="input-group-append">
+                            <div class="input-group-text">
+                            <span class="fas fa-user"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="input-group mb-3">
                     <input type="text" name="name" class="form-control" value={state.name} onChange={handleInputs} placeholder="Name"/>
                         <div class="input-group-append">
                             <div class="input-group-text">

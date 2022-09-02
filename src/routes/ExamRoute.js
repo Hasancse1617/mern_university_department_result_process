@@ -4,8 +4,8 @@ const { createExam, loginExam, forgotPassword, resetPassword } = require("../con
 
 
 router.post("/exam/register", createExam);
-// router.post("/exam/login", loginExam);
-// router.post("/exam/forgot-password", forgotPassword);
-// router.post("/exam/reset-password/:token", resetPassword);
+router.post("/exam/login", loginExam);
+router.post("/exam/forgot-password", forgotPassword);
+router.post("/exam/reset-password/:token", resetPassword);
 
 module.exports = router;
