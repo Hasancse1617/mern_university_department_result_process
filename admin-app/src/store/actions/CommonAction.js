@@ -1,7 +1,7 @@
 import axiosInstance from "../../helper/axiosInstance";
 import { REMOVE_COMMON_LOADER, SET_COMMON_ERRORS, SET_COMMON_LOADER, SET_DEPT } from "../types/CommonType";
 
-export const fetchDept = (id) =>{
+export const fetchDept = () =>{
     return async(dispatch,getState)=>{
           dispatch({type: SET_COMMON_LOADER});
           try {

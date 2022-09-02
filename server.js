@@ -18,6 +18,7 @@ app.use("/api/", chairmanRoute);
 app.use("/api/", teacherRoute);
 app.use("/api/", studentRoute);
 app.use("/api/", examRoute);
+app.use("/api/", commonRoute);
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, ()=>{

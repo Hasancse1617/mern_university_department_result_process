@@ -34,7 +34,9 @@ const ExamRegister = () => {
         if(message){
             toast.success(message, { duration: 5000 });
             dispatch({type: REMOVE_EXAM_MESSAGE});
-            navigate("/exam/login");
+            setTimeout(()=>{
+                navigate("/exam/login");
+            },100);
         }
         if(examErrors.length > 0){
             examErrors.map((error)=>{

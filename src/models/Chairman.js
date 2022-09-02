@@ -1,6 +1,10 @@
 const { model, Schema } = require("mongoose");
 
 const chairmanSchema = new Schema({
+    dept_id:{
+        type: Schema.Types.ObjectId,
+        ref: 'dept'
+    },
     name:{
         type: String,
         required: true

@@ -16,9 +16,12 @@ module.exports.createChairman = async (req,res)=>{
     const form = formidable({ multiples: true });
     form.parse(req, async(err, fields, files) =>{
         // await Dept.create({dept_name: "Biomedical Engineering", short_name: "BME"});
-        const {name, email, password, c_password} = fields;
+        const {dept_id, name, email, password, c_password} = fields;
         const errors = [];
 
+        if(dept_id === ''){
+            errors.push({msg: 'Dept name is required'});
+        }
         if(name === ''){
             errors.push({msg: 'Name is required'});
         }
@@ -40,9 +43,16 @@ module.exports.createChairman = async (req,res)=>{
                 errors.push({msg: 'Password & Confirm Password must be equal!!'});
             }
         }
-        const checkUser = await Chairman.findOne({email});
-        if(checkUser){
-            errors.push({msg:'Email is already exists'});
+        const checkEmail = await Chairman.findOne({ email });
+        if(checkEmail){
+            errors.push({msg:'Email already exists!!!'});
+        }else{
+            if(dept_id){
+                const checkDept = await Chairman.findOne({ dept_id });
+                if(checkDept){
+                    errors.push({msg:'Departmental Chairman is already active. You can register after the chairman resigns!!!'});
+                }
+            }
         }
         if(errors.length !== 0){
             return res.status(400).json({errors});
@@ -54,9 +64,10 @@ module.exports.createChairman = async (req,res)=>{
             try {
                 send_Account_Verify_Email(email, "chairman");//Send Email
                 const response = await Chairman.create({
+                    dept_id,
                     name,
                     email,
-                    type: "teacher",
+                    type: "chairman",
                     password: hash,
                     email_verified: false
                 });
