@@ -1,4 +1,5 @@
 const Exam = require("../models/Exam");
+const Student = require("../models/Student");
 const formidable = require("formidable");
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
@@ -63,8 +64,12 @@ module.exports.createExam = async (req,res)=>{
             errors.push({msg:'Exam ID is already exists'});
         }else{
             const checkEmail = await Exam.findOne({ email });
+            const checkSessionSemister = await Exam.findOne({ dept_id, session, semister });
             if(checkEmail){
                 errors.push({msg:'Email is already exists'});
+            }
+            else if(checkSessionSemister){
+                errors.push({msg:'This Session & Semister Exam already exists!'});
             }
         }
         if(errors.length !== 0){
@@ -247,4 +252,14 @@ module.exports.statusExam = async(req, res) =>{
             return res.status(500).json({errors: [{msg: error.message}]});
         }
     });
+}
+
+module.exports.examStudents = async(req, res) =>{
+    const session = req.params.session;
+    try {
+        const response = await Student.find({session}).sort({createdAt:'descending'});
+        return res.status(200).json({ response });
+    } catch (error) {
+        return res.status(500).json({errors: [{msg: error.message}]});
+    }
 }

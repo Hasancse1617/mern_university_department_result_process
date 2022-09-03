@@ -5,6 +5,7 @@ import Sidebar from "../components/layouts/Sidebar";
 import Footer from "../components/layouts/Footer";
 import ExamPrivateRoute from "./ExamPrivateRoute";
 import Dashboard from "../components/layouts/Dashboard";
+import ExamStudent from "../components/exam/ExamStudent";
 
 const ExamDashboardRoute = () => {
     return (
@@ -15,6 +16,7 @@ const ExamDashboardRoute = () => {
                 <Switch>
                     {/*Exam Chairman dashboard Route */}
                     <Route path="/dashboard" element={<ExamPrivateRoute><Dashboard/></ExamPrivateRoute>}></Route>
+                    <Route path="/students" element={<ExamPrivateRoute><ExamStudent/></ExamPrivateRoute>}></Route>
                     {/*End Exam Chairman dashboard Route */}
                 </Switch>
             </div>

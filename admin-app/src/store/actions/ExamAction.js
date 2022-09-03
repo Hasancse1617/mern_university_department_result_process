@@ -1,6 +1,6 @@
 import axiosInstance from "../../helper/axiosInstance";
 import axiosExam from "../../helper/axiosExam";
-import { EXAM_STATUS, REMOVE_EXAM_LOADER, SET_EXAMS, SET_EXAM_ERRORS, SET_EXAM_LOADER, SET_EXAM_MESSAGE, SET_EXAM_TOKEN } from '../types/ExamType';
+import { SET_EXAM_STUDENTS, EXAM_STATUS, REMOVE_EXAM_LOADER, SET_EXAMS, SET_EXAM_ERRORS, SET_EXAM_LOADER, SET_EXAM_MESSAGE, SET_EXAM_TOKEN } from '../types/ExamType';
 
 export const RegisterExam = (state) =>{
     return async(dispatch)=>{
@@ -70,13 +70,28 @@ export const resetPassword = (state,token) =>{
         }
     }
 }
+export const fetchExamStudents = (session) =>{
+    return async(dispatch,getState)=>{
+          dispatch({type: SET_EXAM_LOADER});
+          try {
+                const {data: { response }} = await axiosExam.get(`/exam/students/${session}`);
+                dispatch({type: SET_EXAM_STUDENTS, payload: response});
+                dispatch({type: REMOVE_EXAM_LOADER});
+          } catch (error) {
+                dispatch({type: REMOVE_EXAM_LOADER});
+                if(error && error.response.data){
+                    const {errors} = error.response.data;
+                    dispatch({type: SET_EXAM_ERRORS, payload:errors});
+                } 
+          }
+    }
+}
 // Start Control Dept chairman
 export const fetchExams = (dept_id) =>{
     return async(dispatch,getState)=>{
           dispatch({type: SET_EXAM_LOADER});
           try {
                 const {data: { response }} = await axiosInstance.get(`/exam/all-exam/${dept_id}`);
-                
                 dispatch({type: SET_EXAMS, payload: response});
                 dispatch({type: REMOVE_EXAM_LOADER});
           } catch (error) {

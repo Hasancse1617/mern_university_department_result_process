@@ -1,6 +1,6 @@
 const app = require("express");
 const router = app.Router();
-const { createExam, loginExam, forgotPassword, resetPassword, allExam, deleteExam, statusExam } = require("../controllers/ExamController");
+const { examStudents, createExam, loginExam, forgotPassword, resetPassword, allExam, deleteExam, statusExam } = require("../controllers/ExamController");
 
 
 router.post("/exam/register", createExam);
@@ -10,5 +10,6 @@ router.post("/exam/reset-password/:token", resetPassword);
 router.get("/exam/all-exam/:dept_id", allExam);
 router.post("/delete-exam/:id", deleteExam);
 router.post("/status-exam", statusExam);
+router.get("/exam/students/:session", examStudents);
 
 module.exports = router;

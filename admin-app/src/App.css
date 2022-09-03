@@ -72,3 +72,17 @@ nav.main-header {
   top: 50%;
   transform: translate(-50%, -50%);
 }
+.small-box-2 {
+  min-height: 135px;
+  position: relative;
+}
+.small-box-2 .inner-2{
+  width: 100%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+.inner.inner-2.text-center h4 {
+  font-size: 30px;
+}

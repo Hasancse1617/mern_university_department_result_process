@@ -22,7 +22,7 @@ const Sidebar = () => {
                         <i className="fas fa-user"></i>
                     </div>
                     <div class="info">
-                         <a href="#" className="d-block">{chairman.name}{chairman? chairman.name :exam? exam.name :""}</a>
+                         <a href="#" className="d-block">{chairman? chairman.name :exam? exam.name :""}</a>
                     </div>
                 </div>
 
@@ -97,11 +97,76 @@ const Sidebar = () => {
                                 </li>                                                      
                             </ul>
                         </li></>:""}
+                        {exam?<>
+
+                        <li className="nav-item has-treeview menu-open">
+                            <a href="#" className="nav-link">
+                                <i className="nav-icon fas fa-copy"></i>
+                                <p>
+                                    Students
+                                    <i className="fas fa-angle-left right"></i>
+                                </p>
+                            </a>
+                            <ul className="nav nav-treeview">
+                                <li className="nav-item">
+                                    <NavLink to="/exam/students" className={pathname==='/admin/user/create'?'active nav-link':'nav-link'}>
+                                        <i className="far fa-circle nav-icon"></i>
+                                        <p>Exam Students</p>
+                                    </NavLink>
+                                </li>                       
+                            </ul>
+                        </li>
+                        <li className="nav-item has-treeview menu-open">
+                            <a href="#" className="nav-link">
+                                <i className="nav-icon fas fa-copy"></i>
+                                <p>
+                                    Subjects
+                                    <i className="fas fa-angle-left right"></i>
+                                </p>
+                            </a>
+                            <ul className="nav nav-treeview">
+                                <li className="nav-item">
+                                    <NavLink to="/exam/exam-student" className={pathname==='/admin/user/create'?'active nav-link':'nav-link'}>
+                                        <i className="far fa-circle nav-icon"></i>
+                                        <p>Add Subject</p>
+                                    </NavLink>
+                                </li>
+                                <li className="nav-item">
+                                    <NavLink to="/exam/exam-student" className={pathname==='/admin/user/create'?'active nav-link':'nav-link'}>
+                                        <i className="far fa-circle nav-icon"></i>
+                                        <p>All Subject</p>
+                                    </NavLink>
+                                </li>                       
+                            </ul>
+                        </li>
+                        <li className="nav-item has-treeview menu-open">
+                            <a href="#" className="nav-link">
+                                <i className="nav-icon fas fa-copy"></i>
+                                <p>
+                                    Subjects Mark
+                                    <i className="fas fa-angle-left right"></i>
+                                </p>
+                            </a>
+                            <ul className="nav nav-treeview">
+                                <li className="nav-item">
+                                    <NavLink to="/exam/exam-student" className={pathname==='/admin/user/create'?'active nav-link':'nav-link'}>
+                                        <i className="far fa-circle nav-icon"></i>
+                                        <p>Add Mark</p>
+                                    </NavLink>
+                                </li>
+                                <li className="nav-item">
+                                    <NavLink to="/exam/exam-student" className={pathname==='/admin/user/create'?'active nav-link':'nav-link'}>
+                                        <i className="far fa-circle nav-icon"></i>
+                                        <p>All Subject</p>
+                                    </NavLink>
+                                </li>                       
+                            </ul>
+                        </li>
+                         
+                        </> :""}
                     </ul>
                 </nav>
-                {/* <!-- /.sidebar-menu --> */}
                 </div>
-                {/* <!-- /.sidebar --> */}
             </aside>
         </>
     );
