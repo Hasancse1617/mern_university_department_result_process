@@ -13,9 +13,10 @@ import { deleteTeacher, fetchTeachers, statusAction } from "../../store/actions/
 
 const AllTeacher = () => {
   const {message, loading, teachers, teacher_status,teacherId} = useSelector((state)=> state.StudentReducer);
+  const {chairman} = useSelector((state)=>state.ChairmanReducer);
   const dispatch = useDispatch();
   useEffect(()=>{
-      dispatch(fetchTeachers());
+      dispatch(fetchTeachers(chairman.dept_id._id));
   },[]);
   const deleteStudent = (id) =>{
     Swal.fire({
@@ -76,8 +77,8 @@ const AllTeacher = () => {
                       <tr>
                         <th>SL.</th>
                         <th>Teacher Name</th>
-                        <th>Email</th>
-                        <th>Status</th>
+                        <th>Dept Name</th>
+                        <th>Approval Status</th>
                         <th>Action</th>
                       </tr>
                       </thead>
@@ -89,7 +90,7 @@ const AllTeacher = () => {
                         <tr key={teacher._id}>
                           <td>{ index+1}</td>
                           <td>{ teacher.name }</td>
-                          <td>{ teacher.email }</td>
+                          <td>Dept of { teacher.dept_id.short_name }</td>
                           <td>
                               {
                                 (teacher.status === true) ? 

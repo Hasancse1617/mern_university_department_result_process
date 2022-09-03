@@ -9,7 +9,7 @@ export const fetchDept = () =>{
                 dispatch({type: SET_DEPT, payload: data.response});
                 dispatch({type: REMOVE_COMMON_LOADER});
           } catch (error) {
-                if(error.response.data){
+                if(error && error.response.data){
                     const {errors} = error.response.data;
                     dispatch({type: SET_COMMON_ERRORS, payload:errors});
                 }

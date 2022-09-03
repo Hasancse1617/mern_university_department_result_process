@@ -52,7 +52,7 @@ const AddStudent = () => {
         dispatch(createAction(formData));
     }
     useEffect(()=>{
-        dispatch(fetchRecentStudent());
+        dispatch(fetchRecentStudent(chairman.dept_id._id));
     },[message]);
     useEffect(()=>{
         if(message){

@@ -2,8 +2,9 @@ import React from "react";
 import { Navigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 
-const ExamPrivateRoute = ({children}) => {
+const ExamPublicRoute = ({children}) => {
     const {exam} = useSelector((state)=>state.ExamReducer);
-    return chairman? children : (<Navigate to="/exam/login" replace/>);
+    return exam?( <Navigate to="/exam/dashboard" replace />) : children;
 }
-export default ExamPrivateRoute;
+
+export default ExamPublicRoute;

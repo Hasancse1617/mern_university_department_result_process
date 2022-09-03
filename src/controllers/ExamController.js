@@ -112,7 +112,7 @@ module.exports.loginExam = async(req,res) =>{
             expiresToken = '7d';
         }
         try{
-            const exam = await Exam.findOne({exam_id});
+            const exam = await Exam.findOne({exam_id}).populate('dept_id','short_name');
             if(exam){
                 if(!exam.status){
                     return res.status(500).json({errors: [{msg: 'Exam is not verified from Dept Chairman!'}]});
@@ -205,5 +205,46 @@ module.exports.resetPassword = async(req, res) =>{
                 return res.status(500).json({errors: error.message});
             }
         } 
+    });
+}
+
+module.exports.allExam = async(req, res) =>{
+    const dept_id = req.params.dept_id;
+    try {
+        const response = await Exam.find({dept_id}).populate('dept_id','short_name').sort({createdAt:'descending'});
+        return res.status(200).json({ response });
+    } catch (error) {
+        return res.status(500).json({errors: [{msg: error.message}]});
+    }
+}
+
+module.exports.deleteExam = async (req,res)=>{
+    const id = req.params.id;
+    try{
+        const exam = await Exam.findByIdAndDelete(id);
+        return res.status(200).json({msg: 'Exam deleted successfully'});
+    }catch(error){
+        return res.status(500).json({errors:error});
+    } 
+}
+
+module.exports.statusExam = async(req, res) =>{
+    const form = formidable({ multiples: true });
+    form.parse(req, async(err, fields, files) =>{
+        const { status, exam_id } = fields;
+        let exam_status ;
+        if(status === 'true'){
+            exam_status = false;
+        }else{
+            exam_status = true;
+        }
+        try {
+            const response = await Exam.findOneAndUpdate({_id: exam_id},{
+                status: exam_status
+            },{new: true});
+            return res.status(200).json({ status: exam_status, exam_id});
+        } catch (error) {
+            return res.status(500).json({errors: [{msg: error.message}]});
+        }
     });
 }

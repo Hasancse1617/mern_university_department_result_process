@@ -26,9 +26,11 @@ export const LoginTeacher = (state) =>{
             localStorage.setItem("myToken", data.token);
             dispatch({type: SET_TEACHER_TOKEN, payload: data.token});
         } catch (error) {
-            const {errors} = error.response.data;
             dispatch({type: REMOVE_TEACHER_LOADER});
-            dispatch({type: SET_TEACHER_ERRORS, payload:errors});
+            if(error && error.response.data){
+                const {errors} = error.response.data;
+                dispatch({type: SET_TEACHER_ERRORS, payload:errors});
+            }
         }
     }
 }
@@ -43,7 +45,10 @@ export const forgotPassword = (state) =>{
             dispatch({type: SET_TEACHER_MESSAGE, payload: data.msg});
         } catch (error) {
             dispatch({type: REMOVE_TEACHER_LOADER});
-            dispatch({type: SET_TEACHER_ERRORS, payload: error.response.data.errors});
+            if(error && error.response.data){
+                const {errors} = error.response.data;
+                dispatch({type: SET_TEACHER_ERRORS, payload:errors});
+            }
         }
     }
 }
@@ -57,7 +62,10 @@ export const resetPassword = (state,token) =>{
             dispatch({type: SET_TEACHER_MESSAGE, payload: data.msg});
         } catch (error) {
             dispatch({type: REMOVE_TEACHER_LOADER});
-            dispatch({type: SET_TEACHER_ERRORS, payload: error.response.data.errors});
+            if(error && error.response.data){
+                const {errors} = error.response.data;
+                dispatch({type: SET_TEACHER_ERRORS, payload:errors});
+            }
         }
     }
 }
@@ -71,9 +79,11 @@ export const verifyAccount = (token) =>{
                 dispatch({type: REMOVE_TEACHER_LOADER});
                 dispatch({type: SET_TEACHER_MESSAGE, payload:msg});   
           } catch (error) {
-                const {errors} = error.response.data;
                 dispatch({type: REMOVE_TEACHER_LOADER});
-                dispatch({type: SET_TEACHER_ERRORS, payload:errors});
+                if(error && error.response.data){
+                    const {errors} = error.response.data;
+                    dispatch({type: SET_TEACHER_ERRORS, payload:errors});
+                }
           }
     }
 }

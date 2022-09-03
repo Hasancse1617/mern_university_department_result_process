@@ -5,8 +5,9 @@ const Teacher = require("../models/Teacher");
 
 module.exports.singleSessionStudent = async(req, res) =>{
     const session = req.query.session;
+    const dept_id = req.params.dept_id;
     try {
-        const response = await Student.find({session}).sort({roll:"ascending"});
+        const response = await Student.find({dept_id, session}).sort({roll:"ascending"});
         return res.status(200).json({ response });
     } catch (error) {
         return res.status(500).json({errors: [{msg: error.message}]});
@@ -14,8 +15,9 @@ module.exports.singleSessionStudent = async(req, res) =>{
 }
 
 module.exports.allTeacher = async(req, res) =>{
+    const dept_id = req.params.dept_id;
     try {
-        const response = await Teacher.find().sort({createdAt:'descending'});
+        const response = await Teacher.find({dept_id}).populate('dept_id','short_name').sort({createdAt:'descending'});
         return res.status(200).json({ response });
     } catch (error) {
         return res.status(500).json({errors: [{msg: error.message}]});
@@ -23,8 +25,9 @@ module.exports.allTeacher = async(req, res) =>{
 }
 
 module.exports.recentlyAdded = async(req, res) =>{
+    const dept_id = req.params.dept_id;
     try {
-        const response = await Student.find().limit(10).sort({createdAt:'descending'});
+        const response = await Student.find({dept_id}).limit(10).sort({createdAt:'descending'});
         return res.status(200).json({ response });
     } catch (error) {
         return res.status(500).json({errors: [{msg: error.message}]});

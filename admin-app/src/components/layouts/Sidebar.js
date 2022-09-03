@@ -4,13 +4,14 @@ import { NavLink, useLocation } from "react-router-dom";
 const Sidebar = () => {
     let { pathname } = useLocation();
     const {chairman} = useSelector((state)=>state.ChairmanReducer);
+    const {exam} = useSelector((state)=>state.ExamReducer);
     return (
         <>
             <aside className="main-sidebar sidebar-dark-primary elevation-4">
                 {/* <!-- Brand Logo --> */}
-                <NavLink to="/admin/dashboard" className="brand-link text-center">
+                <NavLink to={chairman?`/chairman/dashboard`:exam?"/exam/dashboard":""} className="brand-link text-center">
                     <img src="http://localhost:5000/images/logo2.png" width="20%"/><br/>
-                    <span className="brand-text font-weight-light">Dept. Chairman</span>
+                    <span className="brand-text font-weight-light">{chairman?"Dept. Chairman":exam?"Exam Chairman":""}</span>
                 </NavLink>
 
                 {/* <!-- Sidebar --> */}
@@ -21,7 +22,7 @@ const Sidebar = () => {
                         <i className="fas fa-user"></i>
                     </div>
                     <div class="info">
-                         <a href="#" className="d-block">{chairman.name}</a>
+                         <a href="#" className="d-block">{chairman.name}{chairman? chairman.name :exam? exam.name :""}</a>
                     </div>
                 </div>
 
@@ -31,12 +32,30 @@ const Sidebar = () => {
                     {/* <!-- Add icons to the links using the .nav-icon class */}
                         {/* with font-awesome or any other icon font library --> */}
                         <li className="nav-item has-treeview">
-                            <NavLink exact to={chairman?`/chairman/dashboard`:""} activeClassName="active" className="nav-link">
+                            <NavLink to={chairman?`/chairman/dashboard`:exam?"/exam/dashboard":""} className="nav-link">
                                 <i className="nav-icon fas fa-tachometer-alt"></i>
                                 <p>
                                     Dashboard
                                 </p>
                             </NavLink>
+                        </li>
+                        {chairman?
+                        <><li className="nav-item has-treeview menu-open">
+                            <a href="#" className="nav-link">
+                                <i className="nav-icon fas fa-copy"></i>
+                                <p>
+                                    Exams
+                                    <i className="fas fa-angle-left right"></i>
+                                </p>
+                            </a>
+                            <ul className="nav nav-treeview">
+                                <li className="nav-item">
+                                    <NavLink exact to="/chairman/all-exam" className={pathname==='/admin/user/create'?'active nav-link':'nav-link'}>
+                                        <i className="far fa-circle nav-icon"></i>
+                                        <p>All Exams</p>
+                                    </NavLink>
+                                </li>                       
+                            </ul>
                         </li>
                         <li className="nav-item has-treeview menu-open">
                             <a href="#" className="nav-link">
@@ -77,7 +96,7 @@ const Sidebar = () => {
                                     </NavLink>
                                 </li>                                                      
                             </ul>
-                        </li>
+                        </li></>:""}
                     </ul>
                 </nav>
                 {/* <!-- /.sidebar-menu --> */}

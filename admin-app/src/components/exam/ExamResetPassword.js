@@ -2,17 +2,16 @@ import React from "react";
 import { NavLink, useNavigate, useParams } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { resetPassword } from '../../store/actions/ChairmanAction';
-import { REMOVE_CHAIRMAN_ERRORS, REMOVE_CHAIRMAN_MESSAGE } from '../../store/types/ChairmanType';
+import { resetPassword } from '../../store/actions/ExamAction';
+import { REMOVE_EXAM_ERRORS, REMOVE_EXAM_MESSAGE } from '../../store/types/ExamType';
 import { Helmet } from "react-helmet";
 import toast, { Toaster } from 'react-hot-toast';
-import Swal from 'sweetalert2'
 
-const ChairmanResetPassword = () => {
+const ExamResetPassword = () => {
     const { token } = useParams();
     const navigate = useNavigate();
     const dispatch = useDispatch();
-    const {loading, chairmanErrors,message} = useSelector((state)=>state.ChairmanReducer);
+    const {loading, examErrors,message} = useSelector((state)=>state.ExamReducer);
     const [state, setState] = useState({
         password:'',
         c_password:'',
@@ -28,18 +27,18 @@ const ChairmanResetPassword = () => {
         dispatch(resetPassword(state,token));
     }
     useEffect(()=>{
-        if(chairmanErrors && chairmanErrors.length > 0){
-            chairmanErrors.map((error)=>{
+        if(examErrors && examErrors.length > 0){
+            examErrors.map((error)=>{
                 toast.error(error.msg);
             });
-            dispatch({type: REMOVE_CHAIRMAN_ERRORS});
+            dispatch({type: REMOVE_EXAM_ERRORS});
         }
-    }, [chairmanErrors]);
+    }, [examErrors]);
     useEffect(()=>{
         if(message){
             toast.success(message, { duration: 5000 });
-            dispatch({type: REMOVE_CHAIRMAN_MESSAGE});
-            navigate('/chairman/login');
+            dispatch({type: REMOVE_EXAM_MESSAGE});
+            setTimeout(()=>{ navigate("/exam/login") },100);
         }
       },[message]);
     return (
@@ -47,7 +46,7 @@ const ChairmanResetPassword = () => {
         <Toaster position="top-right" reverseOrder={false}/>
         <div class="login-box">
         <Helmet>
-            <title>Chairman reset password</title>
+            <title>Exam reset password</title>
             <meta name="description" content="User Login Here" />
         </Helmet>
             <div class="login-logo">
@@ -95,4 +94,4 @@ const ChairmanResetPassword = () => {
     );
 }
 
-export default ChairmanResetPassword;
+export default ExamResetPassword;

@@ -1,16 +1,16 @@
 import { TEACHER_STATUS, REMOVE_STUDENT_ERRORS, SET_RECENT_STUDENTS, REMOVE_STUDENT_LOADER, SET_STUDENTS, SET_STUDENT_ERRORS, SET_STUDENT_LOADER, SET_STUDENT_MESSAGE, SET_SINGLE_STUDENT, SET_TEACHERS } from "../types/StudentType";
 import axiosInstance from "../../helper/axiosInstance";
 
-export const fetchSessionStudent = (session) =>{
+export const fetchSessionStudent = (session, dept_id) =>{
     return async(dispatch,getState)=>{
           dispatch({type: SET_STUDENT_LOADER});
           try {
-                const {data: { response }} = await axiosInstance.get(`/student/session-student?session=${session}`);
+                const {data: { response }} = await axiosInstance.get(`/student/session-student/${dept_id}?session=${session}`);
                 dispatch({type: SET_STUDENTS, payload: response});
                 dispatch({type: REMOVE_STUDENT_LOADER});
           } catch (error) {
                 dispatch({type: REMOVE_STUDENT_LOADER});
-                if(error){
+                if(error && error.response.data){
                   const {errors} = error.response.data;
                   dispatch({type: SET_STUDENT_ERRORS, payload:errors});
                 } 
@@ -18,17 +18,17 @@ export const fetchSessionStudent = (session) =>{
     }
 }
 
-export const fetchRecentStudent = () =>{
+export const fetchRecentStudent = (dept_id) =>{
       return async(dispatch,getState)=>{
             dispatch({type: SET_STUDENT_LOADER});
             try {
-                  const {data: { response }} = await axiosInstance.get(`/student/recently-added`);
+                  const {data: { response }} = await axiosInstance.get(`/student/recently-added/${dept_id}`);
                   
                   dispatch({type: SET_RECENT_STUDENTS, payload: response});
                   dispatch({type: REMOVE_STUDENT_LOADER});
             } catch (error) {
                   dispatch({type: REMOVE_STUDENT_LOADER});
-                  if(error){
+                  if(error && error.response.data){
                        const {errors} = error.response.data;
                        dispatch({type: SET_STUDENT_ERRORS, payload:errors});
                   } 
@@ -36,17 +36,17 @@ export const fetchRecentStudent = () =>{
       }
 }
 
-export const fetchTeachers = () =>{
+export const fetchTeachers = (dept_id) =>{
       return async(dispatch,getState)=>{
             dispatch({type: SET_STUDENT_LOADER});
             try {
-                  const {data: { response }} = await axiosInstance.get(`/chairman/all-teacher`);
+                  const {data: { response }} = await axiosInstance.get(`/chairman/all-teacher/${dept_id}`);
                   
                   dispatch({type: SET_TEACHERS, payload: response});
                   dispatch({type: REMOVE_STUDENT_LOADER});
             } catch (error) {
                   dispatch({type: REMOVE_STUDENT_LOADER});
-                  if(error){
+                  if(error && error.response.data){
                        const {errors} = error.response.data;
                        dispatch({type: SET_STUDENT_ERRORS, payload:errors});
                   } 
@@ -64,7 +64,7 @@ export const createAction = (studentData) =>{
                 dispatch({type: SET_STUDENT_MESSAGE, payload:msg});  
           } catch (error) {
                 dispatch({type: REMOVE_STUDENT_LOADER});
-                if(error){
+                if(error && error.response.data){
                   const {errors} = error.response.data;
                   dispatch({type: SET_STUDENT_ERRORS, payload:errors});
                 } 
@@ -80,7 +80,7 @@ export const deleteAction = (id) =>{
             dispatch({type:REMOVE_STUDENT_ERRORS});
             dispatch({type:SET_STUDENT_MESSAGE, payload: data.msg});    
         } catch (error) {
-            if(error){
+            if(error && error.response.data){
                const {errors} = error.response.data;
                dispatch({type: SET_STUDENT_ERRORS, payload:errors});
             } 
@@ -97,7 +97,7 @@ export const fetchStudent = (id) =>{
                 dispatch({type:SET_SINGLE_STUDENT, payload: data.response});
                 dispatch({type: REMOVE_STUDENT_LOADER});
           } catch (error) {
-               if(error){
+               if(error && error.response.data){
                   const {errors} = error.response.data;
                }
                dispatch({type: REMOVE_STUDENT_LOADER});
@@ -114,9 +114,11 @@ export const updateAction = (studentData,id) =>{
                   dispatch({type: REMOVE_STUDENT_LOADER});
                   dispatch({type: SET_STUDENT_MESSAGE, payload:msg});
             } catch (error) {
-                  const {errors} = error.response.data;
                   dispatch({type: REMOVE_STUDENT_LOADER});
-                  dispatch({type: SET_STUDENT_ERRORS, payload:errors});
+                  if(error && error.response.data){
+                        const {errors} = error.response.data;
+                        dispatch({type: SET_STUDENT_ERRORS, payload:errors});
+                  } 
             }
       }
 }
@@ -127,8 +129,10 @@ export const statusAction = (statusData) =>{
                   const {data: {status,teacher_id}} = await axiosInstance.post(`/status-teacher`, statusData);
                   dispatch({type: TEACHER_STATUS, payload: {status,teacher_id}});
             } catch (error) {
-                  const {errors} = error.response.data;
-                  dispatch({type: SET_STUDENT_ERRORS, payload:errors});
+                  if(error && error.response.data){
+                        const {errors} = error.response.data;
+                        dispatch({type: SET_STUDENT_ERRORS, payload:errors});
+                   } 
             }
       }
   }
@@ -142,8 +146,10 @@ export const statusAction = (statusData) =>{
                   dispatch({type:SET_STUDENT_MESSAGE, payload: data.msg});    
           } catch (error) {
               if(error){
-                 const {errors} = error.response.data;
-                 dispatch({type: SET_STUDENT_ERRORS, payload:errors});
+                  if(error && error.response.data){
+                        const {errors} = error.response.data;
+                        dispatch({type: SET_STUDENT_ERRORS, payload:errors});
+                  } 
               } 
           }
       }

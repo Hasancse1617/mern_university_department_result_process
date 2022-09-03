@@ -14,6 +14,7 @@ const AllStudent = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   // console.log("hhhh",searchParams.get("session"));
   const {message, loading, students} = useSelector((state)=> state.StudentReducer);
+  const {chairman} = useSelector((state)=>state.ChairmanReducer);
   const dispatch = useDispatch();
   const [state,setState] = useState({
       session:""
@@ -24,11 +25,11 @@ const AllStudent = () => {
           [e.target.name]: e.target.value
       });
       setSearchParams({session: e.target.value});
-      dispatch(fetchSessionStudent(e.target.value));
+      dispatch(fetchSessionStudent(e.target.value, chairman.dept_id._id));
   }
   useEffect(()=>{
     setState({ session: searchParams.get("session") });
-    dispatch(fetchSessionStudent(searchParams.get("session")));
+    dispatch(fetchSessionStudent(searchParams.get("session"), chairman.dept_id._id));
   },[]);
   const deleteStudent = (id) =>{
     Swal.fire({

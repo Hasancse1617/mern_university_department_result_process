@@ -2,13 +2,21 @@ import React from "react";
 import { useDispatch, useSelector } from 'react-redux';
 import { NavLink } from "react-router-dom";
 import {CHAIRMAN_LOGOUT} from '../../store/types/ChairmanType';
+import {EXAM_LOGOUT} from '../../store/types/ExamType';
 
 const Header = () =>{
     const dispatch = useDispatch();
     const {chairman} = useSelector((state)=>state.ChairmanReducer);
+    const {exam} = useSelector((state)=>state.ExamReducer);
     const logout = async () =>{
-        localStorage.removeItem('chairmanToken');
-        dispatch({type: CHAIRMAN_LOGOUT});
+        if(chairman){
+            localStorage.removeItem('chairmanToken');
+            dispatch({type: CHAIRMAN_LOGOUT});
+        }
+        else if(exam){
+            localStorage.removeItem('examToken');
+            dispatch({type: EXAM_LOGOUT});
+        }
     }
     return(
         <>
@@ -20,7 +28,7 @@ const Header = () =>{
                     </li>
                 </ul>
                 <div className="dept_name">
-                     <h1> Dept of {chairman? chairman.dept_id.short_name : ""}</h1>
+                     <h1> Dept of {chairman? chairman.dept_id.short_name:exam? exam.dept_id.short_name: ""}</h1>
                 </div>
                 {/* <!-- Right navbar links --> */}
                 <ul class="navbar-nav ml-auto">

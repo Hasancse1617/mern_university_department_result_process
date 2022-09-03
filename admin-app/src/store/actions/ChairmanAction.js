@@ -10,7 +10,7 @@ export const RegisterChairman = (state) =>{
             dispatch({type: SET_CHAIRMAN_MESSAGE, payload: data.msg});
             console.log(data.msg)
         } catch (error) {
-            if(error.response.data){
+            if(error && error.response.data){
                 const {errors} = error.response.data;
                 dispatch({type: SET_CHAIRMAN_ERRORS, payload:errors});
             }
@@ -28,7 +28,7 @@ export const LoginChairman = (state) =>{
             localStorage.setItem("chairmanToken", data.token);
             dispatch({type: SET_CHAIRMAN_TOKEN, payload: data.token});
         } catch (error) {
-            if(error.response.data){
+            if(error && error.response.data){
                 const {errors} = error.response.data;
                 dispatch({type: SET_CHAIRMAN_ERRORS, payload:errors});
             }
@@ -45,7 +45,7 @@ export const forgotPassword = (state) =>{
             dispatch({type: REMOVE_CHAIRMAN_LOADER});
             dispatch({type: SET_CHAIRMAN_MESSAGE, payload: data.msg});
         } catch (error) {
-            if(error.response.data){
+            if(error && error.response.data){
                 const {errors} = error.response.data;
                 dispatch({type: SET_CHAIRMAN_ERRORS, payload:errors});
             }
@@ -62,7 +62,7 @@ export const resetPassword = (state,token) =>{
             dispatch({type: REMOVE_CHAIRMAN_LOADER});
             dispatch({type: SET_CHAIRMAN_MESSAGE, payload: data.msg});
         } catch (error) {
-            if(error.response.data){
+            if(error && error.response.data){
                 const {errors} = error.response.data;
                 dispatch({type: SET_CHAIRMAN_ERRORS, payload:errors});
             }
@@ -80,7 +80,7 @@ export const verifyAccount = (token) =>{
                 dispatch({type: REMOVE_CHAIRMAN_LOADER});
                 dispatch({type: SET_CHAIRMAN_MESSAGE, payload:msg});   
           } catch (error) {
-                if(error.response.data){
+                if(error && error.response.data){
                     const {errors} = error.response.data;
                     dispatch({type: SET_CHAIRMAN_ERRORS, payload:errors});
                 }

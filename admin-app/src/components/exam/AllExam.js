@@ -3,20 +3,20 @@ import { useEffect } from "react";
 import { Helmet } from "react-helmet";
 import toast, {Toaster} from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
-import { NavLink, useSearchParams } from "react-router-dom";
 import Swal from 'sweetalert2';
 import $ from "jquery";
 import Loader from "../loader/Loader";
-import { REMOVE_STUDENT_MESSAGE } from "../../store/types/StudentType";
+import { REMOVE_EXAM_MESSAGE } from "../../store/types/ExamType";
 import { deleteExam, fetchExams, statusAction } from "../../store/actions/ExamAction";
 
 
 const AllExam = () => {
   const {message, loading, exams, exam_status,examId} = useSelector((state)=> state.ExamReducer);
+  const {chairman} = useSelector((state)=>state.ChairmanReducer);
   const dispatch = useDispatch();
   useEffect(()=>{
-      dispatch(fetchExams());
-  },[]);
+      dispatch(fetchExams(chairman.dept_id._id));
+  },[message]);
   const deleteStudent = (id) =>{
     Swal.fire({
       title: 'Are you sure?',
@@ -35,7 +35,7 @@ const AllExam = () => {
   useEffect(()=>{
     if(message){
       toast.success(message, { duration: 3000 });
-      dispatch({type: REMOVE_STUDENT_MESSAGE});
+      dispatch({type: REMOVE_EXAM_MESSAGE});
     }
   },[message]);
 
@@ -75,9 +75,12 @@ const AllExam = () => {
                       <thead>
                       <tr>
                         <th>SL.</th>
-                        <th>Exam Name</th>
-                        <th>Email</th>
-                        <th>Status</th>
+                        <th>Dept Name</th>
+                        <th>Exam ID</th>
+                        <th>Exam Chairman</th>
+                        <th>Session</th>
+                        <th>Semister</th>
+                        <th>Approval Status</th>
                         <th>Action</th>
                       </tr>
                       </thead>
@@ -88,8 +91,11 @@ const AllExam = () => {
                       exams.map((exam, index)=>(
                         <tr key={exam._id}>
                           <td>{ index+1}</td>
+                          <td>{ exam.dept_id.short_name }</td>
+                          <td>{ exam.exam_id }</td>
                           <td>{ exam.name }</td>
-                          <td>{ exam.email }</td>
+                          <td>{ exam.session }</td>
+                          <td>{ exam.semister }</td>
                           <td>
                               {
                                 (exam.status === true) ? 
