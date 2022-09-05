@@ -6,6 +6,8 @@ import Footer from "../components/layouts/Footer";
 import ExamPrivateRoute from "./ExamPrivateRoute";
 import Dashboard from "../components/layouts/Dashboard";
 import ExamStudent from "../components/exam/ExamStudent";
+import AddSubject from "../components/subject/AddSubject";
+import AllSubject from "../components/subject/AllSubject";
 
 const ExamDashboardRoute = () => {
     return (
@@ -17,6 +19,8 @@ const ExamDashboardRoute = () => {
                     {/*Exam Chairman dashboard Route */}
                     <Route path="/dashboard" element={<ExamPrivateRoute><Dashboard/></ExamPrivateRoute>}></Route>
                     <Route path="/students" element={<ExamPrivateRoute><ExamStudent/></ExamPrivateRoute>}></Route>
+                    <Route path="/subjects" element={<ExamPrivateRoute><AllSubject/></ExamPrivateRoute>}></Route>
+                    <Route path="/add-subject" element={<ExamPrivateRoute><AddSubject/></ExamPrivateRoute>}></Route>
                     {/*End Exam Chairman dashboard Route */}
                 </Switch>
             </div>
