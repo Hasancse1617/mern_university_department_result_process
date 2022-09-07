@@ -86,3 +86,7 @@ nav.main-header {
 .inner.inner-2.text-center h4 {
   font-size: 30px;
 }
+/* //horizontal scroll */
+.card-body{
+  overflow-x: auto;
+}

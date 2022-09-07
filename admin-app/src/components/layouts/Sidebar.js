@@ -103,7 +103,7 @@ const Sidebar = () => {
                             <a href="#" className="nav-link">
                                 <i className="nav-icon fas fa-copy"></i>
                                 <p>
-                                    Students
+                                    Manage Students
                                     <i className="fas fa-angle-left right"></i>
                                 </p>
                             </a>
@@ -120,7 +120,7 @@ const Sidebar = () => {
                             <a href="#" className="nav-link">
                                 <i className="nav-icon fas fa-copy"></i>
                                 <p>
-                                    Subjects
+                                    Manage Subjects
                                     <i className="fas fa-angle-left right"></i>
                                 </p>
                             </a>
@@ -143,7 +143,7 @@ const Sidebar = () => {
                             <a href="#" className="nav-link">
                                 <i className="nav-icon fas fa-copy"></i>
                                 <p>
-                                    Subjects Mark
+                                    Manage Marks
                                     <i className="fas fa-angle-left right"></i>
                                 </p>
                             </a>

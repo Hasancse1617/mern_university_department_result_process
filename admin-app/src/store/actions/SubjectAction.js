@@ -1,11 +1,11 @@
-import { REMOVE_SUBJECT_ERRORS, REMOVE_SUBJECT_LOADER, SET_SUBJECTS, SET_SUBJECT_ERRORS, SET_SUBJECT_LOADER, SET_SUBJECT_MESSAGE, SET_SINGLE_SUBJECT } from "../types/SubjectType";
+import { REMOVE_SUBJECT_ERRORS, REMOVE_SUBJECT_LOADER, SET_SUBJECTS, SET_SUBJECT_ERRORS, SET_SUBJECT_LOADER, SET_SUBJECT_MESSAGE, SET_SINGLE_SUBJECT, SET_SUBJECT_TEACHERS, SET_RECENT_SUBJECTS } from "../types/SubjectType";
 import axiosExam from "../../helper/axiosExam";
 
-export const fetchSubjects = (session, dept_id) =>{
+export const fetchSubjects = (exam_id) =>{
     return async(dispatch,getState)=>{
           dispatch({type: SET_SUBJECT_LOADER});
           try {
-                const {data: { response }} = await axiosExam.get(`/subject/session-subject/${dept_id}?session=${session}`);
+                const {data: { response }} = await axiosExam.get(`/subject/all/${exam_id}`);
                 dispatch({type: SET_SUBJECTS, payload: response});
                 dispatch({type: REMOVE_SUBJECT_LOADER});
           } catch (error) {
@@ -86,3 +86,37 @@ export const updateAction = (subjectData,id) =>{
             }
       }
 }
+
+export const subjectTeachers = (dept_id) =>{
+      return async(dispatch,getState)=>{
+            dispatch({type: SET_SUBJECT_LOADER});
+            try {
+                  const {data: { response }} = await axiosExam.get(`/subject/teachers/${dept_id}`);
+                  dispatch({type: SET_SUBJECT_TEACHERS, payload: response});
+                  dispatch({type: REMOVE_SUBJECT_LOADER});
+            } catch (error) {
+                  dispatch({type: REMOVE_SUBJECT_LOADER});
+                  if(error && error.response.data){
+                    const {errors} = error.response.data;
+                    dispatch({type: SET_SUBJECT_ERRORS, payload:errors});
+                  } 
+            }
+      }
+  }
+
+  export const recentSubjects = (exam_id) =>{
+      return async(dispatch,getState)=>{
+            dispatch({type: SET_SUBJECT_LOADER});
+            try {
+                  const {data: { response }} = await axiosExam.get(`/subject/recent-subjects/${exam_id}`);
+                  dispatch({type: SET_RECENT_SUBJECTS, payload: response});
+                  dispatch({type: REMOVE_SUBJECT_LOADER});
+            } catch (error) {
+                  dispatch({type: REMOVE_SUBJECT_LOADER});
+                  if(error && error.response.data){
+                    const {errors} = error.response.data;
+                    dispatch({type: SET_SUBJECT_ERRORS, payload:errors});
+                  } 
+            }
+      }
+  }

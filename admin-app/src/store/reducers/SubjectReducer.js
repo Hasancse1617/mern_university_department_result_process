@@ -1,10 +1,12 @@
-import { REMOVE_SINGLE_SUBJECT, REMOVE_SUBJECT_ERRORS, REMOVE_SUBJECT_LOADER, REMOVE_SUBJECT_MESSAGE, SET_SINGLE_SUBJECT, SET_SUBJECTS, SET_SUBJECT_ERRORS, SET_SUBJECT_LOADER, SET_SUBJECT_MESSAGE } from "../types/SubjectType";
+import { REMOVE_SINGLE_SUBJECT, REMOVE_SUBJECT_ERRORS, REMOVE_SUBJECT_LOADER, REMOVE_SUBJECT_MESSAGE, SET_RECENT_SUBJECTS, SET_SINGLE_SUBJECT, SET_SUBJECTS, SET_SUBJECT_ERRORS, SET_SUBJECT_LOADER, SET_SUBJECT_MESSAGE, SET_SUBJECT_TEACHERS } from "../types/SubjectType";
 
 const initState = {
     loading: false,
     subjectErrors: [],
     message: '',
     subjects: [],
+    subjectTeachers:[],
+    recentSubjects:[],
     subject: [],
     status: false,
 }
@@ -36,6 +38,12 @@ const SubjectReducer = (state=initState, action) =>{
     }
     else if(action.type === REMOVE_SINGLE_SUBJECT){
         return{...state, subject: [], status: false };
+    }
+    else if(action.type === SET_SUBJECT_TEACHERS){
+        return{...state, subjectTeachers: action.payload };
+    }
+    else if(action.type === SET_RECENT_SUBJECTS){
+        return{...state, recentSubjects: action.payload };
     }
     else{
         return state;

@@ -35,7 +35,7 @@ const ExamStudent = () => {
               <div class="col-12">
                 <div class="card">
                   <div class="card-header">
-                    <h4 className="float-left">All Student</h4>
+                    <h4 className="float-left">Exam Students</h4>
                   </div>
                   
                   <div class="card-body">
