@@ -87,7 +87,7 @@ export const updateAction = (subjectData,id) =>{
       }
 }
 
-export const subjectTeachers = (dept_id) =>{
+export const deptTeachers = (dept_id) =>{
       return async(dispatch,getState)=>{
             dispatch({type: SET_SUBJECT_LOADER});
             try {
@@ -104,7 +104,7 @@ export const subjectTeachers = (dept_id) =>{
       }
   }
 
-  export const recentSubjects = (exam_id) =>{
+  export const recentAddedSubjects = (exam_id) =>{
       return async(dispatch,getState)=>{
             dispatch({type: SET_SUBJECT_LOADER});
             try {

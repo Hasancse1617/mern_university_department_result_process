@@ -1,8 +1,9 @@
 const app = require("express");
 const router = app.Router();
-const { allTeacher, recentlySubjects, createSubject, editSubject, updateSubject, deleteSubject } = require("../controllers/SubjectController");
+const { allSubjects, allTeacher, recentlySubjects, createSubject, editSubject, updateSubject, deleteSubject } = require("../controllers/SubjectController");
 
-router.get("/subject/recently-subjects/:exam_id", recentlySubjects);
+router.get("/subject/all/:exam_id", allSubjects);
+router.get("/subject/recent-subjects/:exam_id", recentlySubjects);
 router.get("/subject/teachers/:dept_id", allTeacher);
 router.post("/subject/add", createSubject);
 router.get("/subject/edit/:id", editSubject);

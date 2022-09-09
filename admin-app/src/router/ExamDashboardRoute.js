@@ -8,6 +8,9 @@ import Dashboard from "../components/layouts/Dashboard";
 import ExamStudent from "../components/exam/ExamStudent";
 import AddSubject from "../components/subject/AddSubject";
 import AllSubject from "../components/subject/AllSubject";
+import EditSubject from "../components/subject/EditSubject";
+import MarkSubjects from "../components/mark/MarkSubjects";
+import AddMark from "../components/mark/AddMark";
 
 const ExamDashboardRoute = () => {
     return (
@@ -21,6 +24,9 @@ const ExamDashboardRoute = () => {
                     <Route path="/students" element={<ExamPrivateRoute><ExamStudent/></ExamPrivateRoute>}></Route>
                     <Route path="/subjects" element={<ExamPrivateRoute><AllSubject/></ExamPrivateRoute>}></Route>
                     <Route path="/add-subject" element={<ExamPrivateRoute><AddSubject/></ExamPrivateRoute>}></Route>
+                    <Route path="/edit-subject/:id" element={<ExamPrivateRoute><EditSubject/></ExamPrivateRoute>}></Route>
+                    <Route path="/mark-subjects" element={<ExamPrivateRoute><MarkSubjects/></ExamPrivateRoute>}></Route>
+                    <Route path="/add-mark/:id" element={<ExamPrivateRoute><AddMark/></ExamPrivateRoute>}></Route>
                     {/*End Exam Chairman dashboard Route */}
                 </Switch>
             </div>

@@ -1,28 +1,27 @@
 import React from "react";
 import { useEffect, useState } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate, useParams } from "react-router-dom";
 import { Helmet } from "react-helmet";
 import Loader from "../loader/Loader";
 import toast, {Toaster} from "react-hot-toast";
 import { useDispatch, useSelector } from 'react-redux';
-import { createAction, recentAddedSubjects, deptTeachers } from "../../store/actions/SubjectAction";
-import { REMOVE_SUBJECT_ERRORS, REMOVE_SUBJECT_MESSAGE } from "../../store/types/SubjectType";
+import { deptTeachers, fetchSubject, updateAction } from "../../store/actions/SubjectAction";
+import { REMOVE_SINGLE_SUBJECT, REMOVE_SUBJECT_ERRORS, REMOVE_SUBJECT_MESSAGE } from "../../store/types/SubjectType";
 
-const AddSubject = () => {
+const EditSubject = () => {
     const dispatch = useDispatch();
+    const { id } = useParams();
+    const navigate = useNavigate();
     const { exam } = useSelector((state)=>state.ExamReducer);
-    const { loading, subjectErrors, message, subjectTeachers, recentSubjects } = useSelector((state)=> state.SubjectReducer);
+    const { loading, status, subjectErrors, message, subject, subjectTeachers } = useSelector((state)=> state.SubjectReducer);
     const [state,setState] = useState({
-        exam_id: exam._id,
         subject_code:"",
         subject_mark:"",
         subject_credit:"",
-        examinar_number:"three",
         first_examinar:"",
         second_examinar:"",
         third_examinar:""
     });
-    console.log(recentSubjects)
     const handleInput = (e) =>{
         setState({
             ...state,
@@ -31,18 +30,33 @@ const AddSubject = () => {
     }
     const createSubject = (e) =>{
         e.preventDefault();
-        dispatch(createAction(state));
+        dispatch(updateAction(state, id));
     }
     useEffect(()=>{
+        dispatch(fetchSubject(id));
         dispatch(deptTeachers(exam.dept_id._id));
-        dispatch(recentAddedSubjects(exam._id));
+        return()=>{
+            dispatch({type: REMOVE_SINGLE_SUBJECT});
+        }
     },[]);
+    useEffect(()=>{
+        if(status){
+           setState({
+               subject_code: subject.subject_code,
+               subject_mark: subject.subject_mark,
+               subject_credit: subject.subject_credit,
+               first_examinar: subject.first_examinar,
+               second_examinar: subject.second_examinar,
+               third_examinar: subject.third_examinar
+           });
+        }
+        dispatch(fetchSubject(id));
+    },[status]);
     useEffect(()=>{
         if(message){
             toast.success(message, { duration: 3000 });
             dispatch({type: REMOVE_SUBJECT_MESSAGE});
-            setState({...state, subject_code:"", subject_mark:"", subject_credit:"", first_examinar:"",second_examinar:"",third_examinar:""});
-            dispatch(recentAddedSubjects(exam._id));
+            navigate('/exam/subjects');
         }
         if(subjectErrors && subjectErrors.length > 0){
             subjectErrors.map((error)=>{
@@ -65,10 +79,10 @@ const AddSubject = () => {
             <div class="col-12">
                 <div class="card">
                 <div class="card-header">
-                    <h4 className="float-left">Add Subject</h4>
+                    <h4 className="float-left">Edit Subject</h4>
                     <h3><NavLink to="/exam/subjects" className="btn btn-sm btn-success float-right text-bold">All Subject</NavLink></h3>
                 </div>
-                <form role="form" onSubmit={createSubject}>
+                {!loading?<form role="form" onSubmit={createSubject}>
                     <div class="card-body">
                     <div class="form-group row">
                         <label for="exampleInputEmail1" className="col-sm-2  col-form-label">Subject Code</label>
@@ -89,17 +103,6 @@ const AddSubject = () => {
                         </div> 
                     </div>
                     <div class="form-group row">
-                        <label for="exampleInputEmail1" className="col-sm-2 col-form-label">Number of Examniar</label>
-                        <div className="col-sm-3">
-                           <input type="radio" name="examinar_number" value="one" checked={state.examinar_number=="one"} onChange={handleInput}  id="exampleInputEmail1"/>
-                           &nbsp;&nbsp;<label className="col-form-label">One Examniar</label>
-                        </div>
-                        <div className="col-sm-3">
-                           <input type="radio" name="examinar_number" value="three" checked={state.examinar_number=="three"} onChange={handleInput} class="" id="exampleInputEmail1"/>
-                           &nbsp;&nbsp;<label className="col-form-label">Three Examniar</label>
-                        </div>  
-                    </div>
-                    <div class="form-group row">
                         <label for="exampleInput" className="col-sm-2  col-form-label">1st Examinar</label>
                         <div className="col-sm-8">
                           <select value={state.first_examinar} class="form-control" name="first_examinar" onChange={handleInput}>
@@ -110,7 +113,7 @@ const AddSubject = () => {
                           </select>
                         </div> 
                     </div>
-                    {state.examinar_number == "three"?<>
+                    {subject.second_examinar?<>
                     <div class="form-group row">
                         <label for="exampleInput" className="col-sm-2  col-form-label">2nd Examinar</label>
                         <div className="col-sm-8">
@@ -137,66 +140,14 @@ const AddSubject = () => {
                         <button type="submit" class="btn btn-primary">Submit</button>
                     </div>
                     </div>
-                </form>
+                </form>:<Loader/>}
                 </div>
                 </div>
             </div>
-            </div>
-        </section>
-        <section class="content">
-          <div class="container-fluid">
-            <div class="row">
-              <div class="col-12">
-                <div class="card">
-                  <div class="card-header">
-                    <h4 className="float-left">Recently added Subject</h4>
-                  </div>
-                  <div class="card-body">
-                    <table id="example2" class="table table-bordered table-hover">
-                      <thead>
-                      <tr>
-                        <th>SL.</th>
-                        <th>Subject Code</th>
-                        <th>Total Mark</th>
-                        <th>Credit</th>
-                        <th>1st Examinar</th>
-                        <th>2nd Examinar</th>
-                        <th>3rd Examinar</th>
-                        <th>Action</th>
-                      </tr>
-                      </thead>
-                      <tbody>
-                      {
-                      !loading?
-                      recentSubjects.length > 0 ?
-                      recentSubjects.map((subject, index)=>(
-                          <tr key={subject._id}>
-                          <td>{ index+1}</td>
-                          <td>{ subject.subject_code }</td>
-                          <td>{ subject.subject_mark }</td>
-                          <td>{ subject.subject_credit }</td>
-                          <td>{ subject.first_examinar.name }</td>
-                          <td>{ subject.second_examinar.name }</td>
-                          <td>{ subject.third_examinar.name }</td>
-                          <td>
-                            <NavLink exact to={`/subject/edit-subject/${subject._id}`} ><button title="Edit" className="text-success" ><i className="fas fa-edit"></i></button></NavLink>&nbsp;
-                          </td>
-                        </tr>
-                        ))
-                        :'No resent subjects found'
-                      :(<Loader/>)
-                       } 
-                      </tbody>
-                    </table>
-                    
-                  </div>
-                </div>
-                </div>
-              </div>
             </div>
         </section>
         </>
     );
 }
 
-export default AddSubject;
+export default EditSubject;

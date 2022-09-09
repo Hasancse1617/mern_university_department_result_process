@@ -90,3 +90,6 @@ nav.main-header {
 .card-body{
   overflow-x: auto;
 }
+.code_padding{
+  width: 200px;
+}

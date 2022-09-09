@@ -1,11 +1,21 @@
 const formidable = require('formidable');
-const Student = require("../models/Student");
+const Subject = require('../models/Subject');
 const Teacher = require("../models/Teacher");
 
 module.exports.allTeacher = async(req, res) =>{
     const dept_id = req.params.dept_id;
     try {
-        const response = await Teacher.find({dept_id}).sort({createdAt:'descending'});
+        const response = await Teacher.find({dept_id, status: true}).select({ "name": 1, "_id": 1}).sort({createdAt:'descending'});
+        return res.status(200).json({ response });
+    } catch (error) {
+        return res.status(500).json({errors: [{msg: error.message}]});
+    }
+}
+
+module.exports.allSubjects = async(req, res) =>{
+    const exam_id = req.params.exam_id;
+    try {
+        const response = await Subject.find({exam_id}).populate('first_examinar','name').populate('second_examinar','name').populate('third_examinar','name').sort({subject_code:'ascending'});
         return res.status(200).json({ response });
     } catch (error) {
         return res.status(500).json({errors: [{msg: error.message}]});
@@ -13,9 +23,9 @@ module.exports.allTeacher = async(req, res) =>{
 }
 
 module.exports.recentlySubjects = async(req, res) =>{
-    const dept_id = req.params.dept_id;
+    const exam_id = req.params.exam_id;
     try {
-        const response = await Student.find({dept_id}).limit(10).sort({createdAt:'descending'});
+        const response = await Subject.find({exam_id}).populate('first_examinar','name').populate('second_examinar','name').populate('third_examinar','name').sort({createdAt:'descending'});
         return res.status(200).json({ response });
     } catch (error) {
         return res.status(500).json({errors: [{msg: error.message}]});
@@ -25,34 +35,47 @@ module.exports.recentlySubjects = async(req, res) =>{
 module.exports.createSubject = async(req, res) =>{ 
     const form = formidable();
     form.parse(req, async(err, fields, files) =>{
-        const {dept_id, name, roll, reg, session} = fields;
+        const {exam_id, subject_code, subject_mark, subject_credit, examinar_number, first_examinar, second_examinar, third_examinar} = fields;
         const errors = [];
-        if(name === ''){
-            errors.push({msg: 'Student name is required'});
-        }
-        if(roll === ''){
-            errors.push({msg: 'Student roll is required'});
+        if(subject_code === ''){
+            errors.push({msg: 'Subject Code is required'});
         }else{
-            let isnum = /^\d+$/.test(roll);
-            if(!isnum){
-                errors.push({msg: 'Valid roll is required'});
+            let isValid = /^([A-Z])+\-([0-9])+$/.test(subject_code);
+            if(!isValid){
+                errors.push({msg: 'Valid Subject Code is required'});
             }
         }
-        if(reg === ''){
-            errors.push({msg: 'Student reg is required'});
+        if(subject_mark === ''){
+            errors.push({msg: 'Subject mark is required'});
         }else{
-            let isnum = /^\d+$/.test(roll);
+            let isnum = /^\d.+$/.test(subject_mark);
             if(!isnum){
-                errors.push({msg: 'Valid reg is required'});
+                errors.push({msg: 'Valid mark is required'});
             }
         }
-        if(session === ''){
-            errors.push({msg: 'Student session is required'});
+        if(subject_credit === ''){
+            errors.push({msg: 'Subject credit is required'});
+        }else{
+            let isnum = /^\d.+$/.test(subject_credit);
+            if(!isnum){
+                errors.push({msg: 'Valid credit is required'});
+            }
+        }
+        if(first_examinar === ''){
+            errors.push({msg: 'First examinar is required'});
+        }
+        if(examinar_number === "three"){
+            if(second_examinar === ''){
+                errors.push({msg: 'Second examinar is required'});
+            }
+            if(third_examinar === ''){
+                errors.push({msg: 'Third examinar is required'});
+            }
         }
 
-        const checkStudent = await Student.findOne({session, roll});
-        if(checkStudent){
-            errors.push({msg:'Student is already exists'});
+        const checkSubject = await Subject.findOne({subject_code});
+        if(checkSubject){
+            errors.push({msg:'Subject is already exists'});
         }
 
         if(errors.length !== 0){
@@ -60,16 +83,17 @@ module.exports.createSubject = async(req, res) =>{
         }
         else{
             try {
-                const response = await Student.create({
-                    dept_id,
-                    name,
-                    roll,
-                    reg,
-                    session,
+                const response = await Subject.create({
+                    exam_id,
+                    subject_code,
+                    subject_mark,
+                    subject_credit,
+                    first_examinar,
+                    second_examinar,
+                    third_examinar,
                 });
-                return res.status(200).json({msg: 'Student created successfully', response});
+                return res.status(200).json({msg: 'Subject created successfully', response});
             } catch (error) {
-                console.log("hhhhh")
                 return res.status(500).json({errors: [{msg: error.message}]});
             }
         }
@@ -79,7 +103,7 @@ module.exports.createSubject = async(req, res) =>{
 module.exports.editSubject = async(req, res) =>{
     const id = req.params.id;
     try {
-        const response = await Student.findOne({_id:id});
+        const response = await Subject.findOne({_id:id});
         return res.status(200).json({response});
         
     } catch (error) {
@@ -90,15 +114,44 @@ module.exports.editSubject = async(req, res) =>{
 module.exports.updateSubject = async(req, res) =>{
     const id = req.params.id;
     const form = formidable({ multiples: true });
-
+    const subject = await Subject.findOne({_id:id});
     form.parse(req, async(err, fields, files) =>{
-        const {name, session} = fields;
+        const { subject_code, subject_mark, subject_credit, first_examinar, second_examinar, third_examinar} = fields;
         const errors = [];
-        if(name === ''){
-            errors.push({msg: 'Student name is required'});
+        if(subject_code === ''){
+            errors.push({msg: 'Subject Code is required'});
+        }else{
+            let isValid = /^([A-Z])+\-([0-9])+$/.test(subject_code);
+            if(!isValid){
+                errors.push({msg: 'Valid Subject Code is required'});
+            }
         }
-        if(session === ''){
-            errors.push({msg: 'Student session is required'});
+        if(subject_mark === ''){
+            errors.push({msg: 'Subject mark is required'});
+        }else{
+            let isnum = /^\d.+$/.test(subject_mark);
+            if(!isnum){
+                errors.push({msg: 'Valid mark is required'});
+            }
+        }
+        if(subject_credit === ''){
+            errors.push({msg: 'Subject credit is required'});
+        }else{
+            let isnum = /^\d.+$/.test(subject_credit);
+            if(!isnum){
+                errors.push({msg: 'Valid credit is required'});
+            }
+        }
+        if(first_examinar === ''){
+            errors.push({msg: 'First examinar is required'});
+        }
+        if(subject && subject.second_examinar){
+            if(second_examinar === ''){
+                errors.push({msg: 'Second examinar is required'});
+            }
+            if(third_examinar === ''){
+                errors.push({msg: 'Third examinar is required'});
+            }
         }
         
         if(errors.length !== 0){
@@ -106,11 +159,15 @@ module.exports.updateSubject = async(req, res) =>{
         }
         else{
             try {
-                const response = await Student.findByIdAndUpdate(id,{
-                    name,
-                    session
+                const response = await Subject.findByIdAndUpdate(id,{
+                    subject_code,
+                    subject_mark,
+                    subject_credit,
+                    first_examinar,
+                    second_examinar,
+                    third_examinar
                 });
-                return res.status(200).json({msg: 'Student updated successfully', response});
+                return res.status(200).json({msg: 'Subject updated successfully', response});
             } catch (error) {
                 return res.status(500).json({errors: [{msg: error.message}]});
             }
@@ -121,8 +178,8 @@ module.exports.updateSubject = async(req, res) =>{
 module.exports.deleteSubject = async (req,res)=>{
     const id = req.params.id;
     try{
-        const student = await Student.findByIdAndDelete(id);
-        return res.status(200).json({msg: 'Student deleted successfully'});
+        const subject = await Subject.findByIdAndDelete(id);
+        return res.status(200).json({msg: 'Subject deleted successfully'});
     }catch(error){
         return res.status(500).json({errors:error});
     } 
