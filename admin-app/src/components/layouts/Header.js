@@ -1,13 +1,14 @@
 import React from "react";
 import { useDispatch, useSelector } from 'react-redux';
-import { NavLink } from "react-router-dom";
 import {CHAIRMAN_LOGOUT} from '../../store/types/ChairmanType';
 import {EXAM_LOGOUT} from '../../store/types/ExamType';
+import {TEACHER_LOGOUT} from '../../store/types/TeacherType';
 
 const Header = () =>{
     const dispatch = useDispatch();
     const {chairman} = useSelector((state)=>state.ChairmanReducer);
     const {exam} = useSelector((state)=>state.ExamReducer);
+    const {teacher} = useSelector((state)=>state.TeacherReducer);
     const logout = async () =>{
         if(chairman){
             localStorage.removeItem('chairmanToken');
@@ -16,6 +17,10 @@ const Header = () =>{
         else if(exam){
             localStorage.removeItem('examToken');
             dispatch({type: EXAM_LOGOUT});
+        }
+        else if(teacher){
+            localStorage.removeItem('teacherToken');
+            dispatch({type: TEACHER_LOGOUT});
         }
     }
     return(
@@ -28,7 +33,7 @@ const Header = () =>{
                     </li>
                 </ul>
                 <div className="dept_name">
-                     <h1> Dept of {chairman? chairman.dept_id.short_name:exam? exam.dept_id.short_name: ""}</h1>
+                     <h1> Dept of {chairman? chairman.dept_id.short_name:exam? exam.dept_id.short_name:teacher?teacher.dept_id.short_name: ""}</h1>
                 </div>
                 {/* <!-- Right navbar links --> */}
                 <ul class="navbar-nav ml-auto">

@@ -14,13 +14,13 @@ const verifyToken = (token) => {
 	const decodeToken = jwt_decode(token);
 	const expiresIn = new Date(decodeToken.exp * 1000);
 	if (new Date() > expiresIn) {
-		localStorage.removeItem('myToken');
+		localStorage.removeItem('teacherToken');
 		return null;
 	} else {
 		return decodeToken;
 	}
 };
-const token = localStorage.getItem('myToken');
+const token = localStorage.getItem('teacherToken');
 if (token) {
 	const decoded = verifyToken(token);
 	if (decoded) {
@@ -29,7 +29,7 @@ if (token) {
 		initState.teacher = teacher;
 	}
 }
-console.log("Teacher Reducer")
+
 const TeacherReducer = (state = initState, action) => {
     if (action.type === SET_TEACHER_LOADER) {
 		return { ...state, loading: true };

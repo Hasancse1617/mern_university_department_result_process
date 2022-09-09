@@ -1,10 +1,18 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Helmet } from "react-helmet";
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
+import { NavLink } from "react-router-dom";
+import { fetchMarkSubjects } from "../../store/actions/MarkAction";
 
 const Dashboard = () => {
+    const dispatch = useDispatch();
     const {chairman} = useSelector((state)=>state.ChairmanReducer);
     const {exam} = useSelector((state)=>state.ExamReducer);
+    const {teacher} = useSelector((state)=>state.TeacherReducer);
+
+    useEffect(()=>{
+        dispatch(fetchMarkSubjects(teacher.exam._id));
+    },[]);
     return (
         <>
             <Helmet>
@@ -23,25 +31,26 @@ const Dashboard = () => {
             
             <section class="content">
             <div class="container-fluid">
-                {exam? <div class="row">
+                {exam || teacher? 
+                <div class="row">
                     <div class="col-lg-4 col-6">
                         <div class="small-box small-box-2 bg-info">
                             <div class="inner inner-2 text-center">
-                                <h4>Exam ID: {exam.exam_id}</h4>
+                                <h4>Exam ID: {exam? exam.exam_id: teacher? teacher.exam.exam_id:""}</h4>
                             </div>
                         </div>
                     </div>
                     <div class="col-lg-4 col-6">
                         <div class="small-box small-box-2  bg-success">
                             <div class="inner inner-2 text-center">
-                                <h4>Session: {exam.session}</h4>
+                                <h4>Session: {exam? exam.session: teacher? teacher.exam.session: ""}</h4>
                             </div>
                         </div>
                     </div>
                     <div class="col-lg-4 col-6">
                         <div class="small-box small-box-2 bg-warning">
                             <div class="inner inner-2 text-center">
-                                <h4>Semister: {exam.semister}</h4>
+                                <h4>Semister: {exam? exam.semister: teacher? teacher.exam.semister: ""}</h4>
                             </div>                      
                         </div>
                     </div>
@@ -98,6 +107,73 @@ const Dashboard = () => {
                         </div>
                     </div>
                 </div>:""}
+                
+                {teacher?
+                <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                    <div class="card-header">
+                        <h4 className="float-left">Add students subject marks</h4>
+                        <h3><NavLink exact to="/chairman/add-student"><button type="button" class="btn btn-primary float-right text-bold">Add Student</button></NavLink></h3>
+                    </div>
+                    
+                    <div class="card-body">
+                        <form role="form" >
+                            <div class="form-group row">
+                                <div className="col-sm-3">
+                                <select  class="form-control" name="session" >
+                                    <option value="">Select Subject</option>
+                                    <option value="2016-17">2016-17</option>
+                                </select>
+                                </div> 
+                                <div className="col-sm-3">
+                                <select  class="form-control" name="session" >
+                                    <option value="">Select Examinar Type</option>
+                                    <option value="2016-17">First Examinar</option>
+                                    <option value="2016-17">Second Examinar</option>
+                                    <option value="2016-17">Third Examinar</option>
+                                </select>
+                                </div> 
+                            </div>
+                        </form>
+                        <table id="example2" class="table table-bordered table-hover">
+                        <thead>
+                        <tr>
+                            <th>SL.</th>
+                            <th>Student Name</th>
+                            <th>Roll Number</th>
+                            <th>Registration Number</th>
+                            <th>Session</th>
+                            <th>Action</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {/* {
+                        !loading?
+                        students.length > 0 ?
+                        students.map((student, index)=>(
+                            <tr key={student._id}>
+                            <td>{ index+1}</td>
+                            <td>{ student.name }</td>
+                            <td>{ student.roll }</td>
+                            <td>{ student.reg }</td>
+                            <td>{ student.session }</td>
+                            <td>
+                                <NavLink exact to={`/chairman/edit-stduent/${student._id}`} ><button className="text-success" ><i className="fas fa-edit"></i></button></NavLink>&nbsp;
+                                <button onClick={() => deleteStudent(student._id)} className="text-danger"><i className="fas fa-trash"></i></button>&nbsp;
+                            </td>
+                            </tr>
+                            ))
+                            :'No Students found'
+                        :(<Loader/>)
+                        } */}
+                        </tbody>
+                        </table>
+                        
+                    </div>
+                    </div>
+                </div>
+              </div>:""}
             </div>
             </section>
             {/* <!-- /.content --> */}

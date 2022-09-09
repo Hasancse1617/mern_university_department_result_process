@@ -1,11 +1,12 @@
 import axiosInstance from '../../helper/axiosInstance';
+import axiosTeacher from '../../helper/axiosTeacher';
 import { REMOVE_TEACHER_LOADER, SET_TEACHER_ERRORS, SET_TEACHER_LOADER, SET_TEACHER_MESSAGE, SET_TEACHER_TOKEN } from '../types/TeacherType';
 
 export const RegisterTeacher = (state) =>{
     return async(dispatch)=>{
         try {
             dispatch({type: SET_TEACHER_LOADER});
-            const {data} = await axiosInstance.post('/teacher/register',state);
+            const {data} = await axiosTeacher.post('/teacher/register',state);
             dispatch({type: REMOVE_TEACHER_LOADER});
             dispatch({type: SET_TEACHER_MESSAGE, payload: data.msg});
             console.log(data.msg)
@@ -21,9 +22,9 @@ export const LoginTeacher = (state) =>{
     return async (dispatch) =>{
         try {
             dispatch({type: SET_TEACHER_LOADER});
-            const {data} = await axiosInstance.post('/teacher/login',state);
+            const {data} = await axiosTeacher.post('/teacher/login',state);
             dispatch({type: REMOVE_TEACHER_LOADER});
-            localStorage.setItem("myToken", data.token);
+            localStorage.setItem("teacherToken", data.token);
             dispatch({type: SET_TEACHER_TOKEN, payload: data.token});
         } catch (error) {
             dispatch({type: REMOVE_TEACHER_LOADER});
@@ -39,7 +40,7 @@ export const forgotPassword = (state) =>{
     return async (dispatch) =>{
         try {
             dispatch({type: SET_TEACHER_LOADER});
-            const {data} = await axiosInstance.post('/teacher/forgot-password',state);
+            const {data} = await axiosTeacher.post('/teacher/forgot-password',state);
             dispatch({type: REMOVE_TEACHER_LOADER});
             console.log(data)
             dispatch({type: SET_TEACHER_MESSAGE, payload: data.msg});
@@ -57,7 +58,7 @@ export const resetPassword = (state,token) =>{
     return async (dispatch) =>{
         try {
             dispatch({type: SET_TEACHER_LOADER});
-            const {data} = await axiosInstance.post(`/teacher/reset-password/${token}`,state);
+            const {data} = await axiosTeacher.post(`/teacher/reset-password/${token}`,state);
             dispatch({type: REMOVE_TEACHER_LOADER});
             dispatch({type: SET_TEACHER_MESSAGE, payload: data.msg});
         } catch (error) {
@@ -75,7 +76,7 @@ export const verifyAccount = (token) =>{
         // const {AuthReducer: {token}} = getState();
         dispatch({type: SET_TEACHER_LOADER});
         try {
-                const { data:{msg} } = await axiosInstance.post(`/teacher/verify-account/${token}`); 
+                const { data:{msg} } = await axiosTeacher.post(`/teacher/verify-account/${token}`); 
                 dispatch({type: REMOVE_TEACHER_LOADER});
                 dispatch({type: SET_TEACHER_MESSAGE, payload:msg});   
           } catch (error) {

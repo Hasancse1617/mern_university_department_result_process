@@ -9,6 +9,7 @@ const studentRoute = require("./src/routes/StudentRoute");
 const examRoute = require("./src/routes/ExamRoute");
 const commonRoute = require("./src/routes/CommonRoute");
 const subjectRoute = require("./src/routes/SubjectRoute");
+const markRoute = require("./src/routes/MarkRoute");
 
 const app = express();
 connectDB();
@@ -21,6 +22,7 @@ app.use("/api/", studentRoute);
 app.use("/api/", examRoute);
 app.use("/api/", commonRoute);
 app.use("/api/", subjectRoute);
+app.use("/api/", markRoute);
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, ()=>{

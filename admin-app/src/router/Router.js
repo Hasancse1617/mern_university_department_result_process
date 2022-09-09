@@ -20,6 +20,8 @@ import ChairmanDashboardRoute from "./ChairmanDashboardRoute";
 import ChairmanPublicRoute from "./ChairmanPublicRoute";
 import ExamDashboardRoute from "./ExamDashboardRoute";
 import ExamPublicRoute from "./ExamPublicRoute";
+import TeacherDashboardRoute from "./TeacherDashboardRoute";
+import TeacherPublicRoute from "./TeacherPublicRoute";
 
 const Router = () => {
     const { user } = useSelector((state)=>state.ChairmanReducer);
@@ -43,11 +45,12 @@ const Router = () => {
                <Route path="/exam/*" element={<ExamDashboardRoute/>}></Route>
                             
                 {/* *** Teacher Public Route *** */}
-               <Route path="/teacher/login" element={<TeacherLogin/>}></Route>
-               <Route path="/teacher/register" element={<TeacherRegister/>}></Route>
-               <Route path="/teacher/verify-account/:token" element={<TeacherActivation/>}></Route>
-               <Route path="/teacher/forgot-password" element={<TeacherForgotPassword/>}></Route>
-               <Route path="/teacher/reset-password/:token" element={<TeacherResetPassword/>}></Route>
+               <Route path="/teacher/login" element={<TeacherPublicRoute><TeacherLogin/></TeacherPublicRoute>}></Route>
+               <Route path="/teacher/register" element={<TeacherPublicRoute><TeacherRegister/></TeacherPublicRoute>}></Route>
+               <Route path="/teacher/verify-account/:token" element={<TeacherPublicRoute><TeacherActivation/></TeacherPublicRoute>}></Route>
+               <Route path="/teacher/forgot-password" element={<TeacherPublicRoute><TeacherForgotPassword/></TeacherPublicRoute>}></Route>
+               <Route path="/teacher/reset-password/:token" element={<TeacherPublicRoute><TeacherResetPassword/></TeacherPublicRoute>}></Route>
+               <Route path="/teacher/*" element={<TeacherDashboardRoute/>}></Route>
 
            </Switch>
         </>

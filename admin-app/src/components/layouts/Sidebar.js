@@ -5,13 +5,14 @@ const Sidebar = () => {
     let { pathname } = useLocation();
     const {chairman} = useSelector((state)=>state.ChairmanReducer);
     const {exam} = useSelector((state)=>state.ExamReducer);
+    const {teacher} = useSelector((state)=>state.TeacherReducer);
     return (
         <>
             <aside className="main-sidebar sidebar-dark-primary elevation-4">
                 {/* <!-- Brand Logo --> */}
                 <NavLink to={chairman?`/chairman/dashboard`:exam?"/exam/dashboard":""} className="brand-link text-center">
                     <img src="http://localhost:5000/images/logo2.png" width="20%"/><br/>
-                    <span className="brand-text font-weight-light">{chairman?"Dept. Chairman":exam?"Exam Chairman":""}</span>
+                    <span className="brand-text font-weight-light">{chairman?"Dept. Chairman":exam?"Exam Chairman":teacher?"Dept. Teacher":""}</span>
                 </NavLink>
 
                 {/* <!-- Sidebar --> */}
@@ -22,7 +23,7 @@ const Sidebar = () => {
                         <i className="fas fa-user"></i>
                     </div>
                     <div class="info">
-                         <a href="#" className="d-block">{chairman? chairman.name :exam? exam.name :""}</a>
+                         <a href="#" className="d-block">{chairman? chairman.name :exam? exam.name :teacher? teacher.name:""}</a>
                     </div>
                 </div>
 
@@ -32,7 +33,7 @@ const Sidebar = () => {
                     {/* <!-- Add icons to the links using the .nav-icon class */}
                         {/* with font-awesome or any other icon font library --> */}
                         <li className="nav-item has-treeview">
-                            <NavLink to={chairman?`/chairman/dashboard`:exam?"/exam/dashboard":""} className="nav-link">
+                            <NavLink to={chairman?`/chairman/dashboard`:exam?"/exam/dashboard":teacher?"/teacher/dashboard":""} className="nav-link">
                                 <i className="nav-icon fas fa-tachometer-alt"></i>
                                 <p>
                                     Dashboard

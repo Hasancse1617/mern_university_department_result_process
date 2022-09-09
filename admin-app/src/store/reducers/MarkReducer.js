@@ -1,4 +1,4 @@
-import { REMOVE_MARK_LOADER, REMOVE_MARK_ERRORS, REMOVE_MARK_MESSAGE, SET_MARKS, SET_MARK_ERRORS, SET_MARK_LOADER, SET_MARK_MESSAGE } from "../types/MarkType";
+import { REMOVE_MARK_LOADER, REMOVE_MARK_ERRORS, REMOVE_MARK_MESSAGE, SET_MARKS, SET_MARK_ERRORS, SET_MARK_LOADER, SET_MARK_MESSAGE, SET_MARK_SUBJECTS } from "../types/MarkType";
 
 const initState = {
     loading: false,
@@ -6,7 +6,7 @@ const initState = {
     message: '',
     marks: [],
     markTeachers:[],
-    recentMarks:[],
+    markSubjects:[],
     mark: [],
     status: false,
 }
@@ -29,6 +29,9 @@ const MarkReducer = (state=initState, action) =>{
     }
     else if(action.type === REMOVE_MARK_ERRORS){
         return{...state, markErrors: [] };
+    }
+    else if(action.type === SET_MARK_SUBJECTS){
+        return{...state, markSubjects: [] };
     }
     else if(action.type === SET_MARKS){
         return{...state, marks: action.payload };

@@ -2,19 +2,18 @@ import React from "react";
 import { useState, useEffect } from 'react';
 import { Helmet } from "react-helmet";
 import { useSelector, useDispatch } from 'react-redux';
-import { LoginChairman } from  "../../store/actions/ChairmanAction";
+import { LoginTeacher } from  "../../store/actions/TeacherAction";
 import toast, { Toaster } from 'react-hot-toast';
-import { REMOVE_CHAIRMAN_ERRORS } from '../../store/types/ChairmanType';
+import { REMOVE_TEACHER_ERRORS } from '../../store/types/TeacherType';
 import { NavLink } from 'react-router-dom';
 
 const TeacherLogin = () => {
     const dispatch = useDispatch();
-    const {loading, chairmanErrors} = useSelector((state)=>state.ChairmanReducer);
+    const {loading, teacherErrors} = useSelector((state)=>state.TeacherReducer);
     const [state, setState] = useState({
         exam_id: '',
         email:"",
         password: '',
-        remember_me: false,
     });
     const handleInputs = (e) =>{
         setState({
@@ -22,25 +21,19 @@ const TeacherLogin = () => {
             [e.target.name]: e.target.value,
         })
     }
-    const handleCheck = (e) =>{
-        setState({
-            ...state,
-            [e.target.name]: e.target.checked,
-        })
-    }
-    const chairmanLogin = (e) =>{
+    const teacherLogin = (e) =>{
         e.preventDefault();
-        dispatch(LoginChairman(state));
+        dispatch(LoginTeacher(state));
         console.log(state);
     }
     useEffect(()=>{
-        if(chairmanErrors.length > 0){
-            chairmanErrors.map((error)=>{
+        if(teacherErrors.length > 0){
+            teacherErrors.map((error)=>{
                 toast.error(error.msg);
             });
-          dispatch({type: REMOVE_CHAIRMAN_ERRORS});
+          dispatch({type: REMOVE_TEACHER_ERRORS});
         }
-    }, [chairmanErrors]);
+    }, [teacherErrors]);
 
     return (
         <>
@@ -53,13 +46,13 @@ const TeacherLogin = () => {
             <div class="login-logo">
                 <NavLink to="/admin"><img src="http://localhost:5000/images/logo2.png" width="20%"/></NavLink><br/>
                 <b>Dept Teacher</b>
-                <h5>Need to verified from Dept Chairman.</h5>
+                <h5>Need to verified from Dept Teacher.</h5>
             </div>
             <div class="card">
                 <div class="card-body login-card-body">
                 <p class="login-box-msg"><h5>You can only login to add exam number as a Examiner</h5></p>
                 
-                <form onSubmit={chairmanLogin}>
+                <form onSubmit={teacherLogin}>
                     <div class="input-group mb-3">
                     <input type="text" name="exam_id" class="form-control" value={state.exam_id} onChange={handleInputs} placeholder="Exam ID"/>
                     <div class="input-group-append">
