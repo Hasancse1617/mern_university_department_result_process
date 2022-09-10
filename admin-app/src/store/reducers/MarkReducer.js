@@ -1,11 +1,11 @@
-import { REMOVE_MARK_LOADER, REMOVE_MARK_ERRORS, REMOVE_MARK_MESSAGE, SET_MARKS, SET_MARK_ERRORS, SET_MARK_LOADER, SET_MARK_MESSAGE, SET_MARK_SUBJECTS } from "../types/MarkType";
+import { REMOVE_MARK_LOADER, REMOVE_MARK_ERRORS, REMOVE_MARK_MESSAGE, SET_MARKS, SET_MARK_ERRORS, SET_MARK_LOADER, SET_MARK_MESSAGE, SET_MARK_SUBJECTS, SET_MARK_STUDENTS, REMOVE_MARK_STUDENTS } from "../types/MarkType";
 
 const initState = {
     loading: false,
     markErrors: [],
     message: '',
     marks: [],
-    markTeachers:[],
+    markStudents:[],
     markSubjects:[],
     mark: [],
     status: false,
@@ -31,7 +31,13 @@ const MarkReducer = (state=initState, action) =>{
         return{...state, markErrors: [] };
     }
     else if(action.type === SET_MARK_SUBJECTS){
-        return{...state, markSubjects: [] };
+        return{...state, markSubjects: action.payload };
+    }
+    else if(action.type === SET_MARK_STUDENTS){
+        return{...state, markStudents: action.payload };
+    }
+    else if(action.type === REMOVE_MARK_STUDENTS){
+        return{...state, markStudents: [] };
     }
     else if(action.type === SET_MARKS){
         return{...state, marks: action.payload };

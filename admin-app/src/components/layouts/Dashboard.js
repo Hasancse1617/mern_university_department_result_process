@@ -1,18 +1,13 @@
 import React, { useEffect } from "react";
 import { Helmet } from "react-helmet";
-import {useDispatch, useSelector} from "react-redux";
-import { NavLink } from "react-router-dom";
-import { fetchMarkSubjects } from "../../store/actions/MarkAction";
+import { useSelector } from "react-redux";
+import AddMarkTeacher from "../mark/AddMarkTeacher";
 
 const Dashboard = () => {
-    const dispatch = useDispatch();
     const {chairman} = useSelector((state)=>state.ChairmanReducer);
     const {exam} = useSelector((state)=>state.ExamReducer);
     const {teacher} = useSelector((state)=>state.TeacherReducer);
-
-    useEffect(()=>{
-        dispatch(fetchMarkSubjects(teacher.exam._id));
-    },[]);
+    
     return (
         <>
             <Helmet>
@@ -107,73 +102,6 @@ const Dashboard = () => {
                         </div>
                     </div>
                 </div>:""}
-                
-                {teacher?
-                <div class="row">
-                <div class="col-12">
-                    <div class="card">
-                    <div class="card-header">
-                        <h4 className="float-left">Add students subject marks</h4>
-                        <h3><NavLink exact to="/chairman/add-student"><button type="button" class="btn btn-primary float-right text-bold">Add Student</button></NavLink></h3>
-                    </div>
-                    
-                    <div class="card-body">
-                        <form role="form" >
-                            <div class="form-group row">
-                                <div className="col-sm-3">
-                                <select  class="form-control" name="session" >
-                                    <option value="">Select Subject</option>
-                                    <option value="2016-17">2016-17</option>
-                                </select>
-                                </div> 
-                                <div className="col-sm-3">
-                                <select  class="form-control" name="session" >
-                                    <option value="">Select Examinar Type</option>
-                                    <option value="2016-17">First Examinar</option>
-                                    <option value="2016-17">Second Examinar</option>
-                                    <option value="2016-17">Third Examinar</option>
-                                </select>
-                                </div> 
-                            </div>
-                        </form>
-                        <table id="example2" class="table table-bordered table-hover">
-                        <thead>
-                        <tr>
-                            <th>SL.</th>
-                            <th>Student Name</th>
-                            <th>Roll Number</th>
-                            <th>Registration Number</th>
-                            <th>Session</th>
-                            <th>Action</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        {/* {
-                        !loading?
-                        students.length > 0 ?
-                        students.map((student, index)=>(
-                            <tr key={student._id}>
-                            <td>{ index+1}</td>
-                            <td>{ student.name }</td>
-                            <td>{ student.roll }</td>
-                            <td>{ student.reg }</td>
-                            <td>{ student.session }</td>
-                            <td>
-                                <NavLink exact to={`/chairman/edit-stduent/${student._id}`} ><button className="text-success" ><i className="fas fa-edit"></i></button></NavLink>&nbsp;
-                                <button onClick={() => deleteStudent(student._id)} className="text-danger"><i className="fas fa-trash"></i></button>&nbsp;
-                            </td>
-                            </tr>
-                            ))
-                            :'No Students found'
-                        :(<Loader/>)
-                        } */}
-                        </tbody>
-                        </table>
-                        
-                    </div>
-                    </div>
-                </div>
-              </div>:""}
             </div>
             </section>
             {/* <!-- /.content --> */}

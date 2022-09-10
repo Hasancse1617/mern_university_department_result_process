@@ -108,7 +108,7 @@ module.exports.loginTeacher = async(req,res) =>{
         const check_exam = await Exam.findOne({exam_id, status: true}).select({_id:1,semister:1,session:1,exam_id:1});     
         const errors = [];
         if(!check_exam){
-            errors.push({msg: 'Valid Exam ID required'});
+            errors.push({msg: 'Exam ID is not found'});
         }
         if(email === ''){
             errors.push({msg: 'Email is required'});
@@ -122,11 +122,6 @@ module.exports.loginTeacher = async(req,res) =>{
         try{
             const teacherDetail = await Teacher.findOne({email}).populate('dept_id','short_name');
             // add exam id in teacher object
-            const teacher = {
-                ...teacherDetail._doc,
-                exam:check_exam
-            }
-            
             if(teacherDetail){
                 if(!teacherDetail.email_verified){
                     send_Account_Verify_Email(email);
@@ -137,6 +132,10 @@ module.exports.loginTeacher = async(req,res) =>{
                 }
                 const matched = await bcrypt.compare(password, teacherDetail.password);
                 if(matched){
+                    const teacher = {
+                        ...teacherDetail._doc,
+                        exam:check_exam
+                    }
                     const token = createToken(teacher,"1h");
                     return res.status(200).json({'msg':'You have successfully login',token});
                 }else{
