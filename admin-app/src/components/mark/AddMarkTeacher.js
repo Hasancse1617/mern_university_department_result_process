@@ -4,14 +4,14 @@ import toast, {Toaster} from "react-hot-toast";
 import Loader from "../loader/Loader";
 import { NavLink, useSearchParams } from "react-router-dom";
 import { fetchMarkSubjects, fetchMarkStudents, addedMarkAction } from "../../store/actions/MarkAction";
-import { REMOVE_MARK_ERRORS, REMOVE_MARK_STUDENTS } from "../../store/types/MarkType";
+import { REMOVE_MARK_ERRORS, REMOVE_MARK_MESSAGE, REMOVE_MARK_STUDENTS } from "../../store/types/MarkType";
 
 const AddMarkTeacher = () =>{
     const dispatch = useDispatch();
     const marKArr = [];
     const [searchParams, setSearchParams] = useSearchParams();
     const {teacher} = useSelector((state)=>state.TeacherReducer);
-    const { loading, markSubjects, markErrors, markStudents} = useSelector((state)=>state.MarkReducer);
+    const { loading, message, markSubjects, markErrors, markStudents} = useSelector((state)=>state.MarkReducer);
     const [subject, setSubject] = useState("");
     const [examinarType, setExaminarType] = useState("");
     const [state, setState] = useState({
@@ -28,21 +28,35 @@ const AddMarkTeacher = () =>{
     }
     const handleSave = (e) =>{
         e.preventDefault();
+        //Start Validate
+        const collection = document.getElementsByClassName("checkValidity");
+        let validAll = false;
+        for (let i = 0; i < collection.length; i++) {
+            validAll = true;
+            if (!collection[i].value && !collection[i].value >= 1 && !collection[i].value <= 100) {
+                alert("Every Field is required.");
+                return false;
+            }
+        } //End Validate
         const markdetails = {state, marKArr, examinarType}
-        dispatch(addedMarkAction(markdetails));
+        if(validAll){
+            dispatch(addedMarkAction(markdetails));
+        } 
     }
-    const handleSelect = (e)=>{
+    const handleSubject = (e)=>{
         setSubject(e.target.value); 
+        dispatch({type: REMOVE_MARK_STUDENTS});
     }
     const handleType = (e) =>{
         setExaminarType(e.target.value);
+        dispatch({type: REMOVE_MARK_STUDENTS});
     }
     const handleSearch = (e) =>{
         e.preventDefault();
         dispatch({type: REMOVE_MARK_STUDENTS});
         if(subject && examinarType){
             setSearchParams({subject_id: subject, examinar_type: examinarType});
-            dispatch(fetchMarkStudents(teacher.exam.session, subject, teacher._id, examinarType));
+            dispatch(fetchMarkStudents(teacher.exam.session, subject, teacher._id, examinarType, teacher.exam._id));
         }
     }
     useEffect(()=>{
@@ -52,13 +66,18 @@ const AddMarkTeacher = () =>{
             });
             dispatch({type: REMOVE_MARK_ERRORS});
         }
-    },[markErrors]);
+        if(message){
+            toast.success(message);
+            dispatch({type: REMOVE_MARK_MESSAGE});
+            dispatch({type: REMOVE_MARK_STUDENTS});
+        }
+    },[markErrors, message]);
     useEffect(()=>{
+        dispatch(fetchMarkSubjects(teacher.exam._id));
         setSubject(searchParams.get("subject_id"));
         setExaminarType(searchParams.get("examinar_type"));
-        dispatch(fetchMarkSubjects(teacher.exam._id));
         if(searchParams.get("subject_id")&& teacher._id){
-            dispatch(fetchMarkStudents(teacher.exam.session, searchParams.get("subject_id"), teacher._id, searchParams.get("examinar_type")));
+            dispatch(fetchMarkStudents(teacher.exam.session, searchParams.get("subject_id"), teacher._id, searchParams.get("examinar_type"), teacher.exam._id));
         }
     },[]);
 
@@ -78,7 +97,7 @@ const AddMarkTeacher = () =>{
                     <form role="form" onSubmit={handleSearch}>
                         <div class="form-group row">
                             <div className="col-sm-3">
-                            <select value={subject} class="form-control" name="subject" onChange={handleSelect}>
+                            <select value={subject} class="form-control" name="subject" onChange={handleSubject}>
                                 <option value="">Select Subject</option>
                                 {markSubjects? markSubjects.map((subject)=>(
                                     <option value={subject._id}>{subject.subject_code}</option>
@@ -96,6 +115,7 @@ const AddMarkTeacher = () =>{
                             <h3><button type="submit" class="btn btn-primary float-right text-bold">Search</button></h3>  
                         </div>
                     </form>
+                    <form onSubmit={handleSave} >
                     <table id="example2" class="table table-bordered table-hover">
                     <thead>
                     <tr>
@@ -118,7 +138,7 @@ const AddMarkTeacher = () =>{
                             <td>{ student.roll }</td>
                             <td>{ student.session }</td>
                             <td>{ teacher.exam.semister+"th" }</td>
-                            <td><input type="number" min={30} max={100} onChange={(e)=>handleInputs(e,index,student._id,subject)}/></td>
+                            <td><input className="checkValidity" type="number" min={30} max={100} onChange={(e)=>handleInputs(e,index,student._id,subject)} required/></td>
                         </tr>
                         ))
                         :'No Students found'
@@ -126,7 +146,8 @@ const AddMarkTeacher = () =>{
                     }
                     </tbody>
                     </table><br/>
-                    <h3><button onClick={handleSave} type="submit" class="btn btn-primary float-right text-bold">Add Mark</button></h3>
+                    {markStudents.length > 0? <h3><button type="submit" class="btn btn-primary float-right text-bold">Add Mark</button></h3>:""}
+                </form>
                 </div>
                 </div>
             </div>
