@@ -3,10 +3,10 @@ import { useDispatch, useSelector } from "react-redux";
 import toast, {Toaster} from "react-hot-toast";
 import Loader from "../loader/Loader";
 import { NavLink, useSearchParams } from "react-router-dom";
-import { fetchMarkSubjects, fetchMarkStudents, addedMarkAction } from "../../store/actions/MarkAction";
+import { fetchMarkSubjects, fetchMarkEditStudents, addedMarkAction } from "../../store/actions/MarkAction";
 import { REMOVE_MARK_ERRORS, REMOVE_MARK_MESSAGE, REMOVE_MARK_STUDENTS } from "../../store/types/MarkType";
 
-const AddMarkTeacher = () =>{
+const UpdateMarkTeacher = () =>{
     const dispatch = useDispatch();
     const marKArr = [];
     let i = -1;
@@ -59,7 +59,7 @@ const AddMarkTeacher = () =>{
         dispatch({type: REMOVE_MARK_STUDENTS});
         if(subject && examinarType){
             setSearchParams({subject_id: subject, examinar_type: examinarType});
-            dispatch(fetchMarkStudents(teacher.dept_id._id, teacher.exam.session, subject, teacher._id, examinarType, teacher.exam._id));
+            dispatch(fetchMarkEditStudents(teacher.dept_id._id, teacher.exam.session, subject, teacher._id, examinarType, teacher.exam._id));
         }
     }
     useEffect(()=>{
@@ -80,7 +80,7 @@ const AddMarkTeacher = () =>{
         setSubject(searchParams.get("subject_id"));
         setExaminarType(searchParams.get("examinar_type"));
         if(searchParams.get("subject_id")&& teacher._id){
-            dispatch(fetchMarkStudents(teacher.dept_id._id, teacher.exam.session, searchParams.get("subject_id"), teacher._id, searchParams.get("examinar_type"), teacher.exam._id));
+            dispatch(fetchMarkEditStudents(teacher.dept_id._id, teacher.exam.session, searchParams.get("subject_id"), teacher._id, searchParams.get("examinar_type"), teacher.exam._id));
         }
         //Clear students after clicking another page
         return () =>{
@@ -96,8 +96,8 @@ const AddMarkTeacher = () =>{
             <div class="col-12">
                 <div class="card">
                 <div class="card-header">
-                    <h4 className="float-left">Add Marks</h4>
-                    <h3><NavLink exact to="/teacher/edit-mark"><button type="button" class="btn btn-primary float-right text-bold">Edit Marks</button></NavLink></h3>
+                    <h4 className="float-left">Update Marks</h4>
+                    <h3><NavLink exact to="/teacher/add-mark"><button type="button" class="btn btn-primary float-right text-bold">Add Marks</button></NavLink></h3>
                 </div>
                 
                 <div class="card-body">
@@ -187,4 +187,4 @@ const AddMarkTeacher = () =>{
      </section>
     )
 }
-export default AddMarkTeacher;
+export default UpdateMarkTeacher;

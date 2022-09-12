@@ -176,13 +176,13 @@ const Sidebar = () => {
                             </a>
                             <ul className="nav nav-treeview">
                                 <li className="nav-item">
-                                    <NavLink to="/teacher/add-mark" className={pathname==='/admin/user/create'?'active nav-link':'nav-link'}>
+                                    <NavLink to="/teacher/add-mark" className="nav-link">
                                         <i className="far fa-circle nav-icon"></i>
                                         <p>Add Mark</p>
                                     </NavLink>
                                 </li>
                                 <li className="nav-item">
-                                    <NavLink to="/exam/edit-mark" className={pathname==='/admin/user/create'?'active nav-link':'nav-link'}>
+                                    <NavLink to="/teacher/edit-mark" className="nav-link">
                                         <i className="far fa-circle nav-icon"></i>
                                         <p>Update Mark</p>
                                     </NavLink>

@@ -18,6 +18,22 @@ export const fetchMarkStudents = (dept_id,session,subject_id,teacher_id,examinar
           }
     }
 }
+export const fetchMarkEditStudents = (dept_id,session,subject_id,teacher_id,examinar_type,exam_id) =>{
+      return async(dispatch,getState)=>{
+            dispatch({type: SET_MARK_LOADER});
+            try {
+                  const {data: { response, check_entry }} = await axiosTeacher.get(`/mark-edit-students/all/${dept_id}/${session}/${subject_id}/${teacher_id}/${examinar_type}/${exam_id}`);
+                  dispatch({type: SET_MARK_STUDENTS, payload: { response, check_entry }});
+                  dispatch({type: REMOVE_MARK_LOADER});
+            } catch (error) {
+                  dispatch({type: REMOVE_MARK_LOADER});
+                  if(error && error.response.data){
+                    const {errors} = error.response.data;
+                    dispatch({type: SET_MARK_ERRORS, payload:errors});
+                  } 
+            }
+      }
+  }
 export const fetchMarkSubjects = (exam_id) =>{
       return async(dispatch,getState)=>{
             dispatch({type: SET_MARK_LOADER});

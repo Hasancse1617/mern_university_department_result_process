@@ -6,6 +6,7 @@ import Footer from "../components/layouts/Footer";
 import Dashboard from "../components/layouts/Dashboard";
 import TeacherPrivateRoute from "./TeacherPrivateRoute";
 import AddMarkTeacher from "../components/mark/AddMarkTeacher";
+import UpdateMarkTeacher from "../components/mark/UpdateMarkTeacher";
 
 const TeacherDashboardRoute = () => {
     return (
@@ -17,6 +18,7 @@ const TeacherDashboardRoute = () => {
                     {/*Teacher dashboard Route */}
                     <Route path="/dashboard" element={<TeacherPrivateRoute><Dashboard/></TeacherPrivateRoute>}></Route>
                     <Route path="/add-mark" element={<TeacherPrivateRoute><AddMarkTeacher/></TeacherPrivateRoute>}></Route>
+                    <Route path="/edit-mark" element={<TeacherPrivateRoute><UpdateMarkTeacher/></TeacherPrivateRoute>}></Route>
                     {/*End Exam Chairman dashboard Route */}
                 </Switch>
             </div>

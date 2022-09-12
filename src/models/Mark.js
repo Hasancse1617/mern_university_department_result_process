@@ -34,6 +34,10 @@ const markSchema = new Schema({
                 type: Boolean,
                 default: false
             },
+            third_mark_entry:{
+                type: Boolean,
+                default: false
+            },
             third_mark:{
                 type: String,
             },
