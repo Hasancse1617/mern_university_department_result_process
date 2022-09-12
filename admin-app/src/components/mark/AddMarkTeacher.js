@@ -11,7 +11,7 @@ const AddMarkTeacher = () =>{
     const marKArr = [];
     const [searchParams, setSearchParams] = useSearchParams();
     const {teacher} = useSelector((state)=>state.TeacherReducer);
-    const { loading, message, markSubjects, markErrors, markStudents} = useSelector((state)=>state.MarkReducer);
+    const { loading, message, markSubjects, markErrors, markStudents, markF_S_Students} = useSelector((state)=>state.MarkReducer);
     const [subject, setSubject] = useState("");
     const [examinarType, setExaminarType] = useState("");
     const [state, setState] = useState({
@@ -56,7 +56,7 @@ const AddMarkTeacher = () =>{
         dispatch({type: REMOVE_MARK_STUDENTS});
         if(subject && examinarType){
             setSearchParams({subject_id: subject, examinar_type: examinarType});
-            dispatch(fetchMarkStudents(teacher.exam.session, subject, teacher._id, examinarType, teacher.exam._id));
+            dispatch(fetchMarkStudents(teacher.dept_id._id, teacher.exam.session, subject, teacher._id, examinarType, teacher.exam._id));
         }
     }
     useEffect(()=>{
@@ -77,10 +77,14 @@ const AddMarkTeacher = () =>{
         setSubject(searchParams.get("subject_id"));
         setExaminarType(searchParams.get("examinar_type"));
         if(searchParams.get("subject_id")&& teacher._id){
-            dispatch(fetchMarkStudents(teacher.exam.session, searchParams.get("subject_id"), teacher._id, searchParams.get("examinar_type"), teacher.exam._id));
+            dispatch(fetchMarkStudents(teacher.dept_id._id, teacher.exam.session, searchParams.get("subject_id"), teacher._id, searchParams.get("examinar_type"), teacher.exam._id));
+        }
+        //Clear students after clicking another page
+        return () =>{
+            dispatch({type: REMOVE_MARK_STUDENTS});
         }
     },[]);
-
+// console.log(markF_S_Students)
     return(
         <section class="content">
            <div class="container-fluid">
@@ -89,8 +93,8 @@ const AddMarkTeacher = () =>{
             <div class="col-12">
                 <div class="card">
                 <div class="card-header">
-                    <h4 className="float-left">Add students subject marks</h4>
-                    <h3><NavLink exact to="/chairman/add-student"><button type="button" class="btn btn-primary float-right text-bold">Add Student</button></NavLink></h3>
+                    <h4 className="float-left">Add Marks</h4>
+                    <h3><NavLink exact to="/chairman/add-student"><button type="button" class="btn btn-primary float-right text-bold">Edit Marks</button></NavLink></h3>
                 </div>
                 
                 <div class="card-body">
@@ -130,7 +134,7 @@ const AddMarkTeacher = () =>{
                     <tbody>
                     {
                     !loading?
-                    markStudents.length > 0 ?
+                    markStudents.length > 0 && examinarType != "third_examinar"?
                     markStudents.map((student, index)=>(
                         <tr key={student._id}>
                             <td>{ index+1}</td>
@@ -140,6 +144,18 @@ const AddMarkTeacher = () =>{
                             <td>{ teacher.exam.semister+"th" }</td>
                             <td><input className="checkValidity" type="number" min={30} max={100} onChange={(e)=>handleInputs(e,index,student._id,subject)} required/></td>
                         </tr>
+                        ))
+                        //Only for 3rd Examinar
+                        :markF_S_Students.length > 0 && examinarType == "third_examinar"?
+                        markStudents.map((student, index)=>(
+                            <tr key={student._id}>
+                                <td>{ index+1}</td>
+                                <td>{ student.name }</td>
+                                <td>{ student.roll }</td>
+                                <td>{ student.session }</td>
+                                <td>{ teacher.exam.semister+"th" }</td>
+                                <td><input className="checkValidity" type="number" min={30} max={100} onChange={(e)=>handleInputs(e,index,student._id,subject)} required/></td>
+                            </tr>
                         ))
                         :'No Students found'
                     :(<Loader/>)

@@ -7,6 +7,7 @@ const initState = {
     marks: [],
     markStudents:[],
     markSubjects:[],
+    markF_S_Students:[],
     mark: [],
     status: false,
 }
@@ -34,7 +35,7 @@ const MarkReducer = (state=initState, action) =>{
         return{...state, markSubjects: action.payload };
     }
     else if(action.type === SET_MARK_STUDENTS){
-        return{...state, markStudents: action.payload };
+        return{...state, markStudents: action.payload.response, markF_S_Students: action.payload.check_entry};
     }
     else if(action.type === REMOVE_MARK_STUDENTS){
         return{...state, markStudents: [] };

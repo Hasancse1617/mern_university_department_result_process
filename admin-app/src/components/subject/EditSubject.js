@@ -15,7 +15,6 @@ const EditSubject = () => {
     const { exam } = useSelector((state)=>state.ExamReducer);
     const { loading, status, subjectErrors, message, subject, subjectTeachers } = useSelector((state)=> state.SubjectReducer);
     const [state,setState] = useState({
-        subject_code:"",
         subject_mark:"",
         subject_credit:"",
         first_examinar:"",
@@ -87,7 +86,7 @@ const EditSubject = () => {
                     <div class="form-group row">
                         <label for="exampleInputEmail1" className="col-sm-2  col-form-label">Subject Code</label>
                         <div className="col-sm-8">
-                           <input type="text" name="subject_code" value={state.subject_code} onChange={handleInput} class="form-control" id="exampleInputEmail1" placeholder="Enter Subject Code eg: CSE-402"/>
+                           <input type="text" name="subject_code" value={state.subject_code} class="form-control" id="exampleInputEmail1" placeholder="Enter Subject Code eg: CSE-402" readOnly/>
                         </div> 
                     </div>
                     <div class="form-group row">

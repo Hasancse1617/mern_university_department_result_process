@@ -39,7 +39,8 @@ module.exports.createStudent = async(req, res) =>{
     form.parse(req, async(err, fields, files) =>{
         const {dept_id, name, roll, reg, session} = fields;
         const errors = [];
-        if(name === ''){
+        const newName = name.replace(/\s+/g,' ').trim();
+        if(newName === ''){
             errors.push({msg: 'Student name is required'});
         }
         if(roll === ''){
@@ -53,7 +54,7 @@ module.exports.createStudent = async(req, res) =>{
         if(reg === ''){
             errors.push({msg: 'Student reg is required'});
         }else{
-            let isnum = /^\d+$/.test(roll);
+            let isnum = /^\d+$/.test(reg);
             if(!isnum){
                 errors.push({msg: 'Valid reg is required'});
             }
@@ -62,9 +63,9 @@ module.exports.createStudent = async(req, res) =>{
             errors.push({msg: 'Student session is required'});
         }
 
-        const checkStudent = await Student.findOne({session, roll});
+        const checkStudent = await Student.findOne({$or:[{dept_id, roll},{dept_id, reg}]});
         if(checkStudent){
-            errors.push({msg:'Student is already exists'});
+            errors.push({msg:'Student Roll or Reg already exists'});
         }
 
         if(errors.length !== 0){

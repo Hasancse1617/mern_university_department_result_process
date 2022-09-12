@@ -105,7 +105,7 @@ const EditStudent = () => {
                         <div class="form-group row">
                             <label for="exampleInput" className="col-sm-2  col-form-label">Session</label>
                             <div className="col-sm-8">
-                            <select value={state.session} class="form-control" name="session" onChange={handleInput}>
+                            <select value={state.session} class="form-control" name="session" onChange={handleInput} disabled>
                                 <option value="">Select Session</option>
                                 <option value="2016-17">2016-17</option>
                                 <option value="2017-18">2017-18</option>

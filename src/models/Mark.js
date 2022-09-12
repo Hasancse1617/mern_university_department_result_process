@@ -30,6 +30,10 @@ const markSchema = new Schema({
             second_mark:{
                 type: String,
             },
+            third_mark_status:{
+                type: Boolean,
+                default: false
+            },
             third_mark:{
                 type: String,
             },

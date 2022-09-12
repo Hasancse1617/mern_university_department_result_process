@@ -73,7 +73,7 @@ module.exports.createSubject = async(req, res) =>{
             }
         }
 
-        const checkSubject = await Subject.findOne({subject_code});
+        const checkSubject = await Subject.findOne({exam_id, subject_code});
         if(checkSubject){
             errors.push({msg:'Subject is already exists'});
         }
@@ -116,16 +116,8 @@ module.exports.updateSubject = async(req, res) =>{
     const form = formidable({ multiples: true });
     const subject = await Subject.findOne({_id:id});
     form.parse(req, async(err, fields, files) =>{
-        const { subject_code, subject_mark, subject_credit, first_examinar, second_examinar, third_examinar} = fields;
+        const { subject_mark, subject_credit, first_examinar, second_examinar, third_examinar} = fields;
         const errors = [];
-        if(subject_code === ''){
-            errors.push({msg: 'Subject Code is required'});
-        }else{
-            let isValid = /^([A-Z])+\-([0-9])+$/.test(subject_code);
-            if(!isValid){
-                errors.push({msg: 'Valid Subject Code is required'});
-            }
-        }
         if(subject_mark === ''){
             errors.push({msg: 'Subject mark is required'});
         }else{
@@ -160,7 +152,6 @@ module.exports.updateSubject = async(req, res) =>{
         else{
             try {
                 const response = await Subject.findByIdAndUpdate(id,{
-                    subject_code,
                     subject_mark,
                     subject_credit,
                     first_examinar,

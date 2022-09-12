@@ -2,12 +2,12 @@ import axiosTeacher from "../../helper/axiosTeacher";
 import { REMOVE_MARK_LOADER, SET_MARK_SUBJECTS, SET_MARK_ERRORS, SET_MARK_LOADER, SET_MARK_STUDENTS, SET_MARK_MESSAGE } from "../types/MarkType";
 
 //Teacher Section Mark Add
-export const fetchMarkStudents = (session,subject_id,teacher_id,examinar_type,exam_id) =>{
+export const fetchMarkStudents = (dept_id,session,subject_id,teacher_id,examinar_type,exam_id) =>{
     return async(dispatch,getState)=>{
           dispatch({type: SET_MARK_LOADER});
           try {
-                const {data: { response }} = await axiosTeacher.get(`/mark-students/all/${session}/${subject_id}/${teacher_id}/${examinar_type}/${exam_id}`);
-                dispatch({type: SET_MARK_STUDENTS, payload: response});
+                const {data: { response, check_entry }} = await axiosTeacher.get(`/mark-students/all/${dept_id}/${session}/${subject_id}/${teacher_id}/${examinar_type}/${exam_id}`);
+                dispatch({type: SET_MARK_STUDENTS, payload: { response, check_entry }});
                 dispatch({type: REMOVE_MARK_LOADER});
           } catch (error) {
                 dispatch({type: REMOVE_MARK_LOADER});

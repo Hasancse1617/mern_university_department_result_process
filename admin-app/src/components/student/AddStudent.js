@@ -66,7 +66,7 @@ const AddStudent = () => {
             });
             dispatch({type: REMOVE_STUDENT_ERRORS});
         }
-    },[message]);
+    },[studentErrors, message]);
 
     return (
         <>
