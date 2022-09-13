@@ -58,7 +58,7 @@ module.exports.markStudents = async(req, res) =>{
                 errors.push({msg: "Your entry already exists. You will can only update!"})
             }
         }
-        if(examinar_type === "second_examinar"){
+        else if(examinar_type === "second_examinar"){
             const second_examinar = await Subject.findOne({ _id: subject_id, second_examinar:teacher_id });
             if(!second_examinar){
                 errors.push({msg: 'You are not Second examinar for this subject'});
@@ -69,7 +69,7 @@ module.exports.markStudents = async(req, res) =>{
                 errors.push({msg: "You will can mark entry after first examinar!"})
             }
         }
-        if(examinar_type === "third_examinar"){
+        else if(examinar_type === "third_examinar"){
             const third_examinar = await Subject.findOne({ _id: subject_id, third_examinar:teacher_id });
             if(!third_examinar){
                 errors.push({msg: 'You are not Third examinar for this subject'});
@@ -102,6 +102,86 @@ module.exports.markEditStudents = async(req,res)=>{
     const teacher_id = req.params.teacher_id;
     const examinar_type = req.params.examinar_type;
     const exam_id = req.params.exam_id;
+
+    const check_entry = await Mark.aggregate([ 
+        {$match:{exam_id: new mongoose.Types.ObjectId(exam_id)}},
+        {
+            $lookup: {
+                from:"students",
+                as:"student",
+                let:{studentId:"$marks.student_id"},
+                pipeline:[
+                    {
+                        $match:{
+                            $expr:{$and: [
+                                {$in: ["$_id", "$$studentId"]}
+                            ]}
+                        }
+                    },
+                    { $sort: { "roll": 1 } },
+                    { $project : { _id:1, name:1, roll:1,session:1 } }
+                ]
+            }
+        },
+        {$project: {
+            "exam_id":1,
+            "student":1,
+            marks: {
+                $filter: {
+                    input: "$marks",
+                    as: "mark",
+                    cond: { $eq: [ "$$mark.subject_id", new mongoose.Types.ObjectId(subject_id) ] }
+                }
+            }
+        }},
+        
+    ]);
+// console.log(check_entry[0])
+    if(session !="" && subject_id !="" && teacher_id !=""){
+        const errors = [];  
+        if(check_entry[0]?.marks[0]?.third_mark_entry && examinar_type === "first_examinar" || check_entry[0]?.marks[0]?.third_mark_entry && examinar_type === "second_examinar"){
+            errors.push({msg: "First & Second Examinar Can't Update for Third Examinar Entry Exists"})
+        }
+        else if(examinar_type === "first_examinar"){
+            const first_examinar = await Subject.findOne({ _id: subject_id, first_examinar: teacher_id });
+            if(!first_examinar){
+                errors.push({msg: 'You are not First examinar for this subject'});
+            }else if(!check_entry[0]?.marks[0]?.first_mark){
+                errors.push({msg: "Your entry not exists. Please add!!"})
+            }
+        }
+        else if(examinar_type === "second_examinar"){
+            const second_examinar = await Subject.findOne({ _id: subject_id, second_examinar:teacher_id });
+            if(!second_examinar){
+                errors.push({msg: 'You are not Second examinar for this subject'});
+            }else if(!check_entry[0]?.marks[0]?.second_mark){
+                errors.push({msg: "Your entry not exists. Please add!!"})
+            }
+        }
+        else if(examinar_type === "third_examinar"){
+            console.log(check_entry[0]?.marks[0]?.third_mark_entry)
+            const third_examinar = await Subject.findOne({ _id: subject_id, third_examinar:teacher_id });
+            if(!third_examinar){
+                errors.push({msg: 'You are not Third examinar for this subject'});
+            }else if(!check_entry[0]?.marks[0]?.third_mark_entry){
+                errors.push({msg: "Your entry not exists. Please add!!"})
+            }
+        }
+
+        if(errors.length !== 0){
+            return res.status(400).json({errors});
+        }else{
+            try {
+                // if(examinar_type === "third_examinar"){
+                //     return res.status(200).json({ response:[], check_entry:check_entry[0] });  
+                // }
+                // const response = await Student.find({dept_id, session}).sort({roll:'ascending'});
+                return res.status(200).json({ response: check_entry[0] });
+            } catch (error) {
+                return res.status(500).json({errors: [{msg: error.message}]});
+            }
+        }
+    }
 }
 //Teacher Section
 module.exports.markSubjects = async(req, res) =>{
@@ -210,12 +290,18 @@ module.exports.markAdd = async(req,res) =>{
                             $filter: {
                                 input: "$marks",
                                 as: "mark",
-                                cond: { $eq: [ "$$mark.subject_id", new mongoose.Types.ObjectId(marKArr[0].subject_id) ] }
+                                cond: { 
+                                    $and:[
+                                        {$eq: [ "$$mark.subject_id", new mongoose.Types.ObjectId(marKArr[0].subject_id) ] },
+                                        {$eq: [ "$$mark.third_mark_status", true ] }
+                                    ]
+                                    
+                                }
                             }
                         }
                     }}
                 ]);
-            //    console.log("Hasan",check_entry[0].marks)
+            //    console.log("Hasan",check_entry[0].marks,marKArr)
                try {
                     for (let i = 0; i < marKArr.length; i++) {
                     
@@ -248,11 +334,98 @@ module.exports.markAdd = async(req,res) =>{
                         {$set:{'marks.$[elem].third_mark_entry': true}},
                         {arrayFilters: [{'elem.subject_id':marKArr[0].subject_id }]})
 
-                    return res.status(200).json({msg: 'Mard added successfully'});
+                    return res.status(200).json({msg: 'Mark added successfully'});
                 } catch (error) {
                     return res.status(500).json({errors: [{msg: error.message}]});
                 }
             }
         }
     })
+}
+
+module.exports.markUpdate = async(req, res) =>{
+    const form = formidable();
+    form.parse(req, async(err, fields, files) =>{
+        const {state: {exam_id,session,semister}, marKArr, examinarType} = fields;
+        const check_entry = await Mark.aggregate([ 
+            {$match:{exam_id: new mongoose.Types.ObjectId(exam_id)}},
+            {$project: {
+                "exam_id":1,
+                marks: {
+                    $filter: {
+                        input: "$marks",
+                        as: "mark",
+                        cond: { $eq: [ "$$mark.subject_id", new mongoose.Types.ObjectId(marKArr[0].subject_id) ] }
+                    }
+                }
+            }}
+        ]);
+        const errors = [];
+        
+        if(errors.length !== 0){
+            return res.status(400).json({errors});
+        }else{
+            if(examinarType == "first_examinar"){
+                try {
+                    if(!check_entry[0].marks[0].second_mark){
+                        for (let i = 0; i < marKArr.length; i++) {
+                            await Mark.updateOne({exam_id},
+                                {$set:{'marks.$[elem].first_mark':marKArr[i].mark}},
+                                {arrayFilters: [{'elem.subject_id':marKArr[i].subject_id,'elem.student_id':marKArr[i].student_id}]})
+                        }
+                    }
+                    else if(check_entry[0].marks[0].second_mark){
+                        for (let i = 0; i < array.length; i++) {
+                            let third_mark_status = false;
+                            let final_mark = 0;
+                            const percent_f = (marKArr[i].mark * 100)/100;
+                            const percent_s = (check_entry[0].marks[0].second_mark * 100)/100;
+                            if(percent_f - percent_s > 20 || percent_s - percent_f > 20){
+                                third_mark_status = true;
+                                final_mark = 0;
+                            }else{
+                                final_mark = Math.round((percent_f+percent_s)/2);
+                                third_mark_status = false;
+                            }
+                            await Mark.updateOne({exam_id},
+                                {$set:{'marks.$[elem].first_mark':marKArr[i].mark, 'marks.$[elem].third_mark_status':third_mark_status, 'marks.$[elem].final_mark':final_mark}},
+                                {arrayFilters: [{'elem.subject_id':marKArr[i].subject_id,'elem.student_id':marKArr[i].student_id}]})
+                        }
+                    }
+                    return res.status(200).json({msg: 'Mark updated successfully'});
+                } catch (error) {
+                    return res.status(500).json({errors: [{msg: error.message}]});
+                }
+            }
+            else if(examinarType == "second_examinar"){
+                try {
+                    for (let i = 0; i < marKArr.length; i++) {
+                       
+                        if(check_first_entry[0].marks[i].student_id == marKArr[i].student_id){
+                            let third_mark_status = false;
+                            let final_mark = 0;
+                            const percent_f = (check_first_entry[0].marks[i].first_mark * 100)/100;
+                            const percent_s = (marKArr[i].mark * 100)/100;
+                            if(percent_f - percent_s > 20 || percent_s - percent_f > 20){
+                                third_mark_status = true;
+                                final_mark = 0;
+                            }else{
+                                final_mark = Math.round((percent_f+percent_s)/2);
+                                third_mark_status = false;
+                            }
+                            await Mark.updateOne({exam_id},
+                                {$set:{'marks.$[elem].second_mark':marKArr[i].mark, 'marks.$[elem].third_mark_status':third_mark_status, 'marks.$[elem].final_mark':final_mark}},
+                                {arrayFilters: [{'elem.subject_id':marKArr[i].subject_id,'elem.student_id':marKArr[i].student_id}]})
+                           
+                                // console.log("Matching",percent_f ,percent_s,final_mark,third_mark_status)
+                        }
+                     }
+
+                    return res.status(200).json({msg: 'Mard added successfully'});
+                } catch (error) {
+                    return res.status(500).json({errors: [{msg: error.message}]});
+                }
+            }
+        }
+    }) 
 }

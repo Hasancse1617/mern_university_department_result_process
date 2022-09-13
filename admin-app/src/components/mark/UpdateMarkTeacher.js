@@ -3,8 +3,8 @@ import { useDispatch, useSelector } from "react-redux";
 import toast, {Toaster} from "react-hot-toast";
 import Loader from "../loader/Loader";
 import { NavLink, useSearchParams } from "react-router-dom";
-import { fetchMarkSubjects, fetchMarkEditStudents, addedMarkAction } from "../../store/actions/MarkAction";
-import { REMOVE_MARK_ERRORS, REMOVE_MARK_MESSAGE, REMOVE_MARK_STUDENTS } from "../../store/types/MarkType";
+import { fetchMarkSubjects, fetchMarkEditStudents, updatedMarkAction } from "../../store/actions/MarkAction";
+import { REMOVE_MARK_EDIT_STUDENTS, REMOVE_MARK_ERRORS, REMOVE_MARK_MESSAGE } from "../../store/types/MarkType";
 
 const UpdateMarkTeacher = () =>{
     const dispatch = useDispatch();
@@ -12,7 +12,7 @@ const UpdateMarkTeacher = () =>{
     let i = -1;
     const [searchParams, setSearchParams] = useSearchParams();
     const {teacher} = useSelector((state)=>state.TeacherReducer);
-    const { loading, message, markSubjects, markErrors, markStudents, markF_S_Students} = useSelector((state)=>state.MarkReducer);
+    const { loading, message, markSubjects, markErrors, markEditStudents, markF_S_Students} = useSelector((state)=>state.MarkReducer);
     const [subject, setSubject] = useState("");
     const [examinarType, setExaminarType] = useState("");
     const [state, setState] = useState({
@@ -43,20 +43,20 @@ const UpdateMarkTeacher = () =>{
         } //End Validate
         const markdetails = {state, marKArr, examinarType}
         if(validAll){
-            dispatch(addedMarkAction(markdetails));
+            dispatch(updatedMarkAction(markdetails));
         } 
     }
     const handleSubject = (e)=>{
         setSubject(e.target.value); 
-        dispatch({type: REMOVE_MARK_STUDENTS});
+        dispatch({type: REMOVE_MARK_EDIT_STUDENTS});
     }
     const handleType = (e) =>{
         setExaminarType(e.target.value);
-        dispatch({type: REMOVE_MARK_STUDENTS});
+        dispatch({type: REMOVE_MARK_EDIT_STUDENTS});
     }
     const handleSearch = (e) =>{
         e.preventDefault();
-        dispatch({type: REMOVE_MARK_STUDENTS});
+        dispatch({type: REMOVE_MARK_EDIT_STUDENTS});
         if(subject && examinarType){
             setSearchParams({subject_id: subject, examinar_type: examinarType});
             dispatch(fetchMarkEditStudents(teacher.dept_id._id, teacher.exam.session, subject, teacher._id, examinarType, teacher.exam._id));
@@ -72,7 +72,7 @@ const UpdateMarkTeacher = () =>{
         if(message){
             toast.success(message);
             dispatch({type: REMOVE_MARK_MESSAGE});
-            dispatch({type: REMOVE_MARK_STUDENTS});
+            dispatch({type: REMOVE_MARK_EDIT_STUDENTS});
         }
     },[markErrors, message]);
     useEffect(()=>{
@@ -84,7 +84,7 @@ const UpdateMarkTeacher = () =>{
         }
         //Clear students after clicking another page
         return () =>{
-            dispatch({type: REMOVE_MARK_STUDENTS});
+            dispatch({type: REMOVE_MARK_EDIT_STUDENTS});
         }
     },[]);
 
@@ -131,52 +131,67 @@ const UpdateMarkTeacher = () =>{
                         <th>Roll Number</th>
                         <th>Session</th>
                         <th>Semister</th>
-                        {Object.keys(markF_S_Students).length != 0?<th>Is 3rd Examinar needed?</th>:""}
-                        <th>Add Mark</th>
+                        {examinarType=="third_examinar"?<th>Is 3rd Examinar needed?</th>:""}
+                        {examinarType=="first_examinar"?<th>First Mark</th>:""}
+                        {examinarType=="second_examinar"?<th>Second Mark</th>:""}
+                        {examinarType=="third_examinar"?<th>Third Mark</th>:""}
+                        <th>New Mark</th>
                     </tr>
                     </thead>
                     <tbody>
                     {
                     !loading?
-                    markStudents && markStudents.length > 0?
-                    markStudents.map((student, index)=>(
-                        <tr key={student._id}>
-                            <td>{ index+1}</td>
-                            <td>{ student.name }</td>
-                            <td>{ student.roll }</td>
-                            <td>{ student.session }</td>
-                            <td>{ teacher.exam.semister+"th" }</td>
-                            <td><input className="checkValidity" type="number" min={30} max={100} onChange={(e)=>handleInputs(e,index,student._id,subject)} required/></td>
-                        </tr>
-                     )):
-                     markF_S_Students && Object.keys(markF_S_Students).length != 0?
-                     
-                     markF_S_Students.student.map((student, index )=>{
-                       if(markF_S_Students.marks[index].third_mark_status== true){
-                          i = i+1 
-                       }
+                    markEditStudents && Object.keys(markEditStudents).length != 0?
+                    markEditStudents.student.map((student, index)=>{
+                        if(markEditStudents.marks[index].third_mark_status== true){
+                            i = i+1 
+                        }
                         return(
                         <tr key={student._id}>
                             <td>{ index+1}</td>
                             <td>{ student.name }</td>
                             <td>{ student.roll }</td>
                             <td>{ student.session }</td>
-                            <td>{ teacher.exam.semister+"th" }</td>
-                            <td>{ markF_S_Students.marks[index].third_mark_status== true?"Yes":"No" }</td>
+                            <td>{ teacher.exam.semister+"th" }{markEditStudents.marks[index].third_mark}</td>
+                            <td>{ markEditStudents.marks[index].third_mark_status== true?"Yes":"No" }</td>
+                            {examinarType=="first_examinar"?<td>{ markEditStudents.marks[index].first_mark }</td>:""}
+                            {examinarType=="second_examinar"?<td>{ markEditStudents.marks[index].second_mark }</td>:""}
+                            {examinarType=="third_examinar"?<td>{ markEditStudents.marks[index].third_mark }</td>:""}
                             <td>
-                                {markF_S_Students.marks[index].third_mark_status== true?
-                                   <input className="checkValidity" type="number" min={30} max={100} index={i} onChange={(e)=>handleInputs(e, i ,student._id,subject)} required/>
-                                :"No Need"}
-                               </td>
-                                
+                                {markEditStudents.marks[index].third_mark_status== true && examinarType=="third_examinar"?
+                                <input className="checkValidity" type="number" min={30} max={100} index={i} onChange={(e)=>handleInputs(e,index,student._id,subject)} required/>:""}
+                                {examinarType!="third_examinar"?<input className="checkValidity" type="number" min={30} max={100} onChange={(e)=>handleInputs(e,index,student._id,subject)} required/>:""}
+                            </td>
                         </tr>
                      )})
+                    //  markF_S_Students && Object.keys(markF_S_Students).length != 0?
+                     
+                    //  markF_S_Students.student.map((student, index )=>{
+                    //    if(markF_S_Students.marks[index].third_mark_status== true){
+                    //       i = i+1 
+                    //    }
+                    //     return(
+                    //     <tr key={student._id}>
+                    //         <td>{ index+1}</td>
+                    //         <td>{ student.name }</td>
+                    //         <td>{ student.roll }</td>
+                    //         <td>{ student.session }</td>
+                    //         <td>{ teacher.exam.semister+"th" }</td>
+                    //         <td>{ markF_S_Students.marks[index].third_mark_status== true?"Yes":"No" }</td>
+                    //         <td>
+                    //             {markF_S_Students.marks[index].third_mark_status== true?
+                    //                <input className="checkValidity" type="number" min={30} max={100} index={i} onChange={(e)=>handleInputs(e, i ,student._id,subject)} required/>
+                    //             :"No Need"}
+                    //            </td>
+                                
+                    //     </tr>
+                    //  )})
                      :'No Students found'
                      :<Loader/>}
                     </tbody>
                     </table><br/>
-                    {markStudents.length > 0? <h3><button type="submit" class="btn btn-primary float-right text-bold">Add Mark</button></h3>:""}
-                    {Object.keys(markF_S_Students).length != 0? <h3><button type="submit" class="btn btn-primary float-right text-bold">Add Mark</button></h3>:""}
+                    {Object.keys(markEditStudents).length != 0? <h3><button type="submit" class="btn btn-primary float-right text-bold">Update Mark</button></h3>:""}
+                    {/* {Object.keys(markF_S_Students).length != 0? <h3><button type="submit" class="btn btn-primary float-right text-bold">Add Mark</button></h3>:""} */}
                 </form>
 
                 </div>
