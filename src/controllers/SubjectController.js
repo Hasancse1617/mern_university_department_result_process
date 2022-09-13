@@ -35,8 +35,9 @@ module.exports.recentlySubjects = async(req, res) =>{
 module.exports.createSubject = async(req, res) =>{ 
     const form = formidable();
     form.parse(req, async(err, fields, files) =>{
-        const {exam_id, subject_code, subject_mark, subject_credit, examinar_number, first_examinar, second_examinar, third_examinar} = fields;
+        const {exam_id, subject_code, subject_mark, subject_credit, subject_type, first_examinar, second_examinar, third_examinar} = fields;
         const errors = [];
+
         if(subject_code === ''){
             errors.push({msg: 'Subject Code is required'});
         }else{
@@ -52,6 +53,9 @@ module.exports.createSubject = async(req, res) =>{
             if(!isnum){
                 errors.push({msg: 'Valid mark is required'});
             }
+            else if(subject_mark < 1 || subject_mark > 100){
+                errors.push({msg: 'Mark will be 1 to 100'});
+            }
         }
         if(subject_credit === ''){
             errors.push({msg: 'Subject credit is required'});
@@ -59,12 +63,14 @@ module.exports.createSubject = async(req, res) =>{
             let isnum = /^\d.+$/.test(subject_credit);
             if(!isnum){
                 errors.push({msg: 'Valid credit is required'});
+            }else if(subject_credit < 1 || subject_credit > 5){
+                errors.push({msg: 'Credit will be 1.0 to 5.0'});
             }
         }
         if(first_examinar === ''){
             errors.push({msg: 'First examinar is required'});
         }
-        if(examinar_number === "three"){
+        if(subject_type === "theory"){
             if(second_examinar === ''){
                 errors.push({msg: 'Second examinar is required'});
             }
@@ -83,16 +89,29 @@ module.exports.createSubject = async(req, res) =>{
         }
         else{
             try {
-                const response = await Subject.create({
-                    exam_id,
-                    subject_code,
-                    subject_mark,
-                    subject_credit,
-                    first_examinar,
-                    second_examinar,
-                    third_examinar,
-                });
-                return res.status(200).json({msg: 'Subject created successfully', response});
+                if(subject_type === "theory"){
+                    const response = await Subject.create({
+                        exam_id,
+                        subject_code,
+                        subject_mark,
+                        subject_credit,
+                        subject_type,
+                        first_examinar,
+                        second_examinar,
+                        third_examinar,
+                    });
+                }else{
+                    const response = await Subject.create({
+                        exam_id,
+                        subject_code,
+                        subject_mark,
+                        subject_credit,
+                        subject_type,
+                        first_examinar,
+                    });
+                }
+                
+                return res.status(200).json({msg: 'Subject created successfully'});
             } catch (error) {
                 return res.status(500).json({errors: [{msg: error.message}]});
             }
@@ -116,7 +135,7 @@ module.exports.updateSubject = async(req, res) =>{
     const form = formidable({ multiples: true });
     const subject = await Subject.findOne({_id:id});
     form.parse(req, async(err, fields, files) =>{
-        const { subject_mark, subject_credit, first_examinar, second_examinar, third_examinar} = fields;
+        const { subject_mark, subject_credit, subject_type, first_examinar, second_examinar, third_examinar} = fields;
         const errors = [];
         if(subject_mark === ''){
             errors.push({msg: 'Subject mark is required'});
@@ -137,7 +156,7 @@ module.exports.updateSubject = async(req, res) =>{
         if(first_examinar === ''){
             errors.push({msg: 'First examinar is required'});
         }
-        if(subject && subject.second_examinar){
+        if(subject_type == "theory"){
             if(second_examinar === ''){
                 errors.push({msg: 'Second examinar is required'});
             }
@@ -151,14 +170,22 @@ module.exports.updateSubject = async(req, res) =>{
         }
         else{
             try {
-                const response = await Subject.findByIdAndUpdate(id,{
-                    subject_mark,
-                    subject_credit,
-                    first_examinar,
-                    second_examinar,
-                    third_examinar
-                });
-                return res.status(200).json({msg: 'Subject updated successfully', response});
+                if(subject_type == "theory"){
+                    const response = await Subject.findByIdAndUpdate(id,{
+                        subject_mark,
+                        subject_credit,
+                        first_examinar,
+                        second_examinar,
+                        third_examinar
+                    });
+                }else{
+                    const response = await Subject.findByIdAndUpdate(id,{
+                        subject_mark,
+                        subject_credit,
+                        first_examinar,
+                    });
+                }
+                return res.status(200).json({msg: 'Subject updated successfully'});
             } catch (error) {
                 return res.status(500).json({errors: [{msg: error.message}]});
             }

@@ -17,6 +17,7 @@ const EditSubject = () => {
     const [state,setState] = useState({
         subject_mark:"",
         subject_credit:"",
+        subject_type:"",
         first_examinar:"",
         second_examinar:"",
         third_examinar:""
@@ -27,7 +28,7 @@ const EditSubject = () => {
             [e.target.name]: e.target.value
         });
     }
-    const createSubject = (e) =>{
+    const updateSubject = (e) =>{
         e.preventDefault();
         dispatch(updateAction(state, id));
     }
@@ -44,6 +45,7 @@ const EditSubject = () => {
                subject_code: subject.subject_code,
                subject_mark: subject.subject_mark,
                subject_credit: subject.subject_credit,
+               subject_type: subject.subject_type,
                first_examinar: subject.first_examinar,
                second_examinar: subject.second_examinar,
                third_examinar: subject.third_examinar
@@ -81,7 +83,7 @@ const EditSubject = () => {
                     <h4 className="float-left">Edit Subject</h4>
                     <h3><NavLink to="/exam/subjects" className="btn btn-sm btn-success float-right text-bold">All Subject</NavLink></h3>
                 </div>
-                {!loading?<form role="form" onSubmit={createSubject}>
+                {!loading?<form role="form" onSubmit={updateSubject}>
                     <div class="card-body">
                     <div class="form-group row">
                         <label for="exampleInputEmail1" className="col-sm-2  col-form-label">Subject Code</label>
@@ -112,7 +114,7 @@ const EditSubject = () => {
                           </select>
                         </div> 
                     </div>
-                    {subject.second_examinar?<>
+                    {subject.subject_type == "theory"?<>
                     <div class="form-group row">
                         <label for="exampleInput" className="col-sm-2  col-form-label">2nd Examinar</label>
                         <div className="col-sm-8">
@@ -136,7 +138,7 @@ const EditSubject = () => {
                         </div> 
                     </div></>:""}
                     <div class="form-group col-6 offset-sm-2">
-                        <button type="submit" class="btn btn-primary">Submit</button>
+                        <button type="submit" class="btn btn-primary">Update</button>
                     </div>
                     </div>
                 </form>:<Loader/>}

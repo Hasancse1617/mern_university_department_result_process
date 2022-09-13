@@ -76,7 +76,7 @@ const AddMarkTeacher = () =>{
         }
     },[markErrors, message]);
     useEffect(()=>{
-        dispatch(fetchMarkSubjects(teacher.exam._id));
+        dispatch(fetchMarkSubjects(teacher.exam._id,"theory"));
         setSubject(searchParams.get("subject_id"));
         setExaminarType(searchParams.get("examinar_type"));
         if(searchParams.get("subject_id")&& teacher._id){

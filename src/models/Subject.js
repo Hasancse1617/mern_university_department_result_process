@@ -17,6 +17,10 @@ const subjectSchema = new Schema({
         type: String,
         required: true
     },
+    subject_type:{
+        type: String,
+        required: true
+    },
     first_examinar:{
         type: Schema.Types.ObjectId,
         ref: 'teacher'

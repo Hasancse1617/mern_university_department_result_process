@@ -165,7 +165,7 @@ const Sidebar = () => {
                         </li>
                          
                         </> :""}
-                        {teacher?
+                        {teacher?<>
                          <li className="nav-item has-treeview menu-open">
                             <a href="#" className="nav-link">
                                 <i className="nav-icon fas fa-copy"></i>
@@ -188,8 +188,31 @@ const Sidebar = () => {
                                     </NavLink>
                                 </li>                       
                             </ul>
-                        </li>:""
-                        }
+                        </li>
+                        <li className="nav-item has-treeview menu-open">
+                            <a href="#" className="nav-link">
+                                <i className="nav-icon fas fa-copy"></i>
+                                <p>
+                                    Manage Lab / Viva
+                                    <i className="fas fa-angle-left right"></i>
+                                </p>
+                            </a>
+                           <ul className="nav nav-treeview">
+                            <li className="nav-item">
+                                <NavLink to="/teacher/add-lab-viva-mark" className="nav-link">
+                                    <i className="far fa-circle nav-icon"></i>
+                                    <p>Add Mark</p>
+                                </NavLink>
+                            </li>
+                            <li className="nav-item">
+                                <NavLink to="/teacher/edit-lab-viva-mark" className="nav-link">
+                                    <i className="far fa-circle nav-icon"></i>
+                                    <p>Update Mark</p>
+                                </NavLink>
+                            </li>                       
+                        </ul>
+                    </li></>
+                        :""}
                     </ul>
                 </nav>
                 </div>

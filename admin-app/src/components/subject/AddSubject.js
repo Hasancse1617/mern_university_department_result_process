@@ -17,12 +17,12 @@ const AddSubject = () => {
         subject_code:"",
         subject_mark:"",
         subject_credit:"",
-        examinar_number:"three",
+        subject_type:"theory",
         first_examinar:"",
         second_examinar:"",
         third_examinar:""
     });
-    console.log(recentSubjects)
+
     const handleInput = (e) =>{
         setState({
             ...state,
@@ -73,31 +73,31 @@ const AddSubject = () => {
                     <div class="form-group row">
                         <label for="exampleInputEmail1" className="col-sm-2  col-form-label">Subject Code</label>
                         <div className="col-sm-8">
-                           <input type="text" name="subject_code" value={state.subject_code} onChange={handleInput} class="form-control" id="exampleInputEmail1" placeholder="Enter Subject Code eg: CSE-402"/>
+                           <input type="text" name="subject_code" value={state.subject_code} onChange={handleInput} class="form-control" id="exampleInputEmail1" placeholder="Eg: CSE-401, ACCE-401"/>
                         </div> 
                     </div>
                     <div class="form-group row">
                         <label for="exampleInputEmail1" className="col-sm-2  col-form-label">Subject Mark</label>
                         <div className="col-sm-8">
-                           <input type="text" name="subject_mark" value={state.subject_mark} onChange={handleInput} class="form-control" id="exampleInputEmail1" placeholder="Enter Total Subject Mark"/>
+                           <input type="text" name="subject_mark" value={state.subject_mark} onChange={handleInput} class="form-control" id="exampleInputEmail1" placeholder="Subject Mark Eg: 100"/>
                         </div> 
                     </div>
                     <div class="form-group row">
                         <label for="exampleInputEmail1" className="col-sm-2  col-form-label">Subject Credit</label>
                         <div className="col-sm-8">
-                           <input type="text" name="subject_credit" value={state.subject_credit} onChange={handleInput} class="form-control" id="exampleInputEmail1" placeholder="Enter Subject Credit"/>
+                           <input type="text" name="subject_credit" value={state.subject_credit} onChange={handleInput} class="form-control" id="exampleInputEmail1" placeholder="Eg: 3.0, 3.5"/>
                         </div> 
                     </div>
                     <div class="form-group row">
-                        <label for="exampleInputEmail1" className="col-sm-2 col-form-label">Number of Examniar</label>
+                        <label for="exampleInputEmail1" className="col-sm-2 col-form-label">Subject Type</label>
                         <div className="col-sm-3">
-                           <input type="radio" name="examinar_number" value="one" checked={state.examinar_number=="one"} onChange={handleInput}  id="exampleInputEmail1"/>
-                           &nbsp;&nbsp;<label className="col-form-label">One Examniar</label>
+                           <input type="radio" name="subject_type" value="theory" checked={state.subject_type=="theory"} onChange={handleInput} class="" id="exampleInputEmail1"/>
+                           &nbsp;&nbsp;<label className="col-form-label">Theory</label>
                         </div>
                         <div className="col-sm-3">
-                           <input type="radio" name="examinar_number" value="three" checked={state.examinar_number=="three"} onChange={handleInput} class="" id="exampleInputEmail1"/>
-                           &nbsp;&nbsp;<label className="col-form-label">Three Examniar</label>
-                        </div>  
+                           <input type="radio" name="subject_type" value="lab_viva" checked={state.subject_type=="lab_viva"} onChange={handleInput}  id="exampleInputEmail1"/>
+                           &nbsp;&nbsp;<label className="col-form-label">Lab or Viva</label>
+                        </div>
                     </div>
                     <div class="form-group row">
                         <label for="exampleInput" className="col-sm-2  col-form-label">1st Examinar</label>
@@ -110,7 +110,7 @@ const AddSubject = () => {
                           </select>
                         </div> 
                     </div>
-                    {state.examinar_number == "three"?<>
+                    {state.subject_type == "theory"?<>
                     <div class="form-group row">
                         <label for="exampleInput" className="col-sm-2  col-form-label">2nd Examinar</label>
                         <div className="col-sm-8">
@@ -159,6 +159,7 @@ const AddSubject = () => {
                         <th>Subject Code</th>
                         <th>Total Mark</th>
                         <th>Credit</th>
+                        <th>Subject Type</th>
                         <th>1st Examinar</th>
                         <th>2nd Examinar</th>
                         <th>3rd Examinar</th>
@@ -175,11 +176,12 @@ const AddSubject = () => {
                           <td>{ subject.subject_code }</td>
                           <td>{ subject.subject_mark }</td>
                           <td>{ subject.subject_credit }</td>
+                          <td>{ subject.subject_type }</td>
                           <td>{ subject.first_examinar.name }</td>
-                          <td>{ subject.second_examinar.name }</td>
-                          <td>{ subject.third_examinar.name }</td>
+                          <td>{ subject.second_examinar? subject.second_examinar.name :""}</td>
+                          <td>{ subject.third_examinar? subject.third_examinar.name :""}</td>
                           <td>
-                            <NavLink exact to={`/subject/edit-subject/${subject._id}`} ><button title="Edit" className="text-success" ><i className="fas fa-edit"></i></button></NavLink>&nbsp;
+                            <NavLink exact to={`/exam/edit-subject/${subject._id}`} ><button title="Edit" className="text-success" ><i className="fas fa-edit"></i></button></NavLink>&nbsp;
                           </td>
                         </tr>
                         ))

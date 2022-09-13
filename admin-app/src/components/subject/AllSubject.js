@@ -65,6 +65,7 @@ const AllSubject = () => {
                         <th>Subject Code</th>
                         <th>Total Mark</th>
                         <th>Credit</th>
+                        <th>Subject Type</th>
                         <th>1st Examinar</th>
                         <th>2nd Examinar</th>
                         <th>3rd Examinar</th>
@@ -81,9 +82,10 @@ const AllSubject = () => {
                           <td>{ subject.subject_code }</td>
                           <td>{ subject.subject_mark }</td>
                           <td>{ subject.subject_credit }</td>
+                          <td>{ subject.subject_type }</td>
                           <td>{ subject.first_examinar.name }</td>
-                          <td>{ subject.second_examinar.name }</td>
-                          <td>{ subject.third_examinar.name }</td>
+                          <td>{ subject.second_examinar? subject.second_examinar.name :""}</td>
+                          <td>{ subject.third_examinar? subject.third_examinar.name :""}</td>
                           <td>
                             <NavLink exact to={`/exam/edit-subject/${subject._id}`} ><button title="Edit" className="text-success" ><i className="fas fa-edit"></i></button></NavLink>&nbsp;
                             <button onClick={() => deleteSubject(subject._id)} className="text-danger"><i className="fas fa-trash"></i></button>&nbsp;</td>
