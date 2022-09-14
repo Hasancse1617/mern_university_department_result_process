@@ -144,21 +144,21 @@ const Sidebar = () => {
                             <a href="#" className="nav-link">
                                 <i className="nav-icon fas fa-copy"></i>
                                 <p>
-                                    Manage Marks
+                                    Manage Results
                                     <i className="fas fa-angle-left right"></i>
                                 </p>
                             </a>
                             <ul className="nav nav-treeview">
                                 <li className="nav-item">
-                                    <NavLink to="/exam/mark-subjects" className={pathname==='/admin/user/create'?'active nav-link':'nav-link'}>
+                                    <NavLink to="/exam/view-mark" className="nav-link">
                                         <i className="far fa-circle nav-icon"></i>
-                                        <p>Add Mark</p>
+                                        <p>View Subject Mark</p>
                                     </NavLink>
                                 </li>
                                 <li className="nav-item">
-                                    <NavLink to="/exam/exam-student" className={pathname==='/admin/user/create'?'active nav-link':'nav-link'}>
+                                    <NavLink to="/exam/view-result" className={pathname==='/admin/user/create'?'active nav-link':'nav-link'}>
                                         <i className="far fa-circle nav-icon"></i>
-                                        <p>All Subject</p>
+                                        <p>View Result</p>
                                     </NavLink>
                                 </li>                       
                             </ul>

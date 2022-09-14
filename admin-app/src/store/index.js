@@ -8,6 +8,7 @@ import ExamReducer from './reducers/ExamReducer';
 import CommonReducer from './reducers/CommonReducer';
 import SubjectReducer from './reducers/SubjectReducer';
 import MarkReducer from './reducers/MarkReducer';
+import ResultReducer from './reducers/ResultReducer';
 
 const rootReducers = combineReducers({
      ChairmanReducer,
@@ -17,6 +18,7 @@ const rootReducers = combineReducers({
      CommonReducer,
      SubjectReducer,
      MarkReducer,
+     ResultReducer,
 });
 const middlewares = [thunkMiddleware];
 const Store = createStore(rootReducers, composeWithDevTools( applyMiddleware(...middlewares)));

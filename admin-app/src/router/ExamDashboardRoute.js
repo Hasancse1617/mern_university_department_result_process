@@ -9,8 +9,8 @@ import ExamStudent from "../components/exam/ExamStudent";
 import AddSubject from "../components/subject/AddSubject";
 import AllSubject from "../components/subject/AllSubject";
 import EditSubject from "../components/subject/EditSubject";
-import MarkSubjects from "../components/mark/MarkSubjects";
-import AddMark from "../components/mark/AddMark";
+import ViewSingleMark from "../components/result/ViewSingleMark";
+import ViewResult from "../components/result/ViewResult";
 
 const ExamDashboardRoute = () => {
     return (
@@ -25,8 +25,10 @@ const ExamDashboardRoute = () => {
                     <Route path="/subjects" element={<ExamPrivateRoute><AllSubject/></ExamPrivateRoute>}></Route>
                     <Route path="/add-subject" element={<ExamPrivateRoute><AddSubject/></ExamPrivateRoute>}></Route>
                     <Route path="/edit-subject/:id" element={<ExamPrivateRoute><EditSubject/></ExamPrivateRoute>}></Route>
-                    <Route path="/mark-subjects" element={<ExamPrivateRoute><MarkSubjects/></ExamPrivateRoute>}></Route>
-                    <Route path="/add-mark/:id" element={<ExamPrivateRoute><AddMark/></ExamPrivateRoute>}></Route>
+                    
+                    <Route path="/view-mark" element={<ExamPrivateRoute><ViewSingleMark/></ExamPrivateRoute>}></Route>
+                    <Route path="/view-result" element={<ExamPrivateRoute><ViewResult/></ExamPrivateRoute>}></Route>
+
                     {/*End Exam Chairman dashboard Route */}
                 </Switch>
             </div>
