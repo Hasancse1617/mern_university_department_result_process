@@ -82,7 +82,6 @@ useEffect(()=>{
                         <th>Student Name</th>
                         <th>Roll Number</th>
                         <th>Session</th>
-                        {Object.keys(resultSingle).length != 0?<th>Is 3rd Examinar needed?</th>:""}
                         <th>Final Mark</th>
                         <th>Grade</th>
                       </tr>
@@ -97,12 +96,11 @@ useEffect(()=>{
                           <td>{ student.name }</td>
                           <td>{ student.roll }</td>
                           <td>{ student.session }</td>
-                          <td>{ resultSingle.marks[index].third_mark_status== true?"Yes":"No" }</td>
                           <td>{ resultSingle.marks[index].final_mark } </td>
                           <td>{ getGradeSingleSubject(resultSingle.marks[index].final_mark) }</td>
                         </tr>
                         ))
-                        :'No Students found'
+                        :'No Results found'
                       :(<Loader/>)
                     }
                       </tbody>

@@ -117,7 +117,7 @@ module.exports.loginExam = async(req,res) =>{
             expiresToken = '7d';
         }
         try{
-            const exam = await Exam.findOne({exam_id}).populate('dept_id','short_name');
+            const exam = await Exam.findOne({exam_id}).populate('dept_id','dept_name short_name');
             if(exam){
                 if(!exam.status){
                     return res.status(500).json({errors: [{msg: 'Exam is not verified from Dept Chairman!'}]});

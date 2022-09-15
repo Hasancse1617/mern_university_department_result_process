@@ -74,14 +74,15 @@ export const getPointSingleSubject =(mark)=>{
 
 export const findStudentGPA = (records) =>{
     // console.log(records);
-    let total_grade = 0;
+    let total_point = 0;
     let total_credit = 0;
     let gpa = 0;
     for (let i = 0; i < records.length; i++) {
         let grade = getPointSingleSubject(records[i].marks.final_mark);
-        let credit = records[i].subject[0].subject_credit;
-        total_grade += grade;
+        let credit = parseFloat(records[i].subject[0].subject_credit);
+        total_point += (grade * credit);
         total_credit += credit;
     }
-    console.log(total_credit, total_grade)
+    return (total_point/total_credit).toFixed(2);
+    // console.log(total_credit, total_point)
 }
