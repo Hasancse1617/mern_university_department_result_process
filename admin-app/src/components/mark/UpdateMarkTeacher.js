@@ -76,7 +76,7 @@ const UpdateMarkTeacher = () =>{
         }
     },[markErrors, message]);
     useEffect(()=>{
-        dispatch(fetchMarkSubjects(teacher.exam._id));
+        dispatch(fetchMarkSubjects(teacher.exam._id, "theory"));
         setSubject(searchParams.get("subject_id"));
         setExaminarType(searchParams.get("examinar_type"));
         if(searchParams.get("subject_id")&& teacher._id){
@@ -153,7 +153,7 @@ const UpdateMarkTeacher = () =>{
                             <td>{ student.roll }</td>
                             <td>{ student.session }</td>
                             <td>{ teacher.exam.semister+"th" }{markEditStudents.marks[index].third_mark}</td>
-                            <td>{ markEditStudents.marks[index].third_mark_status== true?"Yes":"No" }</td>
+                            {examinarType=="third_examinar"?<td>{ markEditStudents.marks[index].third_mark_status== true?"Yes":"No" }</td>:""}
                             {examinarType=="first_examinar"?<td>{ markEditStudents.marks[index].first_mark }</td>:""}
                             {examinarType=="second_examinar"?<td>{ markEditStudents.marks[index].second_mark }</td>:""}
                             {examinarType=="third_examinar"?<td>{ markEditStudents.marks[index].third_mark }</td>:""}

@@ -32,6 +32,10 @@ const subjectSchema = new Schema({
     third_examinar:{
         type: Schema.Types.ObjectId,
         ref: 'teacher'
+    },
+    final_mark_entry_status:{
+        type: Boolean,
+        default: false
     }
 }, {timestamps: true}); 
 

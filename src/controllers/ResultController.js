@@ -50,7 +50,7 @@ module.exports.resultSingleSubject = async(req, res) =>{
 
     const errors = [];
     if(!(response[0]?.marks[0]?.final_mark >= 0)){
-        errors.push({msg: "Entry not Exists!!!"})
+        errors.push({msg: "First or Second Examinar Entry not Exists!!!"})
     }
     if(errors.length !== 0){
         return res.status(400).json({errors});
@@ -62,4 +62,35 @@ module.exports.resultSingleSubject = async(req, res) =>{
         }
     }
     
+}
+//very needed query
+module.exports.examResults = async(req,res) =>{
+    const exam_id = req.params.exam_id;
+    try {
+        const response = await Mark.aggregate([ 
+            {$match:{exam_id: new mongoose.Types.ObjectId(exam_id)}},    
+            {$unwind: "$marks"},
+            { "$lookup": {
+                "from": "students",
+                "localField": "marks.student_id",
+                "foreignField": "_id",
+                "as": "student"
+             }},
+             { "$lookup": {
+                "from": "subjects",
+                "localField": "marks.subject_id",
+                "foreignField": "_id",
+                "as": "subject"
+             }},
+             { $sort: { "subject.subject_code": 1 } },
+             {$group: {
+                _id:"$marks.student_id", roll:{ $push:"$student.roll" }, records: { $push: "$$ROOT" }
+             }},
+             { $sort: { "roll": 1 } },
+        ]);
+        // console.log("Hasan",response)
+        return res.status(200).json({ response });
+    } catch (error) {
+        return res.status(500).json({errors: [{msg: error.message}]});
+    }
 }

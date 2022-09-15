@@ -183,7 +183,7 @@ module.exports.markLabVivaEditStudents = async(req,res) =>{
         const errors = [];  
         const check_examinar = await Subject.findOne({ _id: subject_id, first_examinar: teacher_id });
         if(!check_examinar){
-            errors.push({msg: 'You are not First examinar for this subject'});
+            errors.push({msg: 'You are not examinar for this subject'});
         }else if(!check_entry[0]?.marks[0]?.first_mark){
             errors.push({msg: "Your entry not exists. Please add!!"})
         }
@@ -374,12 +374,13 @@ module.exports.markAdd = async(req,res) =>{
                                 final_mark = Math.round((percent_f+percent_s)/2);
                                 third_mark_status = false;
                             }
+                            
                             await Mark.updateOne({exam_id},
                                 {$set:{'marks.$[elem].second_mark':marKArr[i].mark, 'marks.$[elem].third_mark_status':third_mark_status, 'marks.$[elem].final_mark':final_mark}},
                                 {arrayFilters: [{'elem.subject_id':marKArr[i].subject_id,'elem.student_id':marKArr[i].student_id}]})
-                           
                                 // console.log("Matching",percent_f ,percent_s,final_mark,third_mark_status)
                         }
+                        await Subject.updateOne({_id: marKArr[0].subject_id },{final_mark_entry_status: true});
                      }
 
                     return res.status(200).json({msg: 'Mard added successfully'});
@@ -472,6 +473,7 @@ module.exports.markAddLabViva = async(req,res)=>{
                         })
                     }
                 }else{
+                    
                     const response = new Mark();
                     response.exam_id = exam_id;
                     response.session = session;
@@ -485,6 +487,7 @@ module.exports.markAddLabViva = async(req,res)=>{
                         }
                     }
                     await response.save();
+                    await Subject.updateOne({_id: marKArr[0].subject_id},{final_mark_entry_status: true});
                 }
                 
                 return res.status(200).json({msg: 'Mard added successfully'});
@@ -601,10 +604,10 @@ module.exports.markUpdate = async(req, res) =>{
                 try {
                     for (let i = 0; i < marKArr.length; i++) {
                        
-                        if(check_first_entry[0].marks[i].student_id == marKArr[i].student_id){
+                        if(check_entry[0].marks[i].student_id == marKArr[i].student_id){
                             let third_mark_status = false;
                             let final_mark = 0;
-                            const percent_f = (check_first_entry[0].marks[i].first_mark * 100)/100;
+                            const percent_f = (check_entry[0].marks[i].first_mark * 100)/100;
                             const percent_s = (marKArr[i].mark * 100)/100;
                             if(percent_f - percent_s > 20 || percent_s - percent_f > 20){
                                 third_mark_status = true;
@@ -621,7 +624,7 @@ module.exports.markUpdate = async(req, res) =>{
                         }
                      }
 
-                    return res.status(200).json({msg: 'Mard added successfully'});
+                    return res.status(200).json({msg: 'Mard updated successfully'});
                 } catch (error) {
                     return res.status(500).json({errors: [{msg: error.message}]});
                 }
@@ -677,7 +680,7 @@ module.exports.markUpdate = async(req, res) =>{
                         }
                     }
 
-                    return res.status(200).json({msg: 'Mark added successfully'});
+                    return res.status(200).json({msg: 'Mark updated successfully'});
                 } catch (error) {
                     return res.status(500).json({errors: [{msg: error.message}]});
                 }

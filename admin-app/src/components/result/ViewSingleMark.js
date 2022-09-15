@@ -5,6 +5,7 @@ import toast, {Toaster} from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
 import { NavLink, useParams, useSearchParams } from "react-router-dom";
 import Loader from "../loader/Loader";
+import { getGradeSingleSubject } from "./QueryGPA";
 import { fetchExamSubjects, fetchSingleSubjectResult } from "../../store/actions/ResultAction";
 import { REMOVE_RESULT_ERRORS, REMOVE_RESULT_SINGLE } from "../../store/types/ResultType";
 
@@ -81,7 +82,9 @@ useEffect(()=>{
                         <th>Student Name</th>
                         <th>Roll Number</th>
                         <th>Session</th>
+                        {Object.keys(resultSingle).length != 0?<th>Is 3rd Examinar needed?</th>:""}
                         <th>Final Mark</th>
+                        <th>Grade</th>
                       </tr>
                       </thead>
                       <tbody>
@@ -94,7 +97,9 @@ useEffect(()=>{
                           <td>{ student.name }</td>
                           <td>{ student.roll }</td>
                           <td>{ student.session }</td>
-                          <td>{ resultSingle.marks[index].final_mark }</td>
+                          <td>{ resultSingle.marks[index].third_mark_status== true?"Yes":"No" }</td>
+                          <td>{ resultSingle.marks[index].final_mark } </td>
+                          <td>{ getGradeSingleSubject(resultSingle.marks[index].final_mark) }</td>
                         </tr>
                         ))
                         :'No Students found'

@@ -1,5 +1,5 @@
 import axiosExam from "../../helper/axiosExam";
-import { REMOVE_RESULT_LOADER, SET_RESULT_ERRORS, SET_RESULT_LOADER, SET_RESULT_SINGLE, SET_RESULT_SUBJECTS } from "../types/ResultType";
+import { REMOVE_RESULT_LOADER, SET_RESULTS, SET_RESULT_ERRORS, SET_RESULT_LOADER, SET_RESULT_SINGLE, SET_RESULT_SUBJECTS } from "../types/ResultType";
 
 export const fetchExamSubjects = (exam_id) =>{
     return async(dispatch,getState)=>{
@@ -36,3 +36,21 @@ export const fetchSingleSubjectResult = (exam_id, subject_id) =>{
           }
     }
 }
+
+export const fetchExamResults = (exam_id) =>{
+      return async(dispatch,getState)=>{
+            dispatch({type: SET_RESULT_LOADER});
+            try {
+                  const {data: { response }} = await axiosExam.get(`/exam/exam-result/${exam_id}`);
+                  // console.log(response);
+                  dispatch({type: SET_RESULTS, payload: response});
+                  dispatch({type: REMOVE_RESULT_LOADER});
+            } catch (error) {
+                  dispatch({type: REMOVE_RESULT_LOADER});
+                  if(error && error.response.data){
+                       const {errors} = error.response.data;
+                       dispatch({type: SET_RESULT_ERRORS, payload:errors});
+                  } 
+            }
+      }
+  }

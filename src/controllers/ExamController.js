@@ -257,7 +257,7 @@ module.exports.statusExam = async(req, res) =>{
 module.exports.examStudents = async(req, res) =>{
     const session = req.params.session;
     try {
-        const response = await Student.find({session}).sort({createdAt:'descending'});
+        const response = await Student.find({session}).sort({roll:'ascending'});
         return res.status(200).json({ response });
     } catch (error) {
         return res.status(500).json({errors: [{msg: error.message}]});

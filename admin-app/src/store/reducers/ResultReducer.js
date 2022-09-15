@@ -1,10 +1,11 @@
-import { SET_RESULT_SUBJECTS, REMOVE_RESULT_ERRORS, REMOVE_RESULT_LOADER, REMOVE_RESULT_MESSAGE, SET_RESULT_ERRORS, SET_RESULT_LOADER, SET_RESULT_MESSAGE, SET_RESULT_SINGLE, REMOVE_RESULT_SINGLE } from '../types/ResultType';
+import { SET_RESULT_SUBJECTS, REMOVE_RESULT_ERRORS, REMOVE_RESULT_LOADER, REMOVE_RESULT_MESSAGE, SET_RESULT_ERRORS, SET_RESULT_LOADER, SET_RESULT_MESSAGE, SET_RESULT_SINGLE, REMOVE_RESULT_SINGLE, SET_RESULTS } from '../types/ResultType';
 
 const initState = {
     loading: false,
 	resultErrors: [],
 	message:"",
-	resultSingle:{}
+	resultSingle:{},
+	results:[]
 }
 
 const ResultReducer = (state = initState, action) => {
@@ -33,6 +34,9 @@ const ResultReducer = (state = initState, action) => {
 	}
 	else if (action.type === REMOVE_RESULT_SINGLE) {
 		return {...state, resultSingle: {}};
+	}
+	else if (action.type === SET_RESULTS) {
+		return {...state, results: action.payload};
 	}
 	else {
 		return state;

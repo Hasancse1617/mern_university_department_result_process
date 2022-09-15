@@ -5,16 +5,18 @@ import toast, {Toaster} from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
 import { NavLink } from "react-router-dom";
 import Loader from "../loader/Loader";
-import { fetchExamSubjects } from "../../store/actions/ResultAction";
+import { findStudentGPA } from "./QueryGPA";
+import { fetchExamResults } from "../../store/actions/ResultAction";
 
 const ViewResult = () => {
-  const {message, loading, resultSubjects} = useSelector((state)=> state.ResultReducer);
+  const {message, loading, results} = useSelector((state)=> state.ResultReducer);
   const { exam } = useSelector((state)=>state.ExamReducer);
   const dispatch = useDispatch();
   useEffect(()=>{
-    dispatch(fetchExamSubjects(exam._id));
+    dispatch(fetchExamResults(exam._id));
   },[]);
-  
+
+  console.log(results)
     return (
         <>
         <Helmet>
@@ -37,23 +39,31 @@ const ViewResult = () => {
                       <thead>
                       <tr>
                         <th>SL.</th>
-                        <th>Subject Code</th>
-                        <th>Action</th>
+                        <th>Name</th>
+                        <th>Roll</th>
+                        {results && results.length>0?
+                         results[0].records.map((result,index)=>(
+                            <th>{ result.subject[0].subject_code }</th>
+                         ))
+                        :""}
+                        <th>GPA</th>
                       </tr>
                       </thead>
                       <tbody>
                       {
                       !loading?
-                      resultSubjects && resultSubjects.length > 0 ?
-                      resultSubjects.map((subject, index)=>(
-                          <tr key={subject._id}>
-                          <td>{ index+1}</td>
-                          <td>{ subject.subject_code }</td>
-                          <td>
-                              <h3><NavLink to={`/exam/view-mark/${subject.subject_code}/${subject._id}`}><button type="button" class="btn btn-primary text-bold">View Mark</button></NavLink></h3>
-                          </td>
+                      results && results.length > 0 ?
+                      results.map((result, index)=>(
+                        <tr>
+                          <td>{ index+1 }</td>
+                          <td>{ result.records[0].student[0].name }</td>
+                          <td>{ result.records[0].student[0].roll }</td>
+                          {result.records.map((mark)=>(
+                             <td>{ mark.marks.final_mark }</td>
+                          ))}
+                          <td>{ findStudentGPA(result.records) }</td>
                         </tr>
-                        ))
+                       ))
                         :'No subjects found'
                       :(<Loader/>)
                        } 
