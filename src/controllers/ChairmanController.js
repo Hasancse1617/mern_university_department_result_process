@@ -1,11 +1,14 @@
 const formidable = require("formidable");
 const Chairman = require("../models/Chairman");
 const Dept = require("../models/Dept");
+const Exam = require("../models/Exam");
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
 const jwt_decode = require('jwt-decode');
 const { send_Account_Verify_Email, Send_Reset_Password_Email } = require("../utils/email");
+const Teacher = require("../models/Teacher");
+const Student = require("../models/Student");
 
 const createToken = (chairman, expiresToken)=>{
     return jwt.sign({chairman}, process.env.SECRET, {
@@ -48,9 +51,9 @@ module.exports.createChairman = async (req,res)=>{
             errors.push({msg:'Email already exists!!!'});
         }else{
             if(dept_id){
-                const checkDept = await Chairman.findOne({ dept_id });
+                const checkDept = await Chairman.findOne({ dept_id, status: true });
                 if(checkDept){
-                    errors.push({msg:'Departmental Chairman is already active. You can register after the chairman resigns!!!'});
+                    errors.push({msg:'Departmental Chairman is already active. You can register after the chairman resign!!!'});
                 }
             }
         }
@@ -68,7 +71,7 @@ module.exports.createChairman = async (req,res)=>{
                     name,
                     email,
                     password: hash,
-                    email_verified: false
+                    email_verified: false,
                 });
                 
                 return res.status(200).json({msg: 'Created successfully. Please cheek your Email to verify your account!', response});
@@ -136,11 +139,18 @@ module.exports.loginChairman = async(req,res) =>{
                     send_Account_Verify_Email(email, "chairman");
                     return res.status(500).json({errors: [{msg: 'Account not verified. Check Email & verify account'}]});
                 }
+                else if(!chairman.status){
+                    return res.status(500).json({errors: [{msg: 'You are not present Chairman'}]});
+                }
 
                 const matched = await bcrypt.compare(password, chairman.password);
                 if(matched){
-                    const token = createToken(chairman,expiresToken);
-                    return res.status(200).json({'msg':'You have successfully login',token});
+                    try {
+                        const token = createToken(chairman,expiresToken);
+                        return res.status(200).json({'msg':'You have successfully login',token});
+                    } catch (error) {
+                        return res.status(500).json({errors: [{msg: error.message}]});
+                    }
                 }else{
                     return res.status(401).json({errors:[{msg:'Password does not matched'}]});
                 }
@@ -179,7 +189,7 @@ module.exports.forgotPassword = async(req, res) =>{
                 const response = Send_Reset_Password_Email(email, "chairman");
                 return res.status(200).json({msg: 'Check your email & change your password',response});
             } catch (error) {
-                return res.status(500).json({errors: error, msg: error.message});
+                return res.status(500).json({errors: [{msg: error.message}]});
             }
         }
     });
@@ -221,11 +231,38 @@ module.exports.resetPassword = async(req, res) =>{
             try {
                 const salt = await bcrypt.genSalt(10);
                 const hash = await bcrypt.hash(password, salt);
-                const response = await User.findOneAndUpdate({email},{password: hash}, {new: true});
+                const response = await Chairman.findOneAndUpdate({email},{password: hash}, {new: true});
                 return res.status(200).json({msg: 'Your Password updated successfully', response });
             } catch (error) {
-                return res.status(500).json({errors: error.message});
+                return res.status(500).json({errors: [{msg: error.message}]});
             }
         } 
     });
+}
+
+module.exports.fetchDashInfo = async(req,res) =>{
+    const dept_id = req.params.dept_id;
+    try {
+        const total_teacher = await Teacher.find({dept_id}).countDocuments();
+        const total_exam = await Exam.find({dept_id}).countDocuments();
+        const total_student = await Student.find({dept_id}).countDocuments();
+        const response = {
+            total_teacher,
+            total_exam,
+            total_student
+        }
+        return res.status(200).json({ response });
+    } catch (error) {
+        return res.status(500).json({errors: [{msg: error.message}]});
+    }
+}
+
+module.exports.resignChairman = async (req,res)=>{
+    const id = req.params.id;
+    try{
+        const chairman = await Chairman.findByIdAndUpdate({_id: id}, { status: false });
+        return res.status(200).json({msg: 'Chairman resigned successfully! Now new Charman Can Register'});
+    }catch(error){
+        return res.status(500).json({errors:error});
+    } 
 }

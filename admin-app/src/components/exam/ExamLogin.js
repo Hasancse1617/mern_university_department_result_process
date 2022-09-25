@@ -46,7 +46,7 @@ const ExamLogin = () => {
         <Toaster position="top-right" reverseOrder={true}/>
         <div className="login-box">
             <Helmet>
-                <title>Exam Login - Reasult Processing</title>
+                <title>Exam Chairman Login - Reasult Processing</title>
                 <meta name="description" content="User Login Here" />
             </Helmet>
             <div class="login-logo">

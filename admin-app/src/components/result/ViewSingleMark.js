@@ -45,7 +45,7 @@ useEffect(()=>{
         dispatch({type: REMOVE_RESULT_SINGLE});
     }  
   },[]);
-
+  console.log(resultSingle)
     return (
         <>
         <Helmet>
@@ -81,7 +81,9 @@ useEffect(()=>{
                         <th>SL.</th>
                         <th>Student Name</th>
                         <th>Roll Number</th>
-                        <th>Session</th>
+                        <th>First Mark</th>
+                        <th>Second Mark</th>
+                        <th>Third Mark</th>
                         <th>Final Mark</th>
                         <th>Grade</th>
                       </tr>
@@ -95,7 +97,9 @@ useEffect(()=>{
                           <td>{ index+1}</td>
                           <td>{ student.name }</td>
                           <td>{ student.roll }</td>
-                          <td>{ student.session }</td>
+                          <td>{ resultSingle.marks[index].first_mark } </td>
+                          <td>{ resultSingle.marks[index].second_mark } </td>
+                          <td>{ resultSingle.marks[index].third_mark } </td>
                           <td>{ resultSingle.marks[index].final_mark } </td>
                           <td>{ getGradeSingleSubject(resultSingle.marks[index].final_mark) }</td>
                         </tr>

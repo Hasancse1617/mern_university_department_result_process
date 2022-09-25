@@ -4,14 +4,14 @@ import { Helmet } from "react-helmet";
 import { useSelector, useDispatch } from 'react-redux';
 import { LoginChairman } from  "../../store/actions/ChairmanAction";
 import toast, { Toaster } from 'react-hot-toast';
-import { REMOVE_CHAIRMAN_ERRORS } from '../../store/types/ChairmanType';
+import { REMOVE_CHAIRMAN_ERRORS, REMOVE_CHAIRMAN_MESSAGE } from '../../store/types/ChairmanType';
 import { NavLink } from 'react-router-dom';
 import Select from 'react-select';
 import { fetchDept } from "../../store/actions/CommonAction";
 
 const ChairmanLogin = () => {
     const dispatch = useDispatch();
-    const {loading, chairmanErrors} = useSelector((state)=>state.ChairmanReducer);
+    const {loading, chairmanErrors, message} = useSelector((state)=>state.ChairmanReducer);
     const {departments} = useSelector((state)=>state.CommonReducer);
     const [state, setState] = useState({
         dept_id: "",
@@ -61,7 +61,11 @@ const ChairmanLogin = () => {
             });
           dispatch({type: REMOVE_CHAIRMAN_ERRORS});
         }
-    }, [chairmanErrors]);
+        if(message){
+            toast.success(message);
+            dispatch({type: REMOVE_CHAIRMAN_MESSAGE});
+        }
+    }, [message, chairmanErrors]);
 
     return (
         <>

@@ -1,4 +1,4 @@
-import axiosInstance from "../../helper/axiosInstance";
+import axiosChairman from "../../helper/axiosChairman";
 import axiosExam from "../../helper/axiosExam";
 import { SET_EXAM_STUDENTS, EXAM_STATUS, REMOVE_EXAM_LOADER, SET_EXAMS, SET_EXAM_ERRORS, SET_EXAM_LOADER, SET_EXAM_MESSAGE, SET_EXAM_TOKEN } from '../types/ExamType';
 
@@ -91,7 +91,7 @@ export const fetchExams = (dept_id) =>{
     return async(dispatch,getState)=>{
           dispatch({type: SET_EXAM_LOADER});
           try {
-                const {data: { response }} = await axiosInstance.get(`/exam/all-exam/${dept_id}`);
+                const {data: { response }} = await axiosChairman.get(`/exam/all-exam/${dept_id}`);
                 dispatch({type: SET_EXAMS, payload: response});
                 dispatch({type: REMOVE_EXAM_LOADER});
           } catch (error) {
@@ -107,7 +107,7 @@ export const fetchExams = (dept_id) =>{
 export const statusAction = (statusData) =>{
     return async(dispatch,getState)=>{
           try {
-                const {data: {status,exam_id}} = await axiosInstance.post(`/status-exam`, statusData);
+                const {data: {status,exam_id}} = await axiosChairman.post(`/status-exam`, statusData);
                 dispatch({type: EXAM_STATUS, payload: {status,exam_id}});
           } catch (error) {
                 if(error && error.response.data){
@@ -122,7 +122,7 @@ export const deleteExam = (id) =>{
     return async (dispatch, getState)=>{
           try {
                 dispatch({type: SET_EXAM_LOADER});
-                const {data} = await axiosInstance.post(`/delete-exam/${id}`);
+                const {data} = await axiosChairman.post(`/delete-exam/${id}`);
                 dispatch({type: REMOVE_EXAM_LOADER});
                 dispatch({type: SET_EXAM_MESSAGE, payload: data.msg});    
         } catch (error) {

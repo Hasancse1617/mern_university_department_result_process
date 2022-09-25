@@ -9,7 +9,7 @@ const Login = () => {
         <Toaster position="top-right" reverseOrder={true}/>
         <div className="login-box">
             <Helmet>
-                <title>Admin Panel - Reasult Processing</title>
+                <title>Admin Panel - Result Processing</title>
                 <meta name="description" content="User Login Here" />
             </Helmet>
             <div class="login-logo">

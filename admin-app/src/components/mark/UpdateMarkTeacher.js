@@ -152,7 +152,7 @@ const UpdateMarkTeacher = () =>{
                             <td>{ student.name }</td>
                             <td>{ student.roll }</td>
                             <td>{ student.session }</td>
-                            <td>{ teacher.exam.semister+"th" }{markEditStudents.marks[index].third_mark}</td>
+                            <td>{ teacher.exam.semister+"th" }</td>
                             {examinarType=="third_examinar"?<td>{ markEditStudents.marks[index].third_mark_status== true?"Yes":"No" }</td>:""}
                             {examinarType=="first_examinar"?<td>{ markEditStudents.marks[index].first_mark }</td>:""}
                             {examinarType=="second_examinar"?<td>{ markEditStudents.marks[index].second_mark }</td>:""}

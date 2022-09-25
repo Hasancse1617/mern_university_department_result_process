@@ -1,13 +1,18 @@
 import React, { useEffect } from "react";
 import { Helmet } from "react-helmet";
-import { useSelector } from "react-redux";
-import AddMarkTeacher from "../mark/AddMarkTeacher";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchDashInfo } from "../../store/actions/ChairmanAction";
 
 const Dashboard = () => {
-    const {chairman} = useSelector((state)=>state.ChairmanReducer);
+    const dispatch = useDispatch();
+    const {chairman, dashInfo} = useSelector((state)=>state.ChairmanReducer);
     const {exam} = useSelector((state)=>state.ExamReducer);
     const {teacher} = useSelector((state)=>state.TeacherReducer);
-    
+    useEffect(()=>{
+        if(chairman){
+            dispatch(fetchDashInfo(chairman.dept_id._id));
+        }
+    },[])
     return (
         <>
             <Helmet>
@@ -45,59 +50,37 @@ const Dashboard = () => {
                     <div class="col-lg-4 col-6">
                         <div class="small-box small-box-2 bg-warning">
                             <div class="inner inner-2 text-center">
-                                <h4>Semister: {exam? exam.semister: teacher? teacher.exam.semister: ""}</h4>
+                                <h4>Semister: {exam? exam.semister: teacher? teacher.exam.semister: ""}th</h4>
                             </div>                      
                         </div>
                     </div>
                 </div>:""}
                 {chairman?
                 <div class="row">
-                    <div class="col-lg-3 col-6">
+                    <div class="col-lg-4 col-6">
                         <div class="small-box bg-info">
-                        <div class="inner">
-                            <h3>150</h3>
+                        <div class="inner text-center">
+                            <h3>{ dashInfo.total_teacher < 9 ?"0"+dashInfo.total_teacher: dashInfo.total_teacher }</h3>
 
-                            <p>New Orders</p>
-                        </div>
-                        <div class="icon">
-                            <i class="ion ion-bag"></i>
+                            <p>Total Teacher</p>
                         </div>
                         </div>
                     </div>
-                    <div class="col-lg-3 col-6">
+                    <div class="col-lg-4 col-6">
                         <div class="small-box bg-success">
-                        <div class="inner">
-                            <h3>53<sup style={{fontSize: 20+"px"}}>%</sup></h3>
+                        <div class="inner text-center">
+                            <h3>{ dashInfo.total_exam < 9 ?"0"+dashInfo.total_exam: dashInfo.total_exam }</h3>
 
-                            <p>Bounce Rate</p>
-                        </div>
-                        <div class="icon">
-                            <i class="ion ion-stats-bars"></i>
+                            <p>Total Exam</p>
                         </div>
                         </div>
                     </div>
-                    <div class="col-lg-3 col-6">
-                        <div class="small-box bg-warning">
-                        <div class="inner">
-                            <h3>44</h3>
-
-                            <p>User Registrations</p>
-                        </div>
-                        <div class="icon">
-                            <i class="ion ion-person-add"></i>
-                        </div>
-                        
-                        </div>
-                    </div>
-                    <div class="col-lg-3 col-6">
+                    <div class="col-lg-4 col-6">
                         <div class="small-box bg-danger">
-                        <div class="inner">
-                            <h3>65</h3>
+                        <div class="inner text-center">
+                            <h3>{ dashInfo.total_student < 9 ?"0"+dashInfo.total_student: dashInfo.total_student }</h3>
 
-                            <p>Unique Visitors</p>
-                        </div>
-                        <div class="icon">
-                            <i class="ion ion-pie-graph"></i>
+                            <p>Total Student</p>
                         </div>
                         </div>
                     </div>

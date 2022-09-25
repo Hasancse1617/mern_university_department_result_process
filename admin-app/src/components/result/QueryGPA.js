@@ -83,6 +83,29 @@ export const findStudentGPA = (records) =>{
         total_point += (grade * credit);
         total_credit += credit;
     }
-    return (total_point/total_credit).toFixed(2);
+    let cgpa = (total_point/total_credit).toFixed(2);
+    let grade;
+    if(cgpa == 4.00){
+        grade = "A+";
+    }else if(cgpa < 4.00 && cgpa >= 3.75){
+        grade = "A"
+    }else if(cgpa < 3.75 && cgpa >= 3.50){
+        grade = "A-"
+    }else if(cgpa < 3.50 && cgpa >= 3.25){
+        grade = "B+"
+    }else if(cgpa < 3.25 && cgpa >= 3.00){
+        grade = "B"
+    }else if(cgpa < 3.00 && cgpa >= 2.75){
+        grade = "B-"
+    }else if(cgpa < 2.75 && cgpa >= 2.50){
+        grade = "C+"
+    }else if(cgpa < 2.50 && cgpa >= 2.25){
+        grade = "C"
+    }else if(cgpa < 2.25 && cgpa >= 2.00){
+        grade = "D"
+    }else{
+        grade = "F"
+    }
+    return {cgpa, grade};
     // console.log(total_credit, total_point)
 }

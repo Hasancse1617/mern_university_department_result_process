@@ -1,10 +1,11 @@
 import jwt_decode from 'jwt-decode';
-import { CHAIRMAN_LOGOUT, REMOVE_CHAIRMAN_ERRORS, REMOVE_CHAIRMAN_LOADER, REMOVE_CHAIRMAN_MESSAGE, SET_CHAIRMAN_ERRORS, SET_CHAIRMAN_LOADER, SET_CHAIRMAN_MESSAGE, SET_CHAIRMAN_TOKEN } from '../types/ChairmanType';
+import { CHAIRMAN_LOGOUT, REMOVE_CHAIRMAN_ERRORS, REMOVE_CHAIRMAN_LOADER, REMOVE_CHAIRMAN_MESSAGE, SET_CHAIRMAN_ERRORS, SET_CHAIRMAN_LOADER, SET_CHAIRMAN_MESSAGE, SET_CHAIRMAN_TOKEN, SET_DASH_INFO } from '../types/ChairmanType';
 
 
 const initState = {
     loading: false,
 	chairmanErrors: [],
+	dashInfo: [],
 	token: '',
 	chairman: '',
 	message:'',
@@ -59,6 +60,9 @@ const ChairmanReducer = (state = initState, action) => {
 	}
 	else if (action.type === REMOVE_CHAIRMAN_MESSAGE) {
 		return {...state,message: ''};
+	}
+	else if (action.type === SET_DASH_INFO) {
+		return {...state,dashInfo: action.payload};
 	}
 	else {
 		return state;

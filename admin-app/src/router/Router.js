@@ -22,13 +22,22 @@ import ExamDashboardRoute from "./ExamDashboardRoute";
 import ExamPublicRoute from "./ExamPublicRoute";
 import TeacherDashboardRoute from "./TeacherDashboardRoute";
 import TeacherPublicRoute from "./TeacherPublicRoute";
+import { Navigate } from 'react-router-dom';
 
 const Router = () => {
-    const { user } = useSelector((state)=>state.ChairmanReducer);
+    const { chairman } = useSelector((state)=>state.ChairmanReducer);
+    const { exam } = useSelector((state)=>state.ExamReducer);
+    const { teacher } = useSelector((state)=>state.TeacherReducer);
     return (
         <>
            <Switch>
-               <Route path="/admin" element={<Login/>}></Route>
+               <Route path="/admin" element={
+                chairman?<Navigate to="/chairman/dashboard" replace/>:
+                exam?<Navigate to="/exam/dashboard" replace/>:
+                teacher?<Navigate to="/teacher/dashboard" replace/>:
+                <Login/>}>
+
+               </Route>
                 {/* *** Chairman Public Route *** */}
                <Route path="/chairman/login" element={<ChairmanPublicRoute><ChairmanLogin/></ChairmanPublicRoute>}></Route>
                <Route path="/chairman/register" element={<ChairmanPublicRoute><ChairmanRegister/></ChairmanPublicRoute>}></Route>

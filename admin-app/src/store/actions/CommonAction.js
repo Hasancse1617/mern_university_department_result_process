@@ -1,11 +1,11 @@
-import axiosInstance from "../../helper/axiosInstance";
+import axiosChairman from "../../helper/axiosChairman";
 import { REMOVE_COMMON_LOADER, SET_COMMON_ERRORS, SET_COMMON_LOADER, SET_DEPT } from "../types/CommonType";
 
 export const fetchDept = () =>{
     return async(dispatch,getState)=>{
           dispatch({type: SET_COMMON_LOADER});
           try {
-                const { data } = await axiosInstance.get(`/all-dept`);
+                const { data } = await axiosChairman.get(`/all-dept`);
                 dispatch({type: SET_DEPT, payload: data.response});
                 dispatch({type: REMOVE_COMMON_LOADER});
           } catch (error) {
